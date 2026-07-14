@@ -1,0 +1,6922 @@
+[
+  {
+    "name": "Acetaminophen",
+    "category": "Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid",
+      "Suppository",
+      "Injectable",
+      "Effervescent Tablet",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Pain/Fever"
+  },
+  {
+    "name": "Ibuprofen",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid",
+      "Topical",
+      "Gel",
+      "Injectable",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Amoxicillin",
+    "category": "Antibiotic",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Dispersible Tablet",
+      "Powder for Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Metformin",
+    "category": "Antidiabetic",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Liquid"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Atorvastatin",
+    "category": "Statin",
+    "dosageForms": [
+      "Tablet",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Omeprazole",
+    "category": "PPI",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Injectable",
+      "Powder for Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Amlodipine",
+    "category": "CCB",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Metoprolol",
+    "category": "Beta-blocker",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Losartan",
+    "category": "ARB",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Ciprofloxacin",
+    "category": "Antibiotic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Ophthalmic",
+      "Otic",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Azithromycin",
+    "category": "Antibiotic",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid",
+      "Injectable",
+      "Ophthalmic",
+      "Powder for Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Cetirizine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Chewable Tablet",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Diclofenac",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Topical",
+      "Injectable",
+      "Suppository",
+      "Gel",
+      "Ophthalmic",
+      "Transdermal Patch",
+      "Enteric-Coated Tablet"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Pantoprazole",
+    "category": "PPI",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Granules for Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Ranitidine",
+    "category": "H2 Blocker",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Effervescent Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Captopril",
+    "category": "ACE Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Enalapril",
+    "category": "ACE Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Ramipril",
+    "category": "ACE Inhibitor",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Simvastatin",
+    "category": "Statin",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Rosuvastatin",
+    "category": "Statin",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Clopidogrel",
+    "category": "Antiplatelet",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Warfarin",
+    "category": "Anticoagulant",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Aspirin",
+    "category": "NSAID/Antiplatelet",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Chewable Tablet",
+      "Effervescent Tablet",
+      "Enteric-Coated Tablet",
+      "Suppository"
+    ],
+    "therapeutic": "Cardiovascular/Pain"
+  },
+  {
+    "name": "Glipizide",
+    "category": "Sulfonylurea",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Glimepiride",
+    "category": "Sulfonylurea",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Pioglitazone",
+    "category": "Thiazolidinedione",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Sitagliptin",
+    "category": "DPP-4 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Dapagliflozin",
+    "category": "SGLT2 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Insulin Glargine",
+    "category": "Insulin",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Fluconazole",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Powder for Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Clotrimazole",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Topical",
+      "Lozenge",
+      "Vaginal",
+      "Cream",
+      "Solution"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Ketoconazole",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Tablet",
+      "Topical",
+      "Shampoo",
+      "Cream",
+      "Foam"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Acyclovir",
+    "category": "Antiviral",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Topical",
+      "Injectable",
+      "Cream",
+      "Ointment",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Salbutamol",
+    "category": "Beta-2 Agonist",
+    "dosageForms": [
+      "Inhaler",
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Nebulizer Solution",
+      "Rotacaps"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Montelukast",
+    "category": "Leukotriene Antagonist",
+    "dosageForms": [
+      "Tablet",
+      "Chewable Tablet",
+      "Granules"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Fluticasone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Inhaler",
+      "Nasal Spray",
+      "Topical",
+      "Cream",
+      "Ointment",
+      "Lotion"
+    ],
+    "therapeutic": "Respiratory/Dermatology"
+  },
+  {
+    "name": "Budesonide",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Inhaler",
+      "Nasal Spray",
+      "Capsule",
+      "Nebulizer Suspension",
+      "Enema",
+      "Foam"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Prednisolone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Ophthalmic",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Dexamethasone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Ophthalmic",
+      "Oral Solution",
+      "Elixir"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Hydroxychloroquine",
+    "category": "DMARD",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Methotrexate",
+    "category": "Antimetabolite",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Oncology/Immunology"
+  },
+  {
+    "name": "Cyclophosphamide",
+    "category": "Alkylating Agent",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Doxorubicin",
+    "category": "Anthracycline",
+    "dosageForms": [
+      "Injectable",
+      "Liposomal Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Paclitaxel",
+    "category": "Taxane",
+    "dosageForms": [
+      "Injectable",
+      "Albumin-bound Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "5-Fluorouracil",
+    "category": "Antimetabolite",
+    "dosageForms": [
+      "Injectable",
+      "Topical",
+      "Cream"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Cisplatin",
+    "category": "Platinum Agent",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Tamoxifen",
+    "category": "SERM",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Sertraline",
+    "category": "SSRI",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Oral Concentrate"
+    ],
+    "therapeutic": "CNS/Psychiatry"
+  },
+  {
+    "name": "Fluoxetine",
+    "category": "SSRI",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Delayed-Release Capsule"
+    ],
+    "therapeutic": "CNS/Psychiatry"
+  },
+  {
+    "name": "Escitalopram",
+    "category": "SSRI",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "CNS/Psychiatry"
+  },
+  {
+    "name": "Venlafaxine",
+    "category": "SNRI",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "CNS/Psychiatry"
+  },
+  {
+    "name": "Duloxetine",
+    "category": "SNRI",
+    "dosageForms": [
+      "Capsule",
+      "Delayed-Release Capsule"
+    ],
+    "therapeutic": "CNS/Psychiatry"
+  },
+  {
+    "name": "Alprazolam",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet",
+      "Extended-Release Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS/Psychiatry"
+  },
+  {
+    "name": "Diazepam",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Liquid",
+      "Rectal Gel",
+      "Nasal Spray"
+    ],
+    "therapeutic": "CNS/Psychiatry"
+  },
+  {
+    "name": "Lorazepam",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Concentrate"
+    ],
+    "therapeutic": "CNS/Psychiatry"
+  },
+  {
+    "name": "Zolpidem",
+    "category": "Sedative",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Sublingual Tablet",
+      "Oral Spray"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Gabapentin",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "CNS/Pain"
+  },
+  {
+    "name": "Pregabalin",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "CNS/Pain"
+  },
+  {
+    "name": "Carbamazepine",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Extended-Release Tablet",
+      "Chewable Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Levetiracetam",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Extended-Release Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Donepezil",
+    "category": "AChE Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet",
+      "Transdermal Patch"
+    ],
+    "therapeutic": "CNS/Alzheimer's"
+  },
+  {
+    "name": "Rivastigmine",
+    "category": "AChE Inhibitor",
+    "dosageForms": [
+      "Capsule",
+      "Transdermal Patch",
+      "Liquid",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS/Alzheimer's"
+  },
+  {
+    "name": "Levodopa",
+    "category": "Dopamine Precursor",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Extended-Release Capsule",
+      "Oral Disintegrating Tablet",
+      "Enteral Suspension"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Ropinirole",
+    "category": "Dopamine Agonist",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Ondansetron",
+    "category": "5-HT3 Antagonist",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Liquid",
+      "Film",
+      "Oral Disintegrating Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Domperidone",
+    "category": "Antiemetic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Suppository",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Loperamide",
+    "category": "Antidiarrheal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Lactulose",
+    "category": "Osmotic Laxative",
+    "dosageForms": [
+      "Liquid",
+      "Oral Solution",
+      "Powder"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Esomeprazole",
+    "category": "PPI",
+    "dosageForms": [
+      "Capsule",
+      "Injectable",
+      "Granules for Suspension",
+      "Powder for Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Furosemide",
+    "category": "Loop Diuretic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Liquid",
+      "Oral Solution"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Hydrochlorothiazide",
+    "category": "Thiazide Diuretic",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Spironolactone",
+    "category": "K-sparing Diuretic",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Nifedipine",
+    "category": "CCB",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Diltiazem",
+    "category": "CCB",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Verapamil",
+    "category": "CCB",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Injectable",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Propranolol",
+    "category": "Beta-blocker",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Extended-Release Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Atenolol",
+    "category": "Beta-blocker",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Nitroglycerin",
+    "category": "Nitrate",
+    "dosageForms": [
+      "Sublingual Tablet",
+      "Transdermal Patch",
+      "Injectable",
+      "Spray",
+      "Ointment",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Digoxin",
+    "category": "Cardiac Glycoside",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Levothyroxine",
+    "category": "Thyroid Hormone",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Methimazole",
+    "category": "Antithyroid",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Sildenafil",
+    "category": "PDE5 Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension",
+      "Injectable"
+    ],
+    "therapeutic": "Urology/Pulmonary"
+  },
+  {
+    "name": "Tamsulosin",
+    "category": "Alpha-blocker",
+    "dosageForms": [
+      "Capsule",
+      "Modified-Release Capsule"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Finasteride",
+    "category": "5-alpha Reductase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Urology/Dermatology"
+  },
+  {
+    "name": "Mebendazole",
+    "category": "Anthelmintic",
+    "dosageForms": [
+      "Tablet",
+      "Chewable Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Albendazole",
+    "category": "Anthelmintic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Chewable Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Chloroquine",
+    "category": "Antimalarial",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Artemether",
+    "category": "Antimalarial",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Isoniazid",
+    "category": "Antitubercular",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Rifampicin",
+    "category": "Antitubercular",
+    "dosageForms": [
+      "Capsule",
+      "Liquid",
+      "Injectable",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Morphine",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Liquid",
+      "Extended-Release Tablet",
+      "Oral Solution",
+      "Suppository"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Tramadol",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable",
+      "Extended-Release Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Ketorolac",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Ophthalmic",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Naproxen",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Extended-Release Tablet",
+      "Oral Suspension",
+      "Capsule"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Piroxicam",
+    "category": "NSAID",
+    "dosageForms": [
+      "Capsule",
+      "Topical",
+      "Gel"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Celecoxib",
+    "category": "COX-2 Inhibitor",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Betamethasone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Topical",
+      "Injectable",
+      "Cream",
+      "Ointment",
+      "Lotion",
+      "Foam"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Clobetasol",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Topical",
+      "Cream",
+      "Ointment",
+      "Lotion",
+      "Foam",
+      "Gel",
+      "Spray",
+      "Shampoo"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Tretinoin",
+    "category": "Retinoid",
+    "dosageForms": [
+      "Topical",
+      "Capsule",
+      "Cream",
+      "Gel",
+      "Microsphere Gel"
+    ],
+    "therapeutic": "Dermatology/Oncology"
+  },
+  {
+    "name": "Mupirocin",
+    "category": "Antibiotic",
+    "dosageForms": [
+      "Topical",
+      "Ointment",
+      "Cream",
+      "Nasal Ointment"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Permethrin",
+    "category": "Antiparasitic",
+    "dosageForms": [
+      "Topical",
+      "Cream",
+      "Lotion"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Calamine",
+    "category": "Skin Protectant",
+    "dosageForms": [
+      "Topical",
+      "Lotion"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Timolol",
+    "category": "Beta-blocker",
+    "dosageForms": [
+      "Ophthalmic",
+      "Tablet",
+      "Gel-Forming Solution"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Latanoprost",
+    "category": "Prostaglandin Analog",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Dorzolamide",
+    "category": "CAI",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Pilocarpine",
+    "category": "Cholinergic",
+    "dosageForms": [
+      "Ophthalmic",
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Ofloxacin",
+    "category": "Antibiotic",
+    "dosageForms": [
+      "Tablet",
+      "Ophthalmic",
+      "Otic"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Gentamicin",
+    "category": "Aminoglycoside",
+    "dosageForms": [
+      "Injectable",
+      "Ophthalmic",
+      "Topical",
+      "Cream",
+      "Ointment"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Vancomycin",
+    "category": "Glycopeptide",
+    "dosageForms": [
+      "Injectable",
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Ceftriaxone",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Cephalexin",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Powder for Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Doxycycline",
+    "category": "Tetracycline",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Delayed-Release Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Erythromycin",
+    "category": "Macrolide",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid",
+      "Topical",
+      "Ophthalmic",
+      "Enteric-Coated Tablet",
+      "Gel"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Clarithromycin",
+    "category": "Macrolide",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Extended-Release Tablet",
+      "Granules for Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Metronidazole",
+    "category": "Nitroimidazole",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Topical",
+      "Vaginal",
+      "Gel",
+      "Cream",
+      "Capsule"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Nitrofurantoin",
+    "category": "Antibacterial",
+    "dosageForms": [
+      "Capsule",
+      "Modified-Release Capsule",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Amphotericin B",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Injectable",
+      "Liposomal Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Nystatin",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Liquid",
+      "Topical",
+      "Vaginal",
+      "Cream",
+      "Ointment",
+      "Powder",
+      "Oral Suspension",
+      "Pastille"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Terbinafine",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Tablet",
+      "Topical",
+      "Cream",
+      "Gel",
+      "Spray",
+      "Solution"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Curcumin",
+    "category": "Herbal/Nutraceutical",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Topical",
+      "NDDS",
+      "Nanoparticle",
+      "Liposome",
+      "Nanoemulsion"
+    ],
+    "therapeutic": "Anti-inflammatory"
+  },
+  {
+    "name": "Quercetin",
+    "category": "Flavonoid",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Nanoparticle"
+    ],
+    "therapeutic": "Antioxidant"
+  },
+  {
+    "name": "Resveratrol",
+    "category": "Polyphenol",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Nanoparticle",
+      "Liposome"
+    ],
+    "therapeutic": "Antioxidant"
+  },
+  {
+    "name": "Berberine",
+    "category": "Alkaloid",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Antidiabetic"
+  },
+  {
+    "name": "Piperine",
+    "category": "Alkaloid",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Bioenhancer"
+  },
+  {
+    "name": "Caffeine",
+    "category": "Xanthine",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS Stimulant"
+  },
+  {
+    "name": "Theophylline",
+    "category": "Xanthine",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Liquid",
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Chlorpheniramine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Extended-Release Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Fexofenadine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Oral Disintegrating Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Levocetirizine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Oral Solution"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Promethazine",
+    "category": "Antihistamine/Antiemetic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Suppository",
+      "Oral Solution"
+    ],
+    "therapeutic": "Allergy/Antiemetic"
+  },
+  {
+    "name": "Diphenhydramine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid",
+      "Topical",
+      "Injectable",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Allergy/Sleep"
+  },
+  {
+    "name": "Minoxidil",
+    "category": "Vasodilator",
+    "dosageForms": [
+      "Topical",
+      "Tablet",
+      "Solution",
+      "Foam"
+    ],
+    "therapeutic": "Dermatology/Cardiovascular"
+  },
+  {
+    "name": "Felodipine",
+    "category": "CCB",
+    "dosageForms": [
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Telmisartan",
+    "category": "ARB",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Valsartan",
+    "category": "ARB",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Olmesartan",
+    "category": "ARB",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Candesartan",
+    "category": "ARB",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Lisinopril",
+    "category": "ACE Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Bisoprolol",
+    "category": "Beta-blocker",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Carvedilol",
+    "category": "Alpha/Beta-blocker",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Nebivolol",
+    "category": "Beta-blocker",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Nicorandil",
+    "category": "K-channel Opener",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Ivabradine",
+    "category": "HCN Channel Blocker",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Repaglinide",
+    "category": "Meglitinide",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Empagliflozin",
+    "category": "SGLT2 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Liraglutide",
+    "category": "GLP-1 Agonist",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Acarbose",
+    "category": "Alpha-glucosidase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Voglibose",
+    "category": "Alpha-glucosidase Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Gliclazide",
+    "category": "Sulfonylurea",
+    "dosageForms": [
+      "Tablet",
+      "Modified-Release Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Teneligliptin",
+    "category": "DPP-4 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Salmeterol",
+    "category": "LABA",
+    "dosageForms": [
+      "Inhaler",
+      "Dry Powder Inhaler"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Formoterol",
+    "category": "LABA",
+    "dosageForms": [
+      "Inhaler",
+      "Capsule for Inhalation",
+      "Nebulizer Solution"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Tiotropium",
+    "category": "LAMA",
+    "dosageForms": [
+      "Inhaler",
+      "Dry Powder Inhaler",
+      "Mist Inhaler"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Dextromethorphan",
+    "category": "Antitussive",
+    "dosageForms": [
+      "Liquid",
+      "Tablet",
+      "Lozenge",
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Ambroxol",
+    "category": "Mucolytic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Bromhexine",
+    "category": "Mucolytic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Ferrous Sulphate",
+    "category": "Iron Supplement",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Extended-Release Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Folic Acid",
+    "category": "Vitamin",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Cyanocobalamin",
+    "category": "Vitamin B12",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Sublingual Tablet",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Calcium Carbonate",
+    "category": "Mineral/Antacid",
+    "dosageForms": [
+      "Tablet",
+      "Chewable Tablet",
+      "Liquid",
+      "Oral Suspension",
+      "Powder"
+    ],
+    "therapeutic": "Bone Health/GI"
+  },
+  {
+    "name": "Cholecalciferol",
+    "category": "Vitamin D3",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Oral Solution",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Bone Health"
+  },
+  {
+    "name": "Alendronate",
+    "category": "Bisphosphonate",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Bone Health"
+  },
+  {
+    "name": "Rizatriptan",
+    "category": "Triptan",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Migraine"
+  },
+  {
+    "name": "Sumatriptan",
+    "category": "Triptan",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Nasal Spray",
+      "Transdermal Patch"
+    ],
+    "therapeutic": "Migraine"
+  },
+  {
+    "name": "Phenytoin",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable",
+      "Liquid",
+      "Chewable Tablet",
+      "Extended-Release Capsule",
+      "Oral Suspension"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Valproic Acid",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Delayed-Release Tablet",
+      "Extended-Release Tablet",
+      "Sprinkle Capsule"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Lamotrigine",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Chewable Tablet",
+      "Oral Disintegrating Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Topiramate",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Sprinkle Capsule",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Lithium Carbonate",
+    "category": "Mood Stabilizer",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Extended-Release Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Olanzapine",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Disintegrating Tablet",
+      "Long-Acting Injectable"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Risperidone",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Oral Disintegrating Tablet",
+      "Long-Acting Injectable"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Quetiapine",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Aripiprazole",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Oral Disintegrating Tablet",
+      "Long-Acting Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Haloperidol",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Long-Acting Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Chlorpromazine",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Concentrate"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Baclofen",
+    "category": "Muscle Relaxant",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Intrathecal"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Tizanidine",
+    "category": "Muscle Relaxant",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Cyclobenzaprine",
+    "category": "Muscle Relaxant",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Colchicine",
+    "category": "Anti-gout",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Allopurinol",
+    "category": "Xanthine Oxidase Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Misoprostol",
+    "category": "Prostaglandin",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Gastrointestinal/Obstetrics"
+  },
+  {
+    "name": "Oxytocin",
+    "category": "Hormone",
+    "dosageForms": [
+      "Injectable",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Obstetrics"
+  },
+  {
+    "name": "Norethisterone",
+    "category": "Progestogen",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Ethinylestradiol",
+    "category": "Estrogen",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Clomiphene",
+    "category": "SERM",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Hyoscine",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Tablet",
+      "Transdermal Patch",
+      "Injectable"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Atropine",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Injectable",
+      "Ophthalmic",
+      "Tablet",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Emergency/Ophthalmology"
+  },
+  {
+    "name": "Adrenaline",
+    "category": "Sympathomimetic",
+    "dosageForms": [
+      "Injectable",
+      "Auto-Injector",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Emergency"
+  },
+  {
+    "name": "Lidocaine",
+    "category": "Local Anesthetic",
+    "dosageForms": [
+      "Injectable",
+      "Topical",
+      "Patch",
+      "Gel",
+      "Cream",
+      "Spray",
+      "Ointment",
+      "Viscous Solution"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Bupivacaine",
+    "category": "Local Anesthetic",
+    "dosageForms": [
+      "Injectable",
+      "Liposomal Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Sucralfate",
+    "category": "Mucosal Protectant",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Bismuth Subsalicylate",
+    "category": "Antacid/Antiulcer",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Senna",
+    "category": "Stimulant Laxative",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Psyllium",
+    "category": "Bulk Laxative",
+    "dosageForms": [
+      "Powder",
+      "Capsule",
+      "Wafer"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Activated Charcoal",
+    "category": "Adsorbent",
+    "dosageForms": [
+      "Powder",
+      "Capsule",
+      "Liquid",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Toxicology"
+  },
+  {
+    "name": "N-Acetylcysteine",
+    "category": "Mucolytic/Antidote",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Effervescent Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Respiratory/Toxicology"
+  },
+  {
+    "name": "Zinc Oxide",
+    "category": "Skin Protectant",
+    "dosageForms": [
+      "Topical",
+      "Ointment",
+      "Paste",
+      "Cream"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Silver Sulfadiazine",
+    "category": "Antibacterial",
+    "dosageForms": [
+      "Topical",
+      "Cream"
+    ],
+    "therapeutic": "Dermatology/Burns"
+  },
+  {
+    "name": "Povidone Iodine",
+    "category": "Antiseptic",
+    "dosageForms": [
+      "Topical",
+      "Liquid",
+      "Gel",
+      "Ointment",
+      "Scrub",
+      "Gargle"
+    ],
+    "therapeutic": "Wound Care"
+  },
+  {
+    "name": "Chlorhexidine",
+    "category": "Antiseptic",
+    "dosageForms": [
+      "Topical",
+      "Liquid",
+      "Gel",
+      "Mouthwash",
+      "Solution"
+    ],
+    "therapeutic": "Wound Care/Dental"
+  },
+  {
+    "name": "Abacavir",
+    "category": "NRTI",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Tenofovir",
+    "category": "NtRTI",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Efavirenz",
+    "category": "NNRTI",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Nevirapine",
+    "category": "NNRTI",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Lopinavir",
+    "category": "Protease Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Ritonavir",
+    "category": "Protease Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Atazanavir",
+    "category": "Protease Inhibitor",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Darunavir",
+    "category": "Protease Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Dolutegravir",
+    "category": "Integrase Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Dispersible Tablet"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Raltegravir",
+    "category": "Integrase Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Chewable Tablet",
+      "Granules"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Zidovudine",
+    "category": "NRTI",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Lamivudine",
+    "category": "NRTI",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Emtricitabine",
+    "category": "NRTI",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "HIV/AIDS"
+  },
+  {
+    "name": "Oseltamivir",
+    "category": "Neuraminidase Inhibitor",
+    "dosageForms": [
+      "Capsule",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Antiviral"
+  },
+  {
+    "name": "Valacyclovir",
+    "category": "Antiviral",
+    "dosageForms": [
+      "Tablet",
+      "Caplet"
+    ],
+    "therapeutic": "Antiviral"
+  },
+  {
+    "name": "Sofosbuvir",
+    "category": "NS5B Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Hepatitis C"
+  },
+  {
+    "name": "Ledipasvir",
+    "category": "NS5A Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Hepatitis C"
+  },
+  {
+    "name": "Ribavirin",
+    "category": "Antiviral",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Hepatitis C"
+  },
+  {
+    "name": "Entecavir",
+    "category": "Antiviral",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Hepatitis B"
+  },
+  {
+    "name": "Adefovir",
+    "category": "Antiviral",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Hepatitis B"
+  },
+  {
+    "name": "Praziquantel",
+    "category": "Anthelmintic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Ivermectin",
+    "category": "Antiparasitic",
+    "dosageForms": [
+      "Tablet",
+      "Topical",
+      "Cream",
+      "Lotion"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Pyrantel",
+    "category": "Anthelmintic",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Primaquine",
+    "category": "Antimalarial",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Mefloquine",
+    "category": "Antimalarial",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Artesunate",
+    "category": "Antimalarial",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Suppository"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Lumefantrine",
+    "category": "Antimalarial",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Pyrazinamide",
+    "category": "Antitubercular",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Ethambutol",
+    "category": "Antitubercular",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Streptomycin",
+    "category": "Aminoglycoside",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Bedaquiline",
+    "category": "Diarylquinoline",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Tuberculosis"
+  },
+  {
+    "name": "Delamanid",
+    "category": "Nitroimidazole",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Tuberculosis"
+  },
+  {
+    "name": "Linezolid",
+    "category": "Oxazolidinone",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Meropenem",
+    "category": "Carbapenem",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Imipenem",
+    "category": "Carbapenem",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Piperacillin",
+    "category": "Penicillin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Tazobactam",
+    "category": "Beta-lactamase Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Clavulanic Acid",
+    "category": "Beta-lactamase Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Sulbactam",
+    "category": "Beta-lactamase Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Amikacin",
+    "category": "Aminoglycoside",
+    "dosageForms": [
+      "Injectable",
+      "Nebulizer Solution"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Tobramycin",
+    "category": "Aminoglycoside",
+    "dosageForms": [
+      "Injectable",
+      "Ophthalmic",
+      "Nebulizer Solution",
+      "Inhaler"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Cefixime",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Oral Suspension",
+      "Dispersible Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Cefuroxime",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Cefpodoxime",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Ceftazidime",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Cefepime",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Cefazolin",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Cefadroxil",
+    "category": "Cephalosporin",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Clindamycin",
+    "category": "Lincosamide",
+    "dosageForms": [
+      "Capsule",
+      "Injectable",
+      "Topical",
+      "Gel",
+      "Cream",
+      "Vaginal",
+      "Oral Solution"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Trimethoprim",
+    "category": "Antibacterial",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Sulfamethoxazole",
+    "category": "Sulfonamide",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension",
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Fosfomycin",
+    "category": "Antibacterial",
+    "dosageForms": [
+      "Granules",
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Colistin",
+    "category": "Polymyxin",
+    "dosageForms": [
+      "Injectable",
+      "Nebulizer Solution"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Daptomycin",
+    "category": "Lipopeptide",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Tigecycline",
+    "category": "Glycylcycline",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Itraconazole",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution",
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Voriconazole",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Posaconazole",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension",
+      "Injectable",
+      "Delayed-Release Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Caspofungin",
+    "category": "Echinocandin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Micafungin",
+    "category": "Echinocandin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Anidulafungin",
+    "category": "Echinocandin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Griseofulvin",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension",
+      "Ultramicrosize Tablet"
+    ],
+    "therapeutic": "Infectious Diseases"
+  },
+  {
+    "name": "Carboplatin",
+    "category": "Platinum Agent",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Oxaliplatin",
+    "category": "Platinum Agent",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Gemcitabine",
+    "category": "Antimetabolite",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Capecitabine",
+    "category": "Antimetabolite",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Irinotecan",
+    "category": "Topoisomerase Inhibitor",
+    "dosageForms": [
+      "Injectable",
+      "Liposomal Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Etoposide",
+    "category": "Topoisomerase Inhibitor",
+    "dosageForms": [
+      "Capsule",
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Vincristine",
+    "category": "Vinca Alkaloid",
+    "dosageForms": [
+      "Injectable",
+      "Liposomal Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Vinblastine",
+    "category": "Vinca Alkaloid",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Docetaxel",
+    "category": "Taxane",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Imatinib",
+    "category": "Tyrosine Kinase Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Erlotinib",
+    "category": "EGFR Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Gefitinib",
+    "category": "EGFR Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Sorafenib",
+    "category": "Multi-kinase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Sunitinib",
+    "category": "Multi-kinase Inhibitor",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Lapatinib",
+    "category": "Dual Kinase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Letrozole",
+    "category": "Aromatase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Anastrozole",
+    "category": "Aromatase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Bicalutamide",
+    "category": "Anti-androgen",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Enzalutamide",
+    "category": "Anti-androgen",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Abiraterone",
+    "category": "CYP17 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Rituximab",
+    "category": "Monoclonal Antibody",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology/Immunology"
+  },
+  {
+    "name": "Trastuzumab",
+    "category": "Monoclonal Antibody",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Bevacizumab",
+    "category": "Monoclonal Antibody",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Pembrolizumab",
+    "category": "PD-1 Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Nivolumab",
+    "category": "PD-1 Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Bortezomib",
+    "category": "Proteasome Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Lenalidomide",
+    "category": "IMiD",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Thalidomide",
+    "category": "IMiD",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Azacitidine",
+    "category": "Hypomethylating Agent",
+    "dosageForms": [
+      "Injectable",
+      "Tablet"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Hydroxyurea",
+    "category": "Antimetabolite",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Oncology/Hematology"
+  },
+  {
+    "name": "Mercaptopurine",
+    "category": "Antimetabolite",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Azathioprine",
+    "category": "Immunosuppressant",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Cyclosporine",
+    "category": "Immunosuppressant",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution",
+      "Injectable",
+      "Ophthalmic",
+      "Modified Capsule"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Tacrolimus",
+    "category": "Immunosuppressant",
+    "dosageForms": [
+      "Capsule",
+      "Injectable",
+      "Topical",
+      "Extended-Release Capsule",
+      "Ointment",
+      "Granules"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Mycophenolate",
+    "category": "Immunosuppressant",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable",
+      "Oral Suspension",
+      "Delayed-Release Tablet"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Sirolimus",
+    "category": "mTOR Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Everolimus",
+    "category": "mTOR Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Dispersible Tablet"
+    ],
+    "therapeutic": "Oncology/Immunology"
+  },
+  {
+    "name": "Leflunomide",
+    "category": "DMARD",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Sulfasalazine",
+    "category": "DMARD",
+    "dosageForms": [
+      "Tablet",
+      "Enteric-Coated Tablet"
+    ],
+    "therapeutic": "Immunology/GI"
+  },
+  {
+    "name": "Adalimumab",
+    "category": "TNF Inhibitor",
+    "dosageForms": [
+      "Injectable",
+      "Prefilled Syringe",
+      "Prefilled Pen"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Etanercept",
+    "category": "TNF Inhibitor",
+    "dosageForms": [
+      "Injectable",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Infliximab",
+    "category": "TNF Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Tofacitinib",
+    "category": "JAK Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Baricitinib",
+    "category": "JAK Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Methylprednisolone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Dose Pack"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Hydrocortisone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Topical",
+      "Cream",
+      "Ointment",
+      "Lotion",
+      "Foam",
+      "Suppository",
+      "Enema"
+    ],
+    "therapeutic": "Immunology/Dermatology"
+  },
+  {
+    "name": "Triamcinolone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Injectable",
+      "Topical",
+      "Cream",
+      "Ointment",
+      "Nasal Spray",
+      "Dental Paste"
+    ],
+    "therapeutic": "Immunology/Dermatology"
+  },
+  {
+    "name": "Mometasone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Topical",
+      "Nasal Spray",
+      "Inhaler",
+      "Cream",
+      "Ointment",
+      "Lotion"
+    ],
+    "therapeutic": "Respiratory/Dermatology"
+  },
+  {
+    "name": "Beclomethasone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Inhaler",
+      "Nasal Spray",
+      "Nasal Aerosol"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Ciclesonide",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Inhaler",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Ipratropium",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Inhaler",
+      "Nebulizer Solution",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Glycopyrrolate",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Inhaler",
+      "Nebulizer Solution",
+      "Oral Solution"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Indacaterol",
+    "category": "LABA",
+    "dosageForms": [
+      "Inhaler",
+      "Capsule for Inhalation"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Umeclidinium",
+    "category": "LAMA",
+    "dosageForms": [
+      "Inhaler"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Roflumilast",
+    "category": "PDE4 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Omalizumab",
+    "category": "Anti-IgE",
+    "dosageForms": [
+      "Injectable",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Cromoglycate",
+    "category": "Mast Cell Stabilizer",
+    "dosageForms": [
+      "Inhaler",
+      "Nebulizer Solution",
+      "Ophthalmic",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Respiratory/Allergy"
+  },
+  {
+    "name": "Guaifenesin",
+    "category": "Expectorant",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Extended-Release Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Codeine",
+    "category": "Opioid/Antitussive",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable"
+    ],
+    "therapeutic": "Pain/Respiratory"
+  },
+  {
+    "name": "Acetylcysteine",
+    "category": "Mucolytic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Effervescent Tablet",
+      "Nebulizer Solution",
+      "Oral Solution"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Carbocisteine",
+    "category": "Mucolytic",
+    "dosageForms": [
+      "Capsule",
+      "Liquid"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Insulin Aspart",
+    "category": "Insulin",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Insulin Lispro",
+    "category": "Insulin",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Insulin Regular",
+    "category": "Insulin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Insulin NPH",
+    "category": "Insulin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Insulin Detemir",
+    "category": "Insulin",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Insulin Degludec",
+    "category": "Insulin",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Semaglutide",
+    "category": "GLP-1 Agonist",
+    "dosageForms": [
+      "Injectable",
+      "Tablet",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes/Obesity"
+  },
+  {
+    "name": "Dulaglutide",
+    "category": "GLP-1 Agonist",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Exenatide",
+    "category": "GLP-1 Agonist",
+    "dosageForms": [
+      "Injectable",
+      "Extended-Release Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Canagliflozin",
+    "category": "SGLT2 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Ertugliflozin",
+    "category": "SGLT2 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Saxagliptin",
+    "category": "DPP-4 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Vildagliptin",
+    "category": "DPP-4 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Linagliptin",
+    "category": "DPP-4 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Alogliptin",
+    "category": "DPP-4 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Nateglinide",
+    "category": "Meglitinide",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Glibenclamide",
+    "category": "Sulfonylurea",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Tolbutamide",
+    "category": "Sulfonylurea",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Rosiglitazone",
+    "category": "Thiazolidinedione",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Pramlintide",
+    "category": "Amylin Analog",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Diabetes"
+  },
+  {
+    "name": "Glucagon",
+    "category": "Hormone",
+    "dosageForms": [
+      "Injectable",
+      "Nasal Powder",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Diabetes/Emergency"
+  },
+  {
+    "name": "Heparin",
+    "category": "Anticoagulant",
+    "dosageForms": [
+      "Injectable",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Enoxaparin",
+    "category": "LMWH",
+    "dosageForms": [
+      "Injectable",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Rivaroxaban",
+    "category": "Factor Xa Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Apixaban",
+    "category": "Factor Xa Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Dabigatran",
+    "category": "Direct Thrombin Inhibitor",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Edoxaban",
+    "category": "Factor Xa Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Ticagrelor",
+    "category": "P2Y12 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Prasugrel",
+    "category": "P2Y12 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Dipyridamole",
+    "category": "Antiplatelet",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Streptokinase",
+    "category": "Thrombolytic",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Alteplase",
+    "category": "Thrombolytic",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Tranexamic Acid",
+    "category": "Antifibrinolytic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Aminocaproic Acid",
+    "category": "Antifibrinolytic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Epoetin Alfa",
+    "category": "Erythropoietin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Darbepoetin Alfa",
+    "category": "Erythropoietin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Filgrastim",
+    "category": "G-CSF",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Iron Sucrose",
+    "category": "Iron Supplement",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Ferric Carboxymaltose",
+    "category": "Iron Supplement",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Phytomenadione",
+    "category": "Vitamin K",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Desmopressin",
+    "category": "ADH Analog",
+    "dosageForms": [
+      "Tablet",
+      "Nasal Spray",
+      "Injectable",
+      "Sublingual Tablet"
+    ],
+    "therapeutic": "Hematology/Endocrine"
+  },
+  {
+    "name": "Isosorbide Dinitrate",
+    "category": "Nitrate",
+    "dosageForms": [
+      "Tablet",
+      "Sublingual Tablet",
+      "Extended-Release Tablet",
+      "Spray"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Isosorbide Mononitrate",
+    "category": "Nitrate",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Hydralazine",
+    "category": "Vasodilator",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Prazosin",
+    "category": "Alpha-blocker",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Doxazosin",
+    "category": "Alpha-blocker",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Cardiovascular/Urology"
+  },
+  {
+    "name": "Terazosin",
+    "category": "Alpha-blocker",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular/Urology"
+  },
+  {
+    "name": "Clonidine",
+    "category": "Alpha-2 Agonist",
+    "dosageForms": [
+      "Tablet",
+      "Transdermal Patch",
+      "Injectable",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Methyldopa",
+    "category": "Alpha-2 Agonist",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Amiodarone",
+    "category": "Antiarrhythmic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Flecainide",
+    "category": "Antiarrhythmic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Sotalol",
+    "category": "Antiarrhythmic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Dronedarone",
+    "category": "Antiarrhythmic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Adenosine",
+    "category": "Antiarrhythmic",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Milrinone",
+    "category": "PDE3 Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Dobutamine",
+    "category": "Inotrope",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Dopamine",
+    "category": "Inotrope/Vasopressor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Norepinephrine",
+    "category": "Vasopressor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular/Emergency"
+  },
+  {
+    "name": "Vasopressin",
+    "category": "Antidiuretic",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Cardiovascular/Endocrine"
+  },
+  {
+    "name": "Fenofibrate",
+    "category": "Fibrate",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Micronized Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Gemfibrozil",
+    "category": "Fibrate",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Ezetimibe",
+    "category": "Cholesterol Absorption Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Cholestyramine",
+    "category": "Bile Acid Sequestrant",
+    "dosageForms": [
+      "Powder",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Colestipol",
+    "category": "Bile Acid Sequestrant",
+    "dosageForms": [
+      "Tablet",
+      "Granules"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Niacin",
+    "category": "Vitamin B3",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Omega-3 Fatty Acids",
+    "category": "Lipid-Lowering",
+    "dosageForms": [
+      "Capsule",
+      "Liquid"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Pravastatin",
+    "category": "Statin",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Fluvastatin",
+    "category": "Statin",
+    "dosageForms": [
+      "Capsule",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Pitavastatin",
+    "category": "Statin",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Sacubitril",
+    "category": "Neprilysin Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Ranolazine",
+    "category": "Antianginal",
+    "dosageForms": [
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Trimetazidine",
+    "category": "Antianginal",
+    "dosageForms": [
+      "Tablet",
+      "Modified-Release Tablet"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Pantothenic Acid",
+    "category": "Vitamin B5",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Pyridoxine",
+    "category": "Vitamin B6",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Thiamine",
+    "category": "Vitamin B1",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Riboflavin",
+    "category": "Vitamin B2",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Biotin",
+    "category": "Vitamin B7",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Ascorbic Acid",
+    "category": "Vitamin C",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Chewable Tablet",
+      "Injectable",
+      "Effervescent Tablet",
+      "Liquid"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Alpha Tocopherol",
+    "category": "Vitamin E",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid",
+      "Topical"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Retinol",
+    "category": "Vitamin A",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Mecobalamin",
+    "category": "Vitamin B12",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Capsule"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Zinc Sulfate",
+    "category": "Mineral",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid",
+      "Oral Solution"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Magnesium Sulfate",
+    "category": "Mineral",
+    "dosageForms": [
+      "Injectable",
+      "Oral Solution",
+      "Powder"
+    ],
+    "therapeutic": "Nutritional/Emergency"
+  },
+  {
+    "name": "Potassium Chloride",
+    "category": "Electrolyte",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Extended-Release Tablet",
+      "Powder"
+    ],
+    "therapeutic": "Electrolyte Balance"
+  },
+  {
+    "name": "Sodium Bicarbonate",
+    "category": "Antacid/Electrolyte",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Powder",
+      "Oral Solution"
+    ],
+    "therapeutic": "GI/Emergency"
+  },
+  {
+    "name": "Oral Rehydration Salts",
+    "category": "Rehydration",
+    "dosageForms": [
+      "Powder",
+      "Oral Solution"
+    ],
+    "therapeutic": "Electrolyte Balance"
+  },
+  {
+    "name": "Dextrose",
+    "category": "Nutrient",
+    "dosageForms": [
+      "Injectable",
+      "Oral Solution",
+      "Gel"
+    ],
+    "therapeutic": "Nutritional/Emergency"
+  },
+  {
+    "name": "Mirtazapine",
+    "category": "NaSSA",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Bupropion",
+    "category": "NDRI",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Trazodone",
+    "category": "SARI",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Amitriptyline",
+    "category": "TCA",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry/Pain"
+  },
+  {
+    "name": "Nortriptyline",
+    "category": "TCA",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Psychiatry/Pain"
+  },
+  {
+    "name": "Imipramine",
+    "category": "TCA",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Clomipramine",
+    "category": "TCA",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Desipramine",
+    "category": "TCA",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Paroxetine",
+    "category": "SSRI",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension",
+      "Extended-Release Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Citalopram",
+    "category": "SSRI",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Fluvoxamine",
+    "category": "SSRI",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Desvenlafaxine",
+    "category": "SNRI",
+    "dosageForms": [
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Milnacipran",
+    "category": "SNRI",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry/Pain"
+  },
+  {
+    "name": "Buspirone",
+    "category": "Anxiolytic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Clonazepam",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Psychiatry/CNS"
+  },
+  {
+    "name": "Midazolam",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Injectable",
+      "Nasal Spray",
+      "Oral Solution",
+      "Oromucosal Solution"
+    ],
+    "therapeutic": "Anesthesia/CNS"
+  },
+  {
+    "name": "Triazolam",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Chlordiazepoxide",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Oxazepam",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Temazepam",
+    "category": "Benzodiazepine",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Eszopiclone",
+    "category": "Non-benzodiazepine Hypnotic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Zaleplon",
+    "category": "Non-benzodiazepine Hypnotic",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Melatonin",
+    "category": "Hormone",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid",
+      "Oral Disintegrating Tablet",
+      "Extended-Release Tablet",
+      "Gummy"
+    ],
+    "therapeutic": "CNS/Sleep"
+  },
+  {
+    "name": "Modafinil",
+    "category": "Wakefulness Agent",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Methylphenidate",
+    "category": "CNS Stimulant",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Capsule",
+      "Transdermal Patch",
+      "Chewable Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Amphetamine",
+    "category": "CNS Stimulant",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Atomoxetine",
+    "category": "NRI",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Paliperidone",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Extended-Release Tablet",
+      "Long-Acting Injectable"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Ziprasidone",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Capsule",
+      "Injectable"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Clozapine",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Lurasidone",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Brexpiprazole",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Cariprazine",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Pimozide",
+    "category": "Antipsychotic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Memantine",
+    "category": "NMDA Antagonist",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Extended-Release Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS/Alzheimer's"
+  },
+  {
+    "name": "Galantamine",
+    "category": "AChE Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS/Alzheimer's"
+  },
+  {
+    "name": "Pramipexole",
+    "category": "Dopamine Agonist",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Selegiline",
+    "category": "MAO-B Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Transdermal Patch",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Rasagiline",
+    "category": "MAO-B Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Entacapone",
+    "category": "COMT Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Amantadine",
+    "category": "Dopaminergic",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Extended-Release Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Trihexyphenidyl",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Tablet",
+      "Elixir"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Benztropine",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "CNS/Parkinson's"
+  },
+  {
+    "name": "Oxcarbazepine",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Zonisamide",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Lacosamide",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Brivaracetam",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Perampanel",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Clobazam",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Vigabatrin",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Powder for Solution"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Ethosuximide",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Primidone",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Tiagabine",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Felbamate",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Rufinamide",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Metoclopramide",
+    "category": "Prokinetic/Antiemetic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Solution",
+      "Nasal Spray",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Prochlorperazine",
+    "category": "Antiemetic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Suppository"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Granisetron",
+    "category": "5-HT3 Antagonist",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Transdermal Patch",
+      "Oral Solution"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Aprepitant",
+    "category": "NK1 Antagonist",
+    "dosageForms": [
+      "Capsule",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Scopolamine",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Transdermal Patch",
+      "Injectable",
+      "Ophthalmic"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Lansoprazole",
+    "category": "PPI",
+    "dosageForms": [
+      "Capsule",
+      "Oral Disintegrating Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Rabeprazole",
+    "category": "PPI",
+    "dosageForms": [
+      "Tablet",
+      "Delayed-Release Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Dexlansoprazole",
+    "category": "PPI",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Famotidine",
+    "category": "H2 Blocker",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Oral Suspension",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Cimetidine",
+    "category": "H2 Blocker",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Antacid",
+    "category": "Antacid",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Chewable Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Magnesium Hydroxide",
+    "category": "Antacid/Laxative",
+    "dosageForms": [
+      "Liquid",
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Aluminium Hydroxide",
+    "category": "Antacid",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Polyethylene Glycol",
+    "category": "Osmotic Laxative",
+    "dosageForms": [
+      "Powder",
+      "Oral Solution"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Bisacodyl",
+    "category": "Stimulant Laxative",
+    "dosageForms": [
+      "Tablet",
+      "Suppository",
+      "Enteric-Coated Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Docusate",
+    "category": "Stool Softener",
+    "dosageForms": [
+      "Capsule",
+      "Liquid",
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Lubiprostone",
+    "category": "Chloride Channel Activator",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Linaclotide",
+    "category": "Guanylate Cyclase Agonist",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Mesalamine",
+    "category": "5-ASA",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Suppository",
+      "Enema",
+      "Extended-Release Capsule",
+      "Rectal Foam"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Budesonide EC",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Capsule",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Ursodeoxycholic Acid",
+    "category": "Bile Acid",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Hepatology"
+  },
+  {
+    "name": "Lactoferrin",
+    "category": "Protein",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Immunology/GI"
+  },
+  {
+    "name": "Pancreatin",
+    "category": "Enzyme",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Pancrelipase",
+    "category": "Enzyme",
+    "dosageForms": [
+      "Capsule",
+      "Delayed-Release Capsule"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Propofol",
+    "category": "Anesthetic",
+    "dosageForms": [
+      "Injectable",
+      "Emulsion"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Ketamine",
+    "category": "Dissociative Anesthetic",
+    "dosageForms": [
+      "Injectable",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Anesthesia/Psychiatry"
+  },
+  {
+    "name": "Thiopental",
+    "category": "Barbiturate",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Sevoflurane",
+    "category": "Inhalation Anesthetic",
+    "dosageForms": [
+      "Liquid for Inhalation"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Isoflurane",
+    "category": "Inhalation Anesthetic",
+    "dosageForms": [
+      "Liquid for Inhalation"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Desflurane",
+    "category": "Inhalation Anesthetic",
+    "dosageForms": [
+      "Liquid for Inhalation"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Nitrous Oxide",
+    "category": "Inhalation Anesthetic",
+    "dosageForms": [
+      "Gas"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Fentanyl",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Injectable",
+      "Transdermal Patch",
+      "Lozenge",
+      "Buccal Film",
+      "Nasal Spray",
+      "Sublingual Tablet"
+    ],
+    "therapeutic": "Pain/Anesthesia"
+  },
+  {
+    "name": "Sufentanil",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Injectable",
+      "Sublingual Tablet"
+    ],
+    "therapeutic": "Pain/Anesthesia"
+  },
+  {
+    "name": "Remifentanil",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Hydromorphone",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Extended-Release Tablet",
+      "Liquid",
+      "Suppository"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Oxycodone",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Extended-Release Tablet",
+      "Oral Solution",
+      "Oral Concentrate"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Hydrocodone",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Buprenorphine",
+    "category": "Opioid Partial Agonist",
+    "dosageForms": [
+      "Sublingual Tablet",
+      "Transdermal Patch",
+      "Injectable",
+      "Implant",
+      "Buccal Film"
+    ],
+    "therapeutic": "Pain/Addiction"
+  },
+  {
+    "name": "Methadone",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Oral Concentrate",
+      "Dispersible Tablet"
+    ],
+    "therapeutic": "Pain/Addiction"
+  },
+  {
+    "name": "Naloxone",
+    "category": "Opioid Antagonist",
+    "dosageForms": [
+      "Injectable",
+      "Nasal Spray",
+      "Prefilled Syringe"
+    ],
+    "therapeutic": "Emergency/Addiction"
+  },
+  {
+    "name": "Naltrexone",
+    "category": "Opioid Antagonist",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Extended-Release Injectable"
+    ],
+    "therapeutic": "Addiction"
+  },
+  {
+    "name": "Ropivacaine",
+    "category": "Local Anesthetic",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Mepivacaine",
+    "category": "Local Anesthetic",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Prilocaine",
+    "category": "Local Anesthetic",
+    "dosageForms": [
+      "Injectable",
+      "Topical"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Tetracaine",
+    "category": "Local Anesthetic",
+    "dosageForms": [
+      "Topical",
+      "Ophthalmic",
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Benzocaine",
+    "category": "Local Anesthetic",
+    "dosageForms": [
+      "Topical",
+      "Lozenge",
+      "Spray",
+      "Gel",
+      "Ointment"
+    ],
+    "therapeutic": "Anesthesia/Dental"
+  },
+  {
+    "name": "Succinylcholine",
+    "category": "Neuromuscular Blocker",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Rocuronium",
+    "category": "Neuromuscular Blocker",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Vecuronium",
+    "category": "Neuromuscular Blocker",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Atracurium",
+    "category": "Neuromuscular Blocker",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Neostigmine",
+    "category": "AChE Inhibitor",
+    "dosageForms": [
+      "Injectable",
+      "Tablet"
+    ],
+    "therapeutic": "Anesthesia/Neurology"
+  },
+  {
+    "name": "Sugammadex",
+    "category": "Reversal Agent",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Anesthesia"
+  },
+  {
+    "name": "Flumazenil",
+    "category": "Benzodiazepine Antagonist",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Emergency"
+  },
+  {
+    "name": "Brimonidine",
+    "category": "Alpha-2 Agonist",
+    "dosageForms": [
+      "Ophthalmic",
+      "Topical"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Bimatoprost",
+    "category": "Prostaglandin Analog",
+    "dosageForms": [
+      "Ophthalmic",
+      "Topical"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Travoprost",
+    "category": "Prostaglandin Analog",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Brinzolamide",
+    "category": "CAI",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Acetazolamide",
+    "category": "CAI",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable"
+    ],
+    "therapeutic": "Ophthalmology/Neurology"
+  },
+  {
+    "name": "Tropicamide",
+    "category": "Mydriatic",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Cyclopentolate",
+    "category": "Mydriatic",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Fluorometholone",
+    "category": "Corticosteroid",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Nepafenac",
+    "category": "NSAID",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Ketorolac Ophthalmic",
+    "category": "NSAID",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Carboxymethylcellulose",
+    "category": "Lubricant",
+    "dosageForms": [
+      "Ophthalmic"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Hyaluronic Acid",
+    "category": "Lubricant",
+    "dosageForms": [
+      "Ophthalmic",
+      "Injectable",
+      "Topical",
+      "Gel"
+    ],
+    "therapeutic": "Ophthalmology/Dermatology"
+  },
+  {
+    "name": "Ranibizumab",
+    "category": "Anti-VEGF",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Aflibercept",
+    "category": "Anti-VEGF",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Adapalene",
+    "category": "Retinoid",
+    "dosageForms": [
+      "Topical",
+      "Gel",
+      "Cream",
+      "Lotion"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Isotretinoin",
+    "category": "Retinoid",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Tazarotene",
+    "category": "Retinoid",
+    "dosageForms": [
+      "Topical",
+      "Gel",
+      "Cream",
+      "Foam",
+      "Lotion"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Benzoyl Peroxide",
+    "category": "Keratolytic",
+    "dosageForms": [
+      "Topical",
+      "Gel",
+      "Cream",
+      "Wash",
+      "Lotion",
+      "Foam"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Salicylic Acid",
+    "category": "Keratolytic",
+    "dosageForms": [
+      "Topical",
+      "Liquid",
+      "Gel",
+      "Ointment",
+      "Cream",
+      "Shampoo",
+      "Patch"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Azelaic Acid",
+    "category": "Dicarboxylic Acid",
+    "dosageForms": [
+      "Topical",
+      "Gel",
+      "Cream",
+      "Foam"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Clindamycin Topical",
+    "category": "Antibiotic",
+    "dosageForms": [
+      "Topical",
+      "Gel",
+      "Lotion",
+      "Solution",
+      "Foam",
+      "Pledget"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Erythromycin Topical",
+    "category": "Antibiotic",
+    "dosageForms": [
+      "Topical",
+      "Gel",
+      "Ointment",
+      "Solution",
+      "Pledget"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Metronidazole Topical",
+    "category": "Antibiotic",
+    "dosageForms": [
+      "Topical",
+      "Gel",
+      "Cream",
+      "Lotion"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Ketoconazole Topical",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Cream",
+      "Shampoo",
+      "Foam",
+      "Gel"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Ciclopirox",
+    "category": "Antifungal",
+    "dosageForms": [
+      "Topical",
+      "Cream",
+      "Gel",
+      "Lacquer",
+      "Shampoo",
+      "Solution"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Calcipotriene",
+    "category": "Vitamin D Analog",
+    "dosageForms": [
+      "Topical",
+      "Cream",
+      "Ointment",
+      "Solution",
+      "Foam"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Coal Tar",
+    "category": "Keratolytic",
+    "dosageForms": [
+      "Shampoo",
+      "Topical",
+      "Lotion",
+      "Cream",
+      "Ointment",
+      "Solution"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Pimecrolimus",
+    "category": "Calcineurin Inhibitor",
+    "dosageForms": [
+      "Cream"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Imiquimod",
+    "category": "Immune Modifier",
+    "dosageForms": [
+      "Cream"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Fluorouracil Topical",
+    "category": "Antimetabolite",
+    "dosageForms": [
+      "Cream",
+      "Solution"
+    ],
+    "therapeutic": "Dermatology"
+  },
+  {
+    "name": "Diclofenac Topical",
+    "category": "NSAID",
+    "dosageForms": [
+      "Gel",
+      "Solution",
+      "Patch"
+    ],
+    "therapeutic": "Dermatology/Pain"
+  },
+  {
+    "name": "Capsaicin",
+    "category": "Topical Analgesic",
+    "dosageForms": [
+      "Cream",
+      "Patch",
+      "Gel",
+      "Lotion"
+    ],
+    "therapeutic": "Pain/Dermatology"
+  },
+  {
+    "name": "Menthol",
+    "category": "Topical Analgesic",
+    "dosageForms": [
+      "Cream",
+      "Gel",
+      "Patch",
+      "Ointment",
+      "Lozenge",
+      "Spray"
+    ],
+    "therapeutic": "Pain/Respiratory"
+  },
+  {
+    "name": "Methyl Salicylate",
+    "category": "Topical Analgesic",
+    "dosageForms": [
+      "Cream",
+      "Ointment",
+      "Patch",
+      "Gel"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Camphor",
+    "category": "Topical Analgesic",
+    "dosageForms": [
+      "Topical",
+      "Ointment",
+      "Cream",
+      "Gel"
+    ],
+    "therapeutic": "Pain/Respiratory"
+  },
+  {
+    "name": "Dutasteride",
+    "category": "5-alpha Reductase Inhibitor",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Alfuzosin",
+    "category": "Alpha-blocker",
+    "dosageForms": [
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Silodosin",
+    "category": "Alpha-blocker",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Oxybutynin",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Topical",
+      "Gel",
+      "Transdermal Patch",
+      "Oral Solution"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Tolterodine",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Capsule"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Solifenacin",
+    "category": "Anticholinergic",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Mirabegron",
+    "category": "Beta-3 Agonist",
+    "dosageForms": [
+      "Extended-Release Tablet",
+      "Granules"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Tadalafil",
+    "category": "PDE5 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Urology/Pulmonary"
+  },
+  {
+    "name": "Vardenafil",
+    "category": "PDE5 Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Urology"
+  },
+  {
+    "name": "Dantrolene",
+    "category": "Muscle Relaxant",
+    "dosageForms": [
+      "Capsule",
+      "Injectable"
+    ],
+    "therapeutic": "Musculoskeletal/Emergency"
+  },
+  {
+    "name": "Methocarbamol",
+    "category": "Muscle Relaxant",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Orphenadrine",
+    "category": "Muscle Relaxant",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Carisoprodol",
+    "category": "Muscle Relaxant",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Febuxostat",
+    "category": "Xanthine Oxidase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Probenecid",
+    "category": "Uricosuric",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Pegloticase",
+    "category": "Enzyme",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Risedronate",
+    "category": "Bisphosphonate",
+    "dosageForms": [
+      "Tablet",
+      "Delayed-Release Tablet"
+    ],
+    "therapeutic": "Bone Health"
+  },
+  {
+    "name": "Ibandronate",
+    "category": "Bisphosphonate",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Bone Health"
+  },
+  {
+    "name": "Zoledronic Acid",
+    "category": "Bisphosphonate",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Bone Health/Oncology"
+  },
+  {
+    "name": "Denosumab",
+    "category": "RANKL Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Bone Health/Oncology"
+  },
+  {
+    "name": "Teriparatide",
+    "category": "PTH Analog",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Bone Health"
+  },
+  {
+    "name": "Calcitonin",
+    "category": "Hormone",
+    "dosageForms": [
+      "Nasal Spray",
+      "Injectable"
+    ],
+    "therapeutic": "Bone Health"
+  },
+  {
+    "name": "Raloxifene",
+    "category": "SERM",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Bone Health"
+  },
+  {
+    "name": "Strontium Ranelate",
+    "category": "Bone Agent",
+    "dosageForms": [
+      "Granules",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Bone Health"
+  },
+  {
+    "name": "Progesterone",
+    "category": "Progestogen",
+    "dosageForms": [
+      "Capsule",
+      "Injectable",
+      "Vaginal",
+      "Gel",
+      "Insert"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Medroxyprogesterone",
+    "category": "Progestogen",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Levonorgestrel",
+    "category": "Progestogen",
+    "dosageForms": [
+      "Tablet",
+      "Intrauterine Device",
+      "Implant"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Etonogestrel",
+    "category": "Progestogen",
+    "dosageForms": [
+      "Implant",
+      "Vaginal Ring"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Conjugated Estrogens",
+    "category": "Estrogen",
+    "dosageForms": [
+      "Tablet",
+      "Cream",
+      "Injectable"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Estradiol",
+    "category": "Estrogen",
+    "dosageForms": [
+      "Tablet",
+      "Transdermal Patch",
+      "Cream",
+      "Gel",
+      "Vaginal Ring",
+      "Injectable",
+      "Spray"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Mifepristone",
+    "category": "Progesterone Antagonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Dinoprostone",
+    "category": "Prostaglandin",
+    "dosageForms": [
+      "Vaginal Insert",
+      "Gel",
+      "Suppository"
+    ],
+    "therapeutic": "Obstetrics"
+  },
+  {
+    "name": "Carboprost",
+    "category": "Prostaglandin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Obstetrics"
+  },
+  {
+    "name": "Methylergonovine",
+    "category": "Ergot Alkaloid",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Obstetrics"
+  },
+  {
+    "name": "Magnesium Sulfate IV",
+    "category": "Tocolytic",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Obstetrics"
+  },
+  {
+    "name": "Nifedipine Oral",
+    "category": "Tocolytic",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Obstetrics"
+  },
+  {
+    "name": "Letrozole Fertility",
+    "category": "Aromatase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Gynecology"
+  },
+  {
+    "name": "Testosterone",
+    "category": "Androgen",
+    "dosageForms": [
+      "Injectable",
+      "Topical",
+      "Gel",
+      "Patch",
+      "Pellet",
+      "Buccal"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Propylthiouracil",
+    "category": "Antithyroid",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Carbimazole",
+    "category": "Antithyroid",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Liothyronine",
+    "category": "Thyroid Hormone",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Growth Hormone",
+    "category": "Hormone",
+    "dosageForms": [
+      "Injectable",
+      "Pen Injection"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Octreotide",
+    "category": "Somatostatin Analog",
+    "dosageForms": [
+      "Injectable",
+      "Long-Acting Injectable"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Cabergoline",
+    "category": "Dopamine Agonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Bromocriptine",
+    "category": "Dopamine Agonist",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Fludrocortisone",
+    "category": "Mineralocorticoid",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Cinacalcet",
+    "category": "Calcimimetic",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Endocrine"
+  },
+  {
+    "name": "Sevelamer",
+    "category": "Phosphate Binder",
+    "dosageForms": [
+      "Tablet",
+      "Powder"
+    ],
+    "therapeutic": "Nephrology"
+  },
+  {
+    "name": "Lanthanum",
+    "category": "Phosphate Binder",
+    "dosageForms": [
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Nephrology"
+  },
+  {
+    "name": "Ephedrine",
+    "category": "Sympathomimetic",
+    "dosageForms": [
+      "Injectable",
+      "Capsule"
+    ],
+    "therapeutic": "Emergency/Respiratory"
+  },
+  {
+    "name": "Phenylephrine",
+    "category": "Alpha-1 Agonist",
+    "dosageForms": [
+      "Injectable",
+      "Ophthalmic",
+      "Nasal Spray",
+      "Oral Solution",
+      "Tablet"
+    ],
+    "therapeutic": "Emergency/Decongestant"
+  },
+  {
+    "name": "Pseudoephedrine",
+    "category": "Decongestant",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Liquid",
+      "Oral Solution"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Oxymetazoline",
+    "category": "Decongestant",
+    "dosageForms": [
+      "Nasal Spray",
+      "Ophthalmic"
+    ],
+    "therapeutic": "Respiratory/Ophthalmology"
+  },
+  {
+    "name": "Xylometazoline",
+    "category": "Decongestant",
+    "dosageForms": [
+      "Nasal Spray",
+      "Nasal Drops"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Sodium Cromoglycate",
+    "category": "Mast Cell Stabilizer",
+    "dosageForms": [
+      "Ophthalmic",
+      "Inhaler",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Loratadine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Oral Disintegrating Tablet",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Desloratadine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Bilastine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Ebastine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Oral Disintegrating Tablet"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Rupatadine",
+    "category": "Antihistamine",
+    "dosageForms": [
+      "Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Ketotifen",
+    "category": "Antihistamine/Mast Cell Stabilizer",
+    "dosageForms": [
+      "Tablet",
+      "Ophthalmic",
+      "Oral Solution"
+    ],
+    "therapeutic": "Allergy"
+  },
+  {
+    "name": "Montelukast Sodium",
+    "category": "Leukotriene Antagonist",
+    "dosageForms": [
+      "Tablet",
+      "Chewable Tablet",
+      "Granules"
+    ],
+    "therapeutic": "Respiratory/Allergy"
+  },
+  {
+    "name": "Zafirlukast",
+    "category": "Leukotriene Antagonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Zileuton",
+    "category": "5-LOX Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet"
+    ],
+    "therapeutic": "Respiratory"
+  },
+  {
+    "name": "Aceclofenac",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Gel",
+      "Cream"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Etoricoxib",
+    "category": "COX-2 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Meloxicam",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable",
+      "Oral Disintegrating Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Indomethacin",
+    "category": "NSAID",
+    "dosageForms": [
+      "Capsule",
+      "Suppository",
+      "Injectable",
+      "Extended-Release Capsule",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Mefenamic Acid",
+    "category": "NSAID",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Nimesulide",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Gel",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Flurbiprofen",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Ophthalmic",
+      "Lozenge"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Oxaprozin",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Tenoxicam",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Lornoxicam",
+    "category": "NSAID",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Pain/Inflammation"
+  },
+  {
+    "name": "Tapentadol",
+    "category": "Opioid Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Extended-Release Tablet",
+      "Oral Solution"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Pentazocine",
+    "category": "Opioid Agonist-Antagonist",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Nefopam",
+    "category": "Centrally Acting Analgesic",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Pain"
+  },
+  {
+    "name": "Diacerein",
+    "category": "Anthraquinone",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Glucosamine",
+    "category": "Supplement",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Powder",
+      "Liquid"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Chondroitin",
+    "category": "Supplement",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Musculoskeletal"
+  },
+  {
+    "name": "Ashwagandha",
+    "category": "Adaptogen",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Powder",
+      "Liquid Extract"
+    ],
+    "therapeutic": "General Wellness"
+  },
+  {
+    "name": "Ginseng",
+    "category": "Adaptogen",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid Extract",
+      "Tea"
+    ],
+    "therapeutic": "General Wellness"
+  },
+  {
+    "name": "Ginkgo Biloba",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid Extract"
+    ],
+    "therapeutic": "CNS/Vascular"
+  },
+  {
+    "name": "St. John's Wort",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid Extract",
+      "Tea"
+    ],
+    "therapeutic": "Psychiatry"
+  },
+  {
+    "name": "Echinacea",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid Extract",
+      "Lozenge",
+      "Tea"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Milk Thistle",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid Extract"
+    ],
+    "therapeutic": "Hepatology"
+  },
+  {
+    "name": "Valerian",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid Extract",
+      "Tea"
+    ],
+    "therapeutic": "CNS/Sleep"
+  },
+  {
+    "name": "Aloe Vera",
+    "category": "Herbal",
+    "dosageForms": [
+      "Topical",
+      "Gel",
+      "Liquid",
+      "Capsule",
+      "Cream"
+    ],
+    "therapeutic": "Dermatology/GI"
+  },
+  {
+    "name": "Turmeric Extract",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Powder",
+      "Topical"
+    ],
+    "therapeutic": "Anti-inflammatory"
+  },
+  {
+    "name": "Neem Extract",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Topical",
+      "Oil",
+      "Tablet"
+    ],
+    "therapeutic": "Dermatology/Anti-infective"
+  },
+  {
+    "name": "Tulsi Extract",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid Extract",
+      "Tea"
+    ],
+    "therapeutic": "Respiratory/Immunology"
+  },
+  {
+    "name": "Brahmi",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Liquid Extract"
+    ],
+    "therapeutic": "CNS/Nootropic"
+  },
+  {
+    "name": "Shankhpushpi",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Powder"
+    ],
+    "therapeutic": "CNS/Nootropic"
+  },
+  {
+    "name": "Guduchi",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Powder",
+      "Liquid Extract"
+    ],
+    "therapeutic": "Immunology"
+  },
+  {
+    "name": "Arjuna",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Powder"
+    ],
+    "therapeutic": "Cardiovascular"
+  },
+  {
+    "name": "Guggul",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Cardiovascular/Anti-inflammatory"
+  },
+  {
+    "name": "Shatavari",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Powder"
+    ],
+    "therapeutic": "Gynecology/Immunology"
+  },
+  {
+    "name": "Triphala",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Powder",
+      "Liquid"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Haritaki",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Powder"
+    ],
+    "therapeutic": "Gastrointestinal"
+  },
+  {
+    "name": "Amla",
+    "category": "Herbal",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Powder",
+      "Liquid",
+      "Candy"
+    ],
+    "therapeutic": "Nutritional/Antioxidant"
+  },
+  {
+    "name": "Boswellia",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Topical"
+    ],
+    "therapeutic": "Anti-inflammatory"
+  },
+  {
+    "name": "Moringa",
+    "category": "Herbal",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Powder",
+      "Tea"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Spirulina",
+    "category": "Supplement",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Powder"
+    ],
+    "therapeutic": "Nutritional"
+  },
+  {
+    "name": "Probiotics",
+    "category": "Supplement",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Powder",
+      "Liquid",
+      "Sachet"
+    ],
+    "therapeutic": "Gastrointestinal/Immunology"
+  },
+  {
+    "name": "Omega-3 Fish Oil",
+    "category": "Supplement",
+    "dosageForms": [
+      "Capsule",
+      "Liquid",
+      "Chewable",
+      "Softgel"
+    ],
+    "therapeutic": "Cardiovascular/General"
+  },
+  {
+    "name": "Coenzyme Q10",
+    "category": "Supplement",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Softgel",
+      "Liquid"
+    ],
+    "therapeutic": "Cardiovascular/Antioxidant"
+  },
+  {
+    "name": "L-Carnitine",
+    "category": "Amino Acid",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid",
+      "Injectable"
+    ],
+    "therapeutic": "Metabolic"
+  },
+  {
+    "name": "Alpha Lipoic Acid",
+    "category": "Antioxidant",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Injectable"
+    ],
+    "therapeutic": "Neuropathy/Antioxidant"
+  },
+  {
+    "name": "Collagen",
+    "category": "Protein",
+    "dosageForms": [
+      "Powder",
+      "Capsule",
+      "Tablet",
+      "Liquid"
+    ],
+    "therapeutic": "Dermatology/Joint Health"
+  },
+  {
+    "name": "Lycopene",
+    "category": "Carotenoid",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Softgel"
+    ],
+    "therapeutic": "Antioxidant"
+  },
+  {
+    "name": "Lutein",
+    "category": "Carotenoid",
+    "dosageForms": [
+      "Capsule",
+      "Tablet",
+      "Softgel"
+    ],
+    "therapeutic": "Ophthalmology"
+  },
+  {
+    "name": "Selenium",
+    "category": "Mineral",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Nutritional/Antioxidant"
+  },
+  {
+    "name": "Chromium",
+    "category": "Mineral",
+    "dosageForms": [
+      "Tablet",
+      "Capsule"
+    ],
+    "therapeutic": "Diabetes/Nutritional"
+  },
+  {
+    "name": "Iron Polymaltose",
+    "category": "Iron Supplement",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Carbonyl Iron",
+    "category": "Iron Supplement",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Chewable Tablet"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Ferrous Fumarate",
+    "category": "Iron Supplement",
+    "dosageForms": [
+      "Tablet",
+      "Capsule",
+      "Liquid"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Ferrous Gluconate",
+    "category": "Iron Supplement",
+    "dosageForms": [
+      "Tablet",
+      "Liquid"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Mannitol",
+    "category": "Osmotic Agent",
+    "dosageForms": [
+      "Injectable",
+      "Powder"
+    ],
+    "therapeutic": "Neurology/Nephrology"
+  },
+  {
+    "name": "Glycerol",
+    "category": "Osmotic Agent",
+    "dosageForms": [
+      "Suppository",
+      "Oral Solution",
+      "Topical"
+    ],
+    "therapeutic": "GI/Dermatology"
+  },
+  {
+    "name": "Phenobarbital",
+    "category": "Barbiturate",
+    "dosageForms": [
+      "Tablet",
+      "Injectable",
+      "Liquid",
+      "Elixir"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Sodium Valproate",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Liquid",
+      "Injectable",
+      "Extended-Release Tablet",
+      "Sprinkle Capsule"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Divalproex Sodium",
+    "category": "Anticonvulsant",
+    "dosageForms": [
+      "Tablet",
+      "Delayed-Release Tablet",
+      "Extended-Release Tablet",
+      "Sprinkle Capsule"
+    ],
+    "therapeutic": "CNS"
+  },
+  {
+    "name": "Acamprosate",
+    "category": "GABA Analog",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Addiction"
+  },
+  {
+    "name": "Disulfiram",
+    "category": "Aldehyde Dehydrogenase Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Addiction"
+  },
+  {
+    "name": "Varenicline",
+    "category": "Nicotinic Agonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Addiction"
+  },
+  {
+    "name": "Nicotine",
+    "category": "Nicotinic Agonist",
+    "dosageForms": [
+      "Transdermal Patch",
+      "Gum",
+      "Lozenge",
+      "Inhaler",
+      "Nasal Spray"
+    ],
+    "therapeutic": "Addiction"
+  },
+  {
+    "name": "Dimethyl Fumarate",
+    "category": "Nrf2 Activator",
+    "dosageForms": [
+      "Capsule",
+      "Delayed-Release Capsule"
+    ],
+    "therapeutic": "Neurology"
+  },
+  {
+    "name": "Fingolimod",
+    "category": "S1P Modulator",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Neurology"
+  },
+  {
+    "name": "Glatiramer",
+    "category": "Immunomodulator",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Neurology"
+  },
+  {
+    "name": "Interferon Beta",
+    "category": "Immunomodulator",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Neurology"
+  },
+  {
+    "name": "Natalizumab",
+    "category": "Monoclonal Antibody",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Neurology"
+  },
+  {
+    "name": "Riluzole",
+    "category": "Glutamate Inhibitor",
+    "dosageForms": [
+      "Tablet",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Neurology"
+  },
+  {
+    "name": "Edaravone",
+    "category": "Free Radical Scavenger",
+    "dosageForms": [
+      "Injectable",
+      "Oral Suspension"
+    ],
+    "therapeutic": "Neurology"
+  },
+  {
+    "name": "Tetrabenazine",
+    "category": "VMAT2 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Neurology"
+  },
+  {
+    "name": "Suvorexant",
+    "category": "Orexin Antagonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS/Sleep"
+  },
+  {
+    "name": "Lemborexant",
+    "category": "Orexin Antagonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS/Sleep"
+  },
+  {
+    "name": "Ramelteon",
+    "category": "Melatonin Agonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "CNS/Sleep"
+  },
+  {
+    "name": "Tasimelteon",
+    "category": "Melatonin Agonist",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "CNS/Sleep"
+  },
+  {
+    "name": "Dronabinol",
+    "category": "Cannabinoid",
+    "dosageForms": [
+      "Capsule",
+      "Oral Solution"
+    ],
+    "therapeutic": "Antiemetic/Appetite"
+  },
+  {
+    "name": "Nabilone",
+    "category": "Cannabinoid",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Antiemetic"
+  },
+  {
+    "name": "Cannabidiol",
+    "category": "Cannabinoid",
+    "dosageForms": [
+      "Oral Solution",
+      "Capsule",
+      "Topical"
+    ],
+    "therapeutic": "CNS/Epilepsy"
+  },
+  {
+    "name": "Pirfenidone",
+    "category": "Antifibrotic",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Nintedanib",
+    "category": "Tyrosine Kinase Inhibitor",
+    "dosageForms": [
+      "Capsule"
+    ],
+    "therapeutic": "Pulmonary/Oncology"
+  },
+  {
+    "name": "Bosentan",
+    "category": "Endothelin Antagonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Ambrisentan",
+    "category": "Endothelin Antagonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Macitentan",
+    "category": "Endothelin Antagonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Iloprost",
+    "category": "Prostacyclin",
+    "dosageForms": [
+      "Nebulizer Solution",
+      "Injectable"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Treprostinil",
+    "category": "Prostacyclin",
+    "dosageForms": [
+      "Injectable",
+      "Inhaler",
+      "Oral",
+      "Tablet"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Epoprostenol",
+    "category": "Prostacyclin",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Riociguat",
+    "category": "sGC Stimulator",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Selexipag",
+    "category": "IP Agonist",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Pulmonary"
+  },
+  {
+    "name": "Deferoxamine",
+    "category": "Iron Chelator",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Toxicology"
+  },
+  {
+    "name": "Deferasirox",
+    "category": "Iron Chelator",
+    "dosageForms": [
+      "Tablet",
+      "Dispersible Tablet"
+    ],
+    "therapeutic": "Hematology"
+  },
+  {
+    "name": "Penicillamine",
+    "category": "Chelator",
+    "dosageForms": [
+      "Capsule",
+      "Tablet"
+    ],
+    "therapeutic": "Toxicology/Immunology"
+  },
+  {
+    "name": "Dimercaprol",
+    "category": "Heavy Metal Chelator",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Toxicology"
+  },
+  {
+    "name": "Sodium Thiosulfate",
+    "category": "Antidote",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Toxicology"
+  },
+  {
+    "name": "Pralidoxime",
+    "category": "AChE Reactivator",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Toxicology"
+  },
+  {
+    "name": "Physostigmine",
+    "category": "AChE Inhibitor",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Toxicology"
+  },
+  {
+    "name": "Leucovorin",
+    "category": "Folate Analog",
+    "dosageForms": [
+      "Tablet",
+      "Injectable"
+    ],
+    "therapeutic": "Oncology/Toxicology"
+  },
+  {
+    "name": "Protamine",
+    "category": "Heparin Antagonist",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Emergency"
+  },
+  {
+    "name": "Idarucizumab",
+    "category": "Dabigatran Reversal",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Emergency"
+  },
+  {
+    "name": "Andexanet Alfa",
+    "category": "Factor Xa Reversal",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Emergency"
+  },
+  {
+    "name": "Calcium Gluconate",
+    "category": "Electrolyte",
+    "dosageForms": [
+      "Injectable",
+      "Tablet",
+      "Gel"
+    ],
+    "therapeutic": "Emergency/Nutritional"
+  },
+  {
+    "name": "Sodium Chloride",
+    "category": "Electrolyte",
+    "dosageForms": [
+      "Injectable",
+      "Nasal Spray",
+      "Ophthalmic",
+      "Solution",
+      "Nebulizer Solution"
+    ],
+    "therapeutic": "Fluid Balance"
+  },
+  {
+    "name": "Ringer Lactate",
+    "category": "IV Fluid",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Fluid Balance"
+  },
+  {
+    "name": "Albumin",
+    "category": "Plasma Expander",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Emergency/Critical Care"
+  },
+  {
+    "name": "Hetastarch",
+    "category": "Plasma Expander",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Emergency"
+  },
+  {
+    "name": "Rasburicase",
+    "category": "Uricase",
+    "dosageForms": [
+      "Injectable"
+    ],
+    "therapeutic": "Oncology"
+  },
+  {
+    "name": "Alogliptin",
+    "category": "DPP-4 Inhibitor",
+    "dosageForms": [
+      "Tablet"
+    ],
+    "therapeutic": "Diabetes"
+  }
+]
