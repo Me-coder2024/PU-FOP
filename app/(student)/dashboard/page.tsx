@@ -174,7 +174,7 @@ export default function StudentDashboard() {
                   style={{ width: `${completionPercent}%` }}
                 />
               </div>
-              <p className="text-[10px] text-[#4361EE] font-medium mt-1.5" style={authorFont}>Google Photos</p>
+              <p className="text-[10px] text-[#4361EE] font-medium mt-1.5" style={authorFont}>Overall Progress</p>
             </div>
           </div>
 

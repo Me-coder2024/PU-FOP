@@ -12,6 +12,7 @@ import {
   Check,
   UserCheck,
 } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 interface Institute {
   id: string;
@@ -52,6 +53,8 @@ export default function RoleGrantsPage() {
   const [instId, setInstId] = useState('');
   const [deptId, setDeptId] = useState('');
   const [canEdit, setCanEdit] = useState(false);
+  const [revokeTarget, setRevokeTarget] = useState<RoleGrant | null>(null);
+  const { success, error: showError } = useToast();
 
   const fetchData = useCallback(async () => {
     try {
@@ -141,18 +144,24 @@ export default function RoleGrantsPage() {
       setInstId('');
       setDeptId('');
       setCanEdit(false);
-      alert('Role pre-provisioned successfully.');
+      success('Role pre-provisioned successfully.', 'Success');
       await fetchData();
     } catch (err: any) {
       console.error('Error creating role grant', err);
-      alert(err.message || 'Failed to create role grant.');
+      showError(err.message || 'Failed to create role grant.', 'Error');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeleteGrant = async (grant: RoleGrant) => {
-    if (!confirm(`Are you sure you want to revoke role access for ${grant.email}?`)) return;
+    setRevokeTarget(grant);
+  };
+
+  const confirmRevokeGrant = async () => {
+    if (!revokeTarget) return;
+    const grant = revokeTarget;
+    setRevokeTarget(null);
     try {
       const { error } = await supabase.from('role_grants').delete().eq('id', grant.id);
       if (error) throw error;
@@ -186,10 +195,11 @@ export default function RoleGrantsPage() {
         old_data: grant as any,
       });
 
+      success('Role access revoked successfully.', 'Success');
       await fetchData();
     } catch (err) {
       console.error('Error revoking role grant', err);
-      alert('Failed to revoke role grant.');
+      showError('Failed to revoke role grant.', 'Error');
     }
   };
 
@@ -367,6 +377,22 @@ export default function RoleGrantsPage() {
           </div>
         </div>
       </div>
+
+      {/* Revoke Confirmation Modal */}
+      {revokeTarget && (
+        <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl mx-4">
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Revoke Access</h3>
+            <p className="text-sm text-slate-600 mb-6">
+              Are you sure you want to revoke role access for <strong>{revokeTarget.email}</strong>?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setRevokeTarget(null)} className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-all">Cancel</button>
+              <button onClick={confirmRevokeGrant} className="px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition-all">Revoke</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

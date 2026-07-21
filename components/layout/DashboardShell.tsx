@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useRole } from '@/hooks/useRole';
 import { useNotifications } from '@/hooks/useNotifications';
 import type { AppRole } from '@/lib/supabase/types';
+import { createClient } from '@/lib/supabase/client';
 import { Icon } from '@iconify/react';
 import {
   Settings,
@@ -89,12 +90,51 @@ const ROLE_LABELS: Record<AppRole, string> = {
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
 
+function getTopicProgress(status: string | undefined): number {
+  if (!status) return 0;
+  switch (status) {
+    case 'submitted': case 'revision_requested': return 25;
+    case 'guide_accepted': return 50;
+    case 'hod_accepted': return 75;
+    case 'finalized': return 100;
+    case 'guide_rejected': case 'hod_rejected': return 10;
+    default: return 0;
+  }
+}
+
+function getOverallProgress(status: string | undefined): number {
+  if (!status) return 0;
+  const steps = [
+    true,
+    ['guide_accepted', 'hod_accepted', 'finalized'].includes(status),
+    ['hod_accepted', 'finalized'].includes(status),
+    status === 'finalized',
+  ];
+  return Math.round((steps.filter(Boolean).length / steps.length) * 100);
+}
+
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const { user, signOut } = useAuth();
   const { role, profile, loading } = useRole();
   const { unreadCount } = useNotifications();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (role !== 'student' || !profile) return;
+    const supabase = createClient();
+    supabase
+      .from('submissions')
+      .select('status')
+      .eq('student_id', profile.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setSubmissionStatus(data.status);
+      });
+  }, [role, profile]);
 
   if (loading) {
     return (
@@ -207,10 +247,10 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                   <span className="text-[11px] font-semibold text-white/80 truncate pr-2" style={authorFont}>
                     Topic Submission
                   </span>
-                  <span className="text-[10px] font-bold text-white/60 flex-shrink-0" style={authorFont}>60%</span>
+                  <span className="text-[10px] font-bold text-white/60 flex-shrink-0" style={authorFont}>{getTopicProgress(submissionStatus)}%</span>
                 </div>
                 <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-white rounded-full" style={{ width: '60%' }} />
+                  <div className="h-full bg-white rounded-full transition-all duration-500" style={{ width: `${getTopicProgress(submissionStatus)}%` }} />
                 </div>
               </div>
               <div>
@@ -218,10 +258,10 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                   <span className="text-[11px] font-semibold text-white/80 truncate pr-2" style={authorFont}>
                     Progress
                   </span>
-                  <span className="text-[10px] font-bold text-white/60 flex-shrink-0" style={authorFont}>10%</span>
+                  <span className="text-[10px] font-bold text-white/60 flex-shrink-0" style={authorFont}>{getOverallProgress(submissionStatus)}%</span>
                 </div>
                 <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-white rounded-full" style={{ width: '10%' }} />
+                  <div className="h-full bg-white rounded-full transition-all duration-500" style={{ width: `${getOverallProgress(submissionStatus)}%` }} />
                 </div>
               </div>
             </div>

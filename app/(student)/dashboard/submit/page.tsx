@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import type { SubmissionRow } from '@/lib/supabase/types';
 import { Icon } from '@iconify/react';
 import { Loader2 } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
@@ -50,6 +51,13 @@ export default function SubmitTitlePage() {
   const { profile } = useRole();
   const router = useRouter();
   const supabase = createClient();
+  const { warning } = useToast();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      warning('For better experience open in laptop or desktop', 'Tip');
+    }
+  }, [warning]);
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);

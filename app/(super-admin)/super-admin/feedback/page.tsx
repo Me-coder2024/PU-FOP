@@ -10,6 +10,7 @@ import {
   Clock,
   AlertCircle,
 } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 interface FeedbackItem {
   id: string;
@@ -24,6 +25,7 @@ interface FeedbackItem {
 export default function SuperAdminFeedbackPage() {
   const { profile } = useRole();
   const supabase = createClient();
+  const { success, error: showError } = useToast();
 
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
@@ -65,9 +67,10 @@ export default function SuperAdminFeedbackPage() {
       setFeedbackList((prev) =>
         prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
       );
+      success(`Ticket status updated to ${newStatus.replace('_', ' ')}`, 'Success');
     } catch (err) {
       console.error('Error updating feedback status', err);
-      alert('Failed to update status.');
+      showError('Failed to update status.', 'Error');
     }
   };
 

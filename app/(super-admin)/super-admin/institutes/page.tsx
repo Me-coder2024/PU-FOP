@@ -10,6 +10,7 @@ import {
   Trash2,
   Building2,
 } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 interface Institute {
   id: string;
@@ -28,6 +29,7 @@ interface Department {
 export default function InstitutesPage() {
   const { profile } = useRole();
   const supabase = createClient();
+  const { success, error: showError } = useToast();
 
   const [loading, setLoading] = useState(true);
   const [savingInst, setSavingInst] = useState(false);
@@ -35,6 +37,10 @@ export default function InstitutesPage() {
   
   const [institutes, setInstitutes] = useState<Institute[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
+
+  // Deletion targets
+  const [deleteInstTarget, setDeleteInstTarget] = useState<{ id: string; name: string } | null>(null);
+  const [deleteDeptTarget, setDeleteDeptTarget] = useState<{ id: string; name: string } | null>(null);
 
   // Form inputs
   const [instName, setInstName] = useState('');
@@ -93,11 +99,11 @@ export default function InstitutesPage() {
       });
 
       setInstName('');
-      alert('Institute added successfully!');
+      success('Institute added successfully!', 'Success');
       await fetchData();
     } catch (err) {
       console.error('Error adding institute', err);
-      alert('Failed to add institute.');
+      showError('Failed to add institute.', 'Error');
     } finally {
       setSavingInst(false);
     }
@@ -126,18 +132,24 @@ export default function InstitutesPage() {
 
       setDeptName('');
       setDeptInstId('');
-      alert('Department added successfully!');
+      success('Department added successfully!', 'Success');
       await fetchData();
     } catch (err) {
       console.error('Error adding department', err);
-      alert('Failed to add department.');
+      showError('Failed to add department.', 'Error');
     } finally {
       setSavingDept(false);
     }
   };
 
   const handleDeleteInstitute = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"? This will delete all associated departments and cascade update users.`)) return;
+    setDeleteInstTarget({ id, name });
+  };
+
+  const confirmDeleteInstitute = async () => {
+    if (!deleteInstTarget) return;
+    const { id, name } = deleteInstTarget;
+    setDeleteInstTarget(null);
     try {
       const { error } = await supabase.from('institutes').delete().eq('id', id);
       if (error) throw error;
@@ -151,15 +163,22 @@ export default function InstitutesPage() {
         old_data: { name },
       });
 
+      success('Institute deleted successfully.', 'Success');
       await fetchData();
     } catch (err) {
       console.error('Error deleting institute', err);
-      alert('Failed to delete institute.');
+      showError('Failed to delete institute.', 'Error');
     }
   };
 
   const handleDeleteDepartment = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete department "${name}"?`)) return;
+    setDeleteDeptTarget({ id, name });
+  };
+
+  const confirmDeleteDepartment = async () => {
+    if (!deleteDeptTarget) return;
+    const { id, name } = deleteDeptTarget;
+    setDeleteDeptTarget(null);
     try {
       const { error } = await supabase.from('departments').delete().eq('id', id);
       if (error) throw error;
@@ -173,10 +192,11 @@ export default function InstitutesPage() {
         old_data: { name },
       });
 
+      success('Department deleted successfully.', 'Success');
       await fetchData();
     } catch (err) {
       console.error('Error deleting department', err);
-      alert('Failed to delete department.');
+      showError('Failed to delete department.', 'Error');
     }
   };
 
@@ -312,6 +332,38 @@ export default function InstitutesPage() {
         </div>
 
       </div>
+
+      {/* Delete Institute Confirmation Modal */}
+      {deleteInstTarget && (
+        <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl mx-4">
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Delete College/Institute</h3>
+            <p className="text-sm text-slate-600 mb-6">
+              Are you sure you want to delete &quot;{deleteInstTarget.name}&quot;? This will delete all associated departments and cascade update users.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setDeleteInstTarget(null)} className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-all">Cancel</button>
+              <button onClick={confirmDeleteInstitute} className="px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition-all">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Department Confirmation Modal */}
+      {deleteDeptTarget && (
+        <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl mx-4">
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Delete Department</h3>
+            <p className="text-sm text-slate-600 mb-6">
+              Are you sure you want to delete department &quot;{deleteDeptTarget.name}&quot;?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setDeleteDeptTarget(null)} className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-all">Cancel</button>
+              <button onClick={confirmDeleteDepartment} className="px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition-all">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

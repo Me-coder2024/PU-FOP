@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import type { SubmissionRow } from '@/lib/supabase/types';
 import { Icon } from '@iconify/react';
 import { Loader2, Search, Filter } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
@@ -20,6 +21,7 @@ interface Department { id: string; name: string; }
 export default function DeanTitlesPage() {
   const { profile } = useRole();
   const supabase = createClient();
+  const { success, error: showError, warning } = useToast();
 
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState<SubmissionWithDetails[]>([]);
@@ -83,10 +85,11 @@ export default function DeanTitlesPage() {
         record_id: submissionId, old_data: { title: old?.title }, new_data: { title: editTitle.trim() },
       });
       setEditingId(null);
+      success('Title saved successfully!', 'Success');
       await fetchData();
     } catch (err) {
       console.error('Error saving title', err);
-      alert('Failed to save title.');
+      showError('Failed to save title.', 'Error');
     } finally {
       setSaving(false);
     }
@@ -108,14 +111,16 @@ export default function DeanTitlesPage() {
           link: '/dashboard/submit',
         });
       }
+      success(!currentValue ? 'Edit access granted.' : 'Edit access revoked.', 'Access Changed');
       await fetchData();
     } catch (err) {
       console.error('Error toggling edit unlock', err);
+      showError('Failed to update edit access.', 'Error');
     }
   };
 
   const handleSendBack = async (submissionId: string) => {
-    if (!remarks[submissionId]?.trim()) { alert('Please provide remarks.'); return; }
+    if (!remarks[submissionId]?.trim()) { warning('Please provide remarks.', 'Warning'); return; }
     setActionLoading(submissionId);
     try {
       const sub = submissions.find(s => s.id === submissionId);
@@ -130,8 +135,9 @@ export default function DeanTitlesPage() {
         type: 'warning', link: '/dashboard/submit',
       });
       setModalSub(null);
+      success('Title sent back for revisions.', 'Success');
       await fetchData();
-    } catch (err) { console.error('Error sending back', err); alert('Failed to send back.'); }
+    } catch (err) { console.error('Error sending back', err); showError('Failed to send back.', 'Error'); }
     finally { setActionLoading(null); }
   };
 
@@ -156,10 +162,11 @@ export default function DeanTitlesPage() {
       }
 
       setModalSub(null);
+      success('Submission finalized successfully!', 'Success');
       await fetchData();
     } catch (err: any) {
       console.error('Error finalizing', err);
-      alert(err.message || 'Failed to finalize.');
+      showError(err.message || 'Failed to finalize.', 'Error');
     } finally {
       setActionLoading(null);
     }

@@ -11,6 +11,7 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 interface Drug {
   id: string;
@@ -33,6 +34,8 @@ export default function SuperAdminSettingsPage() {
   const [drugCategory, setDrugCategory] = useState('');
   const [drugTherapeutic, setDrugTherapeutic] = useState('');
   const [drugDosage, setDrugDosage] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
+  const { success, error: showError } = useToast();
 
   const fetchDrugs = useCallback(async () => {
     try {
@@ -84,18 +87,24 @@ export default function SuperAdminSettingsPage() {
       setDrugCategory('');
       setDrugTherapeutic('');
       setDrugDosage('');
-      alert('Drug added successfully.');
+      success('Drug added successfully.', 'Success');
       await fetchDrugs();
     } catch (err) {
       console.error('Error adding drug', err);
-      alert('Failed to add drug (likely duplicate name).');
+      showError('Failed to add drug (likely duplicate name).', 'Error');
     } finally {
       setSavingDrug(false);
     }
   };
 
   const handleDeleteDrug = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}" from the repository?`)) return;
+    setDeleteTarget({ id, name });
+  };
+
+  const confirmDeleteDrug = async () => {
+    if (!deleteTarget) return;
+    const { id, name } = deleteTarget;
+    setDeleteTarget(null);
     try {
       const { error } = await supabase.from('drugs').delete().eq('id', id);
       if (error) throw error;
@@ -109,10 +118,11 @@ export default function SuperAdminSettingsPage() {
         old_data: { name },
       });
 
+      success('Drug deleted successfully.', 'Success');
       await fetchDrugs();
     } catch (err) {
       console.error('Error deleting drug', err);
-      alert('Failed to delete drug.');
+      showError('Failed to delete drug.', 'Error');
     }
   };
 
@@ -255,6 +265,22 @@ export default function SuperAdminSettingsPage() {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl mx-4">
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Confirm Deletion</h3>
+            <p className="text-sm text-slate-600 mb-6">
+              Are you sure you want to delete &quot;{deleteTarget.name}&quot; from the repository?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setDeleteTarget(null)} className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-all">Cancel</button>
+              <button onClick={confirmDeleteDrug} className="px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition-all">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

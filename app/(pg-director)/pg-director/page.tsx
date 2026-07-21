@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import type { SubmissionRow } from '@/lib/supabase/types';
 import { Icon } from '@iconify/react';
 import { Loader2, Search, Filter } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
@@ -18,6 +19,7 @@ interface SubmissionWithDetails extends SubmissionRow {
 export default function PgDirectorPage() {
   const { profile } = useRole();
   const supabase = createClient();
+  const { success, error: showError, warning } = useToast();
 
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState<SubmissionWithDetails[]>([]);
@@ -79,10 +81,11 @@ export default function PgDirectorPage() {
         new_data: { title: editTitle.trim() },
       });
       setEditingId(null);
+      success('Title saved successfully!', 'Success');
       await fetchSubmissions();
     } catch (err) {
       console.error('Error saving title', err);
-      alert('Failed to save title.');
+      showError('Failed to save title.', 'Error');
     } finally {
       setSaving(false);
     }
@@ -107,15 +110,17 @@ export default function PgDirectorPage() {
           link: '/dashboard/submit',
         });
       }
+      success(!currentValue ? 'Edit access granted.' : 'Edit access revoked.', 'Access Changed');
       await fetchSubmissions();
     } catch (err) {
       console.error('Error toggling edit unlock', err);
+      showError('Failed to update edit access.', 'Error');
     }
   };
 
   const handleSendBack = async (submissionId: string) => {
     if (!remarks[submissionId]?.trim()) {
-      alert('Please provide remarks explaining what needs to be changed.');
+      warning('Please provide remarks explaining what needs to be changed.', 'Warning');
       return;
     }
     setActionLoading(submissionId);
@@ -138,10 +143,11 @@ export default function PgDirectorPage() {
         link: '/dashboard/submit',
       });
       setModalSub(null);
+      success('Title sent back for revisions.', 'Success');
       await fetchSubmissions();
     } catch (err) {
       console.error('Error sending back', err);
-      alert('Failed to send back.');
+      showError('Failed to send back.', 'Error');
     } finally {
       setActionLoading(null);
     }
@@ -168,10 +174,11 @@ export default function PgDirectorPage() {
       }
 
       setModalSub(null);
+      success('Submission finalized successfully!', 'Success');
       await fetchSubmissions();
     } catch (err: any) {
       console.error('Error finalizing', err);
-      alert(err.message || 'Failed to finalize.');
+      showError(err.message || 'Failed to finalize.', 'Error');
     } finally {
       setActionLoading(null);
     }
