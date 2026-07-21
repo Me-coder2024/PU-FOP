@@ -493,6 +493,18 @@ CREATE POLICY "Students can view own submissions"
         student_id = auth.uid()
     );
 
+-- Students can update their own submission when revision is requested or edit is unlocked
+CREATE POLICY "Students can update own revision submissions"
+    ON public.submissions FOR UPDATE
+    TO authenticated
+    USING (
+        student_id = auth.uid()
+        AND (status = 'revision_requested' OR edit_unlocked = true)
+    )
+    WITH CHECK (
+        student_id = auth.uid()
+    );
+
 -- Guides can view submissions assigned to them
 CREATE POLICY "Guides can view assigned submissions"
     ON public.submissions FOR SELECT
@@ -520,20 +532,23 @@ CREATE POLICY "Guides can update assigned submissions"
     USING (guide_id = auth.uid())
     WITH CHECK (guide_id = auth.uid());
 
--- HOD can update guide_accepted submissions in their institute
-CREATE POLICY "HOD can update guide_accepted submissions"
+-- HOD can update submissions in their institute (either submitted for guide assignment, or guide_accepted for review)
+CREATE POLICY "HOD can update institute submissions"
     ON public.submissions FOR UPDATE
     TO authenticated
     USING (
         EXISTS (
-            SELECT 1 FROM public.profiles p
-            WHERE p.id = auth.uid()
-            AND p.role = 'hod'
+            SELECT 1 FROM public.profiles student_p
+            JOIN public.profiles hod_p ON hod_p.institute_id = student_p.institute_id
+            WHERE student_p.id = submissions.student_id
+            AND hod_p.id = auth.uid()
+            AND hod_p.role = 'hod'
         )
-        AND status = 'guide_accepted'
-    );
+        AND status IN ('submitted', 'guide_accepted')
+    )
+    WITH CHECK (true);
 
--- PG Director and Dean can update title text only on finalized submissions
+-- PG Director and Dean can update titles that are HOD accepted or finalized
 CREATE POLICY "PG Director and Dean can update finalized titles"
     ON public.submissions FOR UPDATE
     TO authenticated
@@ -544,7 +559,8 @@ CREATE POLICY "PG Director and Dean can update finalized titles"
             AND p.role IN ('pg_director', 'dean')
         )
         AND status IN ('hod_accepted', 'finalized')
-    );
+    )
+    WITH CHECK (true);
 
 -- Super admin can do anything with submissions
 CREATE POLICY "Super admin full access to submissions"

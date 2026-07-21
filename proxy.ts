@@ -2,10 +2,10 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Skip middleware for static assets, public files, API routes, and auth callback
+  // 1. Skip proxy for static assets, public files, API routes, and auth callback
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/images') ||
@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          // Mutate request cookies so subsequent middleware/handlers see the changes
+          // Mutate request cookies so subsequent proxy/handlers see the changes
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           
           // Re-create the next response passing the mutated request

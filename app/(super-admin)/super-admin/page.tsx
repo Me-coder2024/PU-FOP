@@ -113,7 +113,7 @@ export default function SuperAdminDashboard() {
       </div>
 
       {/* Grid of stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex items-center justify-between text-slate-400">
             <span className="text-[10px] font-black uppercase tracking-wider">Registered Accounts</span>
@@ -145,7 +145,7 @@ export default function SuperAdminDashboard() {
       </div>
 
       {/* Admin Panel Tiles */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {sections.map((section, idx) => {
           const Icon = section.icon;
           return (

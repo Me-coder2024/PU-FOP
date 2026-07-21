@@ -3,23 +3,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRole } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
-import type { SubmissionRow, ProfileRow, SubmissionStatus } from '@/lib/supabase/types';
-import {
-  Loader2,
-  CheckCircle,
-  XCircle,
-  RotateCcw,
-  Eye,
-  ChevronDown,
-  ChevronUp,
-  Users,
-  ClipboardCheck,
-  Clock,
-  Send,
-  AlertTriangle,
-  FileText,
-  MessageSquare,
-} from 'lucide-react';
+import type { SubmissionRow, SubmissionStatus } from '@/lib/supabase/types';
+import { Icon } from '@iconify/react';
+import { Loader2 } from 'lucide-react';
+
+const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
+const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
 
 interface SubmissionWithStudent extends SubmissionRow {
   student?: {
@@ -39,10 +28,12 @@ export default function GuidePage() {
   const [activeCount, setActiveCount] = useState(0);
 
   // Action states
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Record<string, string>>({});
   const [rejectionReason, setRejectionReason] = useState<Record<string, string>>({});
+
+  // Full form modal
+  const [modalSub, setModalSub] = useState<SubmissionWithStudent | null>(null);
 
   const fetchSubmissions = useCallback(async () => {
     if (!profile) return;
@@ -103,7 +94,6 @@ export default function GuidePage() {
         notifMessage = `Your dissertation title "${submission.title}" has been rejected. Reason: ${rejectionReason[submissionId]}`;
         notifType = 'error';
       } else {
-        // revision — send back to student for edits
         if (!remarks[submissionId]?.trim()) {
           alert('Please provide remarks for the student.');
           setActionLoading(null);
@@ -115,7 +105,6 @@ export default function GuidePage() {
         notifType = 'warning';
       }
 
-      // Update submission
       const updateData: Partial<SubmissionRow> = {
         status: newStatus,
         guide_reviewed_at: new Date().toISOString(),
@@ -135,7 +124,6 @@ export default function GuidePage() {
 
       if (updateError) throw updateError;
 
-      // Create notification for student
       await supabase.from('notifications').insert({
         user_id: submission.student_id,
         title: notifTitle,
@@ -144,7 +132,6 @@ export default function GuidePage() {
         link: '/dashboard',
       });
 
-      // If accepted, notify HOD (find HOD in the student's institute)
       if (action === 'accept') {
         const { data: studentProfile } = await supabase
           .from('profiles')
@@ -174,9 +161,8 @@ export default function GuidePage() {
         }
       }
 
-      // Refresh list
+      setModalSub(null);
       await fetchSubmissions();
-      setExpandedId(null);
     } catch (err) {
       console.error('Error performing guide action', err);
       alert('Action failed. Please try again.');
@@ -188,58 +174,55 @@ export default function GuidePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="text-center">
-          <Loader2 className="w-10 h-10 text-[#1E3A8A] animate-spin mx-auto mb-3" />
-          <p className="text-sm text-slate-400 font-medium">Loading review queue...</p>
-        </div>
+        <Loader2 className="w-10 h-10 text-[#4361EE] animate-spin" />
       </div>
     );
   }
 
-  const pendingSubmissions = submissions.filter((s) => s.status === 'submitted');
-  const revisionSubmissions = submissions.filter((s) => s.status === 'revision_requested');
-  const acceptedSubmissions = submissions.filter((s) => s.status === 'guide_accepted');
+  const pending = submissions.filter(s => s.status === 'submitted');
+  const accepted = submissions.filter(s => s.status === 'guide_accepted');
+  const revisions = submissions.filter(s => s.status === 'revision_requested');
 
   return (
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Guide Review Queue</h1>
-        <p className="text-sm text-slate-500 mt-1">Review, accept, or send back dissertation titles assigned to you.</p>
+        <h1 className="text-2xl font-black text-slate-900 tracking-tight" style={authorFont}>Guide Review Queue</h1>
+        <p className="text-sm text-slate-500 mt-1" style={authorFont}>Review, accept, or request revisions on assigned student titles.</p>
       </div>
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#1E3A8A] rounded-2xl p-5 text-white">
+        <div className="bg-[#4361EE] rounded-2xl p-5 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-white/70">Pending Review</p>
-              <p className="text-3xl font-black mt-1">{String(pendingSubmissions.length).padStart(2, '0')}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/70" style={poppinsFont}>Pending Review</p>
+              <p className="text-3xl font-black mt-1" style={authorFont}>{String(pending.length).padStart(2, '0')}</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-white/80" />
+              <Icon icon="solar:clock-circle-bold-duotone" className="w-5 h-5 text-white/80" />
             </div>
           </div>
         </div>
         <div className="bg-white rounded-2xl p-5 border border-slate-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Awaiting Revision</p>
-              <p className="text-3xl font-black text-amber-600 mt-1">{String(revisionSubmissions.length).padStart(2, '0')}</p>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
-              <RotateCcw className="w-5 h-5 text-amber-600" />
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-2xl p-5 border border-slate-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Forwarded to HOD</p>
-              <p className="text-3xl font-black text-emerald-600 mt-1">{String(acceptedSubmissions.length).padStart(2, '0')}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500" style={poppinsFont}>Accepted</p>
+              <p className="text-3xl font-black text-emerald-600 mt-1" style={authorFont}>{String(accepted.length).padStart(2, '0')}</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
-              <Send className="w-5 h-5 text-emerald-600" />
+              <Icon icon="solar:check-circle-bold-duotone" className="w-5 h-5 text-emerald-600" />
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl p-5 border border-slate-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500" style={poppinsFont}>Revision Requested</p>
+              <p className="text-3xl font-black text-amber-600 mt-1" style={authorFont}>{String(revisions.length).padStart(2, '0')}</p>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+              <Icon icon="solar:pen-new-square-bold-duotone" className="w-5 h-5 text-amber-600" />
             </div>
           </div>
         </div>
@@ -247,222 +230,229 @@ export default function GuidePage() {
 
       {/* Submissions List */}
       <div>
-        <h2 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-4">
-          Assigned Submissions ({submissions.length})
+        <h2 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-4" style={poppinsFont}>
+          Your Submissions ({submissions.length})
         </h2>
 
         {submissions.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center">
-            <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-slate-200">
-              <ClipboardCheck className="w-8 h-8 text-slate-300" />
+            <div className="w-16 h-16 bg-[#4361EE]/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#4361EE]/10">
+              <Icon icon="solar:clipboard-check-bold-duotone" className="w-8 h-8 text-[#4361EE]/40" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">All Caught Up!</h3>
-            <p className="text-sm text-slate-500">No submissions currently assigned to you. New assignments will appear here automatically.</p>
+            <h3 className="text-lg font-bold text-slate-900 mb-2" style={authorFont}>No Assigned Submissions</h3>
+            <p className="text-sm text-slate-500" style={authorFont}>Titles assigned to you by the HOD will appear here.</p>
           </div>
         ) : (
           <div className="space-y-3">
             {submissions.map((sub) => {
-              const isExpanded = expandedId === sub.id;
-              const isActionLoading = actionLoading === sub.id;
-              const student = sub.student;
-              const details = (sub.criteria_details as Record<string, string>) || {};
-
               const statusBadge = sub.status === 'submitted'
-                ? { label: 'Pending Review', bg: 'bg-blue-50 border-blue-200 text-blue-700' }
+                ? { label: 'Pending Review', bg: 'bg-blue-50 border-blue-200 text-blue-700', icon: 'solar:clock-circle-bold-duotone' }
+                : sub.status === 'guide_accepted'
+                ? { label: 'Accepted', bg: 'bg-emerald-50 border-emerald-200 text-emerald-700', icon: 'solar:check-circle-bold-duotone' }
                 : sub.status === 'revision_requested'
-                ? { label: 'Revision Sent', bg: 'bg-amber-50 border-amber-200 text-amber-700' }
-                : { label: 'Forwarded', bg: 'bg-emerald-50 border-emerald-200 text-emerald-700' };
+                ? { label: 'Revision Requested', bg: 'bg-amber-50 border-amber-200 text-amber-700', icon: 'solar:pen-new-square-bold-duotone' }
+                : { label: sub.status, bg: 'bg-slate-50 border-slate-200 text-slate-600', icon: 'solar:document-bold-duotone' };
 
               return (
-                <div key={sub.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all">
-                  {/* Collapsed Header */}
-                  <button
-                    onClick={() => setExpandedId(isExpanded ? null : sub.id)}
-                    className="w-full flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors text-left"
-                  >
+                <div key={sub.id} className="bg-white rounded-2xl border border-slate-200 p-5 hover:border-[#4361EE]/30 transition-all">
+                  <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4 min-w-0 flex-1">
-                      <div className="w-10 h-10 rounded-full bg-[#1E3A8A]/10 flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs font-bold text-[#1E3A8A]">
-                          {student?.full_name?.[0]?.toUpperCase() || '?'}
+                      <div className="w-10 h-10 rounded-full bg-[#4361EE]/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-xs font-bold text-[#4361EE]">
+                          {sub.student?.full_name?.[0]?.toUpperCase() || '?'}
                         </span>
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-bold text-slate-900 truncate">{sub.title}</p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          {student?.full_name || 'Student'} • {student?.university_id || 'N/A'}
+                        <p className="text-sm font-bold text-slate-900 truncate" style={authorFont}>{sub.title}</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5" style={poppinsFont}>
+                          {sub.student?.full_name || 'Student'} • {sub.student?.university_id || 'N/A'}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold border ${statusBadge.bg}`}>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button
+                        onClick={() => setModalSub(sub)}
+                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#4361EE] hover:bg-[#4361EE]/5 transition-all"
+                        title="View full form"
+                      >
+                        <Icon icon="solar:eye-bold-duotone" className="w-5 h-5" />
+                      </button>
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border ${statusBadge.bg}`} style={poppinsFont}>
+                        <Icon icon={statusBadge.icon} className="w-3 h-3" />
                         {statusBadge.label}
                       </span>
-                      {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                     </div>
-                  </button>
-
-                  {/* Expanded Details */}
-                  {isExpanded && (
-                    <div className="border-t border-slate-100 p-5 space-y-5">
-                      {/* Title and Description */}
-                      <div>
-                        <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Full Title</h4>
-                        <p className="text-sm font-semibold text-slate-900">&quot;{sub.title}&quot;</p>
-                      </div>
-                      {sub.description && (
-                        <div>
-                          <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Description</h4>
-                          <p className="text-sm text-slate-700">{sub.description}</p>
-                        </div>
-                      )}
-
-                      {/* Criteria Details */}
-                      {Object.keys(details).length > 0 && (
-                        <div>
-                          <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Research Details</h4>
-                          <div className="grid grid-cols-2 gap-3">
-                            {details.drugName && (
-                              <div className="bg-slate-50 rounded-xl p-3">
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Drug Name</p>
-                                <p className="text-xs font-semibold text-slate-800 mt-0.5">{details.drugName}</p>
-                              </div>
-                            )}
-                            {details.dosageForm && (
-                              <div className="bg-slate-50 rounded-xl p-3">
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Dosage Form</p>
-                                <p className="text-xs font-semibold text-slate-800 mt-0.5">{details.dosageForm}</p>
-                              </div>
-                            )}
-                            {details.routeOfAdmin && (
-                              <div className="bg-slate-50 rounded-xl p-3">
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Route</p>
-                                <p className="text-xs font-semibold text-slate-800 mt-0.5">{details.routeOfAdmin}</p>
-                              </div>
-                            )}
-                            {details.excipients && (
-                              <div className="bg-slate-50 rounded-xl p-3">
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Excipients</p>
-                                <p className="text-xs font-semibold text-slate-800 mt-0.5">{details.excipients}</p>
-                              </div>
-                            )}
-                          </div>
-                          {details.novelty && (
-                            <div className="bg-slate-50 rounded-xl p-3 mt-3">
-                              <p className="text-[9px] font-bold text-slate-400 uppercase">Novelty Statement</p>
-                              <p className="text-xs text-slate-700 mt-0.5">{details.novelty}</p>
-                            </div>
-                          )}
-                          {details.keywords && (
-                            <div className="bg-slate-50 rounded-xl p-3 mt-3">
-                              <p className="text-[9px] font-bold text-slate-400 uppercase">Keywords</p>
-                              <p className="text-xs text-slate-700 mt-0.5">{details.keywords}</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Actions — only for 'submitted' status */}
-                      {sub.status === 'submitted' && (
-                        <div className="border-t border-slate-100 pt-5 space-y-4">
-                          <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Take Action</h4>
-
-                          {/* Remarks for revision */}
-                          <div>
-                            <label className="text-xs font-bold text-slate-700 block mb-1">
-                              Remarks (for student revision)
-                            </label>
-                            <textarea
-                              value={remarks[sub.id] || ''}
-                              onChange={(e) => setRemarks((prev) => ({ ...prev, [sub.id]: e.target.value }))}
-                              placeholder="Provide feedback for the student to improve their title..."
-                              rows={2}
-                              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]/30 focus:border-[#1E3A8A] transition-all resize-none"
-                            />
-                          </div>
-
-                          {/* Rejection reason */}
-                          <div>
-                            <label className="text-xs font-bold text-slate-700 block mb-1">
-                              Rejection Reason (if rejecting)
-                            </label>
-                            <textarea
-                              value={rejectionReason[sub.id] || ''}
-                              onChange={(e) => setRejectionReason((prev) => ({ ...prev, [sub.id]: e.target.value }))}
-                              placeholder="Explain why this title is being rejected..."
-                              rows={2}
-                              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-400 transition-all resize-none"
-                            />
-                          </div>
-
-                          {/* Action Buttons */}
-                          <div className="flex items-center gap-3">
-                            <button
-                              onClick={() => handleAction(sub.id, 'accept')}
-                              disabled={isActionLoading}
-                              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700 transition-all disabled:opacity-50"
-                            >
-                              {isActionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle className="w-3.5 h-3.5" />}
-                              Accept & Forward
-                            </button>
-                            <button
-                              onClick={() => handleAction(sub.id, 'revision')}
-                              disabled={isActionLoading}
-                              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-amber-500 text-white text-xs font-bold rounded-xl hover:bg-amber-600 transition-all disabled:opacity-50"
-                            >
-                              {isActionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />}
-                              Send for Revision
-                            </button>
-                            <button
-                              onClick={() => handleAction(sub.id, 'reject')}
-                              disabled={isActionLoading}
-                              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-red-600 text-white text-xs font-bold rounded-xl hover:bg-red-700 transition-all disabled:opacity-50"
-                            >
-                              {isActionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <XCircle className="w-3.5 h-3.5" />}
-                              Reject
-                            </button>
-                          </div>
-
-                          <p className="text-[10px] text-slate-400 font-medium">
-                            <strong>Accept & Forward:</strong> Title goes to HOD. Student can no longer edit. •{' '}
-                            <strong>Send for Revision:</strong> Student can edit and resubmit. •{' '}
-                            <strong>Reject:</strong> Student must submit a new title.
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Already reviewed info */}
-                      {sub.status === 'revision_requested' && (
-                        <div className="border-t border-slate-100 pt-4">
-                          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2">
-                            <RotateCcw className="w-4 h-4 text-amber-600 mt-0.5" />
-                            <div>
-                              <p className="text-xs font-bold text-amber-800">Revision Requested</p>
-                              <p className="text-[11px] text-amber-700 mt-0.5">Waiting for the student to revise and resubmit.</p>
-                              {sub.guide_remarks && <p className="text-[11px] text-amber-600 mt-1 italic">Your remarks: &quot;{sub.guide_remarks}&quot;</p>}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {sub.status === 'guide_accepted' && (
-                        <div className="border-t border-slate-100 pt-4">
-                          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2">
-                            <CheckCircle className="w-4 h-4 text-emerald-600 mt-0.5" />
-                            <div>
-                              <p className="text-xs font-bold text-emerald-800">Forwarded to HOD</p>
-                              <p className="text-[11px] text-emerald-700 mt-0.5">This title has been forwarded and is under HOD review.</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  </div>
                 </div>
               );
             })}
           </div>
         )}
       </div>
+
+      {/* ===== Full Form Modal ===== */}
+      {modalSub && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setModalSub(null)}>
+          <div
+            className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
+              <h2 className="text-lg font-black text-slate-900" style={authorFont}>Submission Details</h2>
+              <button
+                onClick={() => setModalSub(null)}
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all"
+              >
+                <Icon icon="solar:close-circle-bold-duotone" className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="px-6 py-5 space-y-5">
+              <div>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest" style={poppinsFont}>Title</p>
+                <p className="text-sm font-bold text-slate-900 mt-1" style={authorFont}>&quot;{modalSub.title}&quot;</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#F0F2F8] rounded-xl p-3">
+                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Student</p>
+                  <p className="text-xs font-semibold text-slate-800 mt-0.5" style={authorFont}>{modalSub.student?.full_name || 'N/A'}</p>
+                  <p className="text-[10px] text-slate-500" style={poppinsFont}>{modalSub.student?.university_id || 'N/A'}</p>
+                </div>
+                <div className="bg-[#F0F2F8] rounded-xl p-3">
+                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Submitted</p>
+                  <p className="text-xs font-semibold text-slate-800 mt-0.5" style={authorFont}>{new Date(modalSub.created_at).toLocaleDateString()}</p>
+                </div>
+              </div>
+
+              {modalSub.description && (
+                <div className="bg-[#F0F2F8] rounded-xl p-4">
+                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Statement of Novelty</p>
+                  <p className="text-xs text-slate-700 mt-1" style={authorFont}>{modalSub.description}</p>
+                </div>
+              )}
+
+              {(() => {
+                const details = (modalSub.criteria_details as Record<string, unknown>) || {};
+                const fields = [
+                  { key: 'drugName', label: 'Drug Name' },
+                  { key: 'dosageForm', label: 'Dosage Form' },
+                  { key: 'primarySubject', label: 'Primary Subject' },
+                  { key: 'coreDomain', label: 'Core Domain' },
+                  { key: 'methodology', label: 'Methodology' },
+                  { key: 'toolsInstruments', label: 'Tools & Instruments' },
+                  { key: 'workLocation', label: 'Work Location' },
+                  { key: 'excipients', label: 'Excipients' },
+                  { key: 'keywords', label: 'Keywords' },
+                  { key: 'novelty', label: 'Novelty' },
+                ];
+                const visibleFields = fields.filter(f => details[f.key]);
+                if (visibleFields.length === 0) return null;
+                return (
+                  <div className="grid grid-cols-2 gap-3">
+                    {visibleFields.map(f => (
+                      <div key={f.key} className="bg-[#F0F2F8] rounded-xl p-3">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>{f.label}</p>
+                        <p className="text-xs font-semibold text-slate-800 mt-0.5 line-clamp-3" style={authorFont}>{String(details[f.key])}</p>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+
+              {/* Actions — only for 'submitted' status */}
+              {modalSub.status === 'submitted' && (
+                <div className="border-t border-slate-100 pt-5 space-y-4">
+                  <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest" style={poppinsFont}>Guide Decision</h4>
+
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-1" style={authorFont}>
+                      Remarks <span className="text-slate-400 font-normal">(required for revision)</span>
+                    </label>
+                    <textarea
+                      value={remarks[modalSub.id] || ''}
+                      onChange={(e) => setRemarks((prev) => ({ ...prev, [modalSub.id]: e.target.value }))}
+                      placeholder="Add remarks for the student..."
+                      rows={2}
+                      className="w-full px-3 py-2.5 bg-[#F0F2F8] border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE] transition-all resize-none"
+                      style={authorFont}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-1" style={authorFont}>
+                      Rejection Reason <span className="text-slate-400 font-normal">(required for rejection)</span>
+                    </label>
+                    <textarea
+                      value={rejectionReason[modalSub.id] || ''}
+                      onChange={(e) => setRejectionReason((prev) => ({ ...prev, [modalSub.id]: e.target.value }))}
+                      placeholder="Reason for rejecting this title..."
+                      rows={2}
+                      className="w-full px-3 py-2.5 bg-[#F0F2F8] border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE] transition-all resize-none"
+                      style={authorFont}
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => handleAction(modalSub.id, 'accept')}
+                      disabled={actionLoading === modalSub.id}
+                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700 transition-all disabled:opacity-50"
+                      style={authorFont}
+                    >
+                      {actionLoading === modalSub.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Icon icon="solar:check-circle-bold" className="w-3.5 h-3.5" />}
+                      Accept & Forward
+                    </button>
+                    <button
+                      onClick={() => handleAction(modalSub.id, 'revision')}
+                      disabled={actionLoading === modalSub.id}
+                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-amber-500 text-white text-xs font-bold rounded-xl hover:bg-amber-600 transition-all disabled:opacity-50"
+                      style={authorFont}
+                    >
+                      {actionLoading === modalSub.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Icon icon="solar:undo-left-bold" className="w-3.5 h-3.5" />}
+                      Send for Revision
+                    </button>
+                    <button
+                      onClick={() => handleAction(modalSub.id, 'reject')}
+                      disabled={actionLoading === modalSub.id}
+                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-red-500 text-white text-xs font-bold rounded-xl hover:bg-red-600 transition-all disabled:opacity-50"
+                      style={authorFont}
+                    >
+                      {actionLoading === modalSub.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Icon icon="solar:close-circle-bold" className="w-3.5 h-3.5" />}
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Already accepted */}
+              {modalSub.status === 'guide_accepted' && (
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2">
+                  <Icon icon="solar:check-circle-bold-duotone" className="w-4 h-4 text-emerald-600 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-bold text-emerald-800" style={authorFont}>Forwarded to HOD</p>
+                    <p className="text-[11px] text-emerald-700 mt-0.5" style={authorFont}>This title has been forwarded and is under HOD review.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Revision requested */}
+              {modalSub.status === 'revision_requested' && (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2">
+                  <Icon icon="solar:pen-new-square-bold-duotone" className="w-4 h-4 text-amber-600 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-bold text-amber-800" style={authorFont}>Revision Requested</p>
+                    {modalSub.guide_remarks && <p className="text-[11px] text-amber-700 mt-0.5 italic" style={authorFont}>Your remarks: &quot;{modalSub.guide_remarks}&quot;</p>}
+                    <p className="text-[11px] text-amber-600 mt-0.5" style={authorFont}>Waiting for the student to revise and resubmit.</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

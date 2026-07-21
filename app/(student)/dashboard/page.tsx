@@ -119,13 +119,13 @@ export default function StudentDashboard() {
   const completionPercent = Math.round((completionSteps.filter(Boolean).length / completionSteps.length) * 100);
 
   return (
-    <div className="space-y-8">
-      {/* Page Header - matches design exactly */}
+    <div className="space-y-6 sm:space-y-8">
+      {/* Page Header */}
       <div className="flex items-center gap-3">
-        <h1 className="text-[32px] font-black text-slate-900 tracking-tight italic" style={authorFont}>
+        <h1 className="text-2xl sm:text-[32px] font-black text-slate-900 tracking-tight italic" style={authorFont}>
           My Dashboard
         </h1>
-        <div className="w-8 h-8 rounded-lg bg-[#4361EE] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-[#4361EE] flex items-center justify-center flex-shrink-0">
           <Icon icon="solar:document-bold" className="w-4 h-4 text-white" />
         </div>
         <div className="ml-auto">
@@ -221,13 +221,13 @@ export default function StudentDashboard() {
 
       {/* ===== My Submission Card ===== */}
       {submission && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
             <h2 className="text-sm font-black text-slate-900 uppercase tracking-wider" style={authorFont}>My Submission</h2>
             {statusConfig && (
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border ${statusConfig.bg} ${statusConfig.color}`}>
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border w-fit ${statusConfig.bg} ${statusConfig.color}`}>
                 <Icon icon={statusConfig.icon} className="w-3 h-3" />
-                {statusConfig.label}
+                <span className="truncate">{statusConfig.label}</span>
               </span>
             )}
           </div>

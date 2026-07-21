@@ -22,6 +22,7 @@ import {
   Loader2,
   Calendar,
   ClipboardCheck,
+  Pill,
 } from 'lucide-react';
 
 interface NavItem {
@@ -34,6 +35,7 @@ interface NavItem {
 const STUDENT_NAV: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', iconifyIcon: 'solar:widget-bold-duotone' },
   { label: 'Submit Topic', href: '/dashboard/submit', iconifyIcon: 'solar:document-add-bold-duotone' },
+  { label: 'Drug Requests', href: '/dashboard/drug-requests', iconifyIcon: 'solar:pill-bold-duotone' },
   { label: 'Progress Tracker', href: '/dashboard/track', iconifyIcon: 'solar:chart-2-bold-duotone' },
   { label: 'Similarity Check', href: '/dashboard/similarity', iconifyIcon: 'solar:shield-check-bold-duotone' },
   { label: 'Repository', href: '/dashboard/repository', iconifyIcon: 'solar:library-bold-duotone' },
@@ -47,16 +49,20 @@ const OTHER_NAV: Record<Exclude<AppRole, 'student'>, NavItem[]> = {
   ],
   hod: [
     { label: 'Review Queue', href: '/hod', lucideIcon: ClipboardCheck },
+    { label: 'Assign Guide', href: '/hod/assign', iconifyIcon: 'solar:user-plus-bold-duotone' },
     { label: 'All Titles', href: '/hod/all', lucideIcon: Eye },
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
   ],
   pg_director: [
     { label: 'Title Browser', href: '/pg-director', lucideIcon: Eye },
+    { label: 'Drug Requests', href: '/pg-director/drug-requests', lucideIcon: Pill },
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
   ],
   dean: [
     { label: 'Dashboard', href: '/dean', iconifyIcon: 'solar:widget-bold-duotone' },
     { label: 'Title Browser', href: '/dean/titles', lucideIcon: Eye },
+    { label: 'Drug Requests', href: '/dean/drug-requests', lucideIcon: Pill },
+    { label: 'Role Grants', href: '/dean/roles', lucideIcon: Shield },
     { label: 'Submission Window', href: '/dean/window', lucideIcon: Calendar },
     { label: 'Announcements', href: '/dean/announcements', lucideIcon: Megaphone },
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
@@ -218,19 +224,19 @@ export default function DashboardShell({ children }: { children: React.ReactNode
       </aside>
 
       {/* ===== Main Content Area ===== */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen min-w-0">
         {/* Top Bar */}
-        <header className="h-16 bg-white border-b border-slate-200/80 px-4 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm">
-          <div className="flex items-center gap-4">
+        <header className="h-14 sm:h-16 bg-white border-b border-slate-200/80 px-3 sm:px-4 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
             <button
-              className="lg:hidden w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              className="lg:hidden w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex-shrink-0"
               onClick={() => setSidebarOpen(true)}
             >
               <Menu className="w-5 h-5" />
             </button>
-            {/* Search Bar */}
-            <div className="hidden md:flex items-center gap-2 bg-[#F0F2F8] rounded-xl px-4 py-2.5 w-[320px] lg:w-[420px]">
-              <Icon icon="solar:magnifer-linear" className="w-4 h-4 text-slate-400" />
+            {/* Search Bar — hidden on mobile */}
+            <div className="hidden md:flex items-center gap-2 bg-[#F0F2F8] rounded-xl px-4 py-2.5 w-[220px] lg:w-[380px] xl:w-[420px]">
+              <Icon icon="solar:magnifer-linear" className="w-4 h-4 text-slate-400 flex-shrink-0" />
               <input
                 type="text"
                 placeholder="Search Something Here....."
@@ -240,7 +246,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             {/* Notification bell */}
             <button className="relative w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all">
               <Icon icon="solar:bell-bold-duotone" className="w-5 h-5" />
@@ -252,13 +258,18 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             </button>
 
             {/* User info */}
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#4361EE] flex items-center justify-center text-white text-sm font-bold shadow-md shadow-[#4361EE]/20">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#4361EE] flex items-center justify-center text-white text-sm font-bold shadow-md shadow-[#4361EE]/20 flex-shrink-0">
                 {profile?.full_name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || '?'}
               </div>
-              <span className="hidden sm:block text-sm font-semibold text-slate-700" style={{ fontFamily: "'Author', sans-serif" }}>
-                {profile?.full_name || 'User'}
-              </span>
+              <div className="hidden sm:block min-w-0">
+                <p className="text-sm font-semibold text-slate-700 truncate max-w-[120px] lg:max-w-[180px]" style={{ fontFamily: "'Author', sans-serif" }}>
+                  {profile?.full_name || 'User'}
+                </p>
+                <p className="text-[10px] text-slate-400 truncate max-w-[120px] lg:max-w-[180px]" style={poppinsFont}>
+                  {role ? ROLE_LABELS[role] : ''}
+                </p>
+              </div>
             </div>
 
             {/* Sign Out */}
@@ -273,7 +284,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 lg:p-8">
+        <main className="flex-1 p-3 sm:p-4 lg:p-8">
           {children}
         </main>
       </div>

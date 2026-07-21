@@ -193,6 +193,7 @@ export default function SubmitTitlePage() {
           keywords: keywords.trim(),
           excipients: excipients.trim(),
           novelty: novelty.trim(),
+          excludeSubmissionId: existingSubmission?.id,
         }),
       });
 
@@ -209,7 +210,7 @@ export default function SubmitTitlePage() {
     } finally {
       setValidating(false);
     }
-  }, [title, drugName, dosageForm, keywords, excipients, novelty]);
+  }, [title, drugName, dosageForm, keywords, excipients, novelty, existingSubmission]);
 
   // Live Validation with debounce
   useEffect(() => {
@@ -329,20 +330,7 @@ export default function SubmitTitlePage() {
           throw new Error(insertError.message);
         }
 
-        const { data: subData } = await supabase
-          .from('submissions')
-          .select('id')
-          .eq('student_id', profile.id)
-          .eq('status', 'submitted')
-          .single();
-
-        if (subData) {
-          try {
-            await supabase.rpc('assign_guide', { p_submission_id: subData.id });
-          } catch (guideErr) {
-            console.warn('Guide assignment failed — may need manual assignment', guideErr);
-          }
-        }
+        // Guide will be assigned by HOD manually — no auto-assignment
       }
 
       setSuccess(true);
@@ -419,16 +407,28 @@ export default function SubmitTitlePage() {
 
   return (
     <div className="space-y-6 pb-28">
+
+      {/* ===== Mobile Banner ===== */}
+      <div className="lg:hidden p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5">
+        <Icon icon="solar:monitor-smartphone-bold-duotone" className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="text-xs font-bold text-amber-800" style={authorFont}>Better on Desktop</p>
+          <p className="text-[11px] text-amber-700 mt-0.5 leading-relaxed" style={authorFont}>
+            For the best experience, open this page on a <strong>laptop or desktop</strong>. Some features like the AI score panel are hidden on mobile.
+          </p>
+        </div>
+      </div>
+
       <div className="flex gap-6">
         {/* ===== Main Form Column ===== */}
         <div className="flex-1 space-y-6 max-w-3xl">
           {/* Header */}
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-[32px] font-black text-slate-900 tracking-tight italic" style={authorFont}>
+              <h1 className="text-xl sm:text-[32px] font-black text-slate-900 tracking-tight italic" style={authorFont}>
                 {isEditMode ? 'Edit Dissertation Topic' : 'Submit New Dissertation Topic'}
               </h1>
-              <div className="w-8 h-8 rounded-lg bg-[#4361EE] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-[#4361EE] flex items-center justify-center flex-shrink-0">
                 <Icon icon="solar:document-add-bold" className="w-4 h-4 text-white" />
               </div>
             </div>
@@ -769,16 +769,16 @@ export default function SubmitTitlePage() {
       </div>
 
       {/* ===== Fixed Bottom Blue Footer ===== */}
-      <div className="fixed bottom-0 left-0 right-0 lg:left-[250px] z-40 bg-[#4361EE] text-white py-4 px-6 md:px-8 border-t border-blue-500 shadow-2xl flex items-center justify-between">
-        <div className="flex flex-col gap-1">
-          <p className="text-[10px] font-black text-white/70 uppercase tracking-widest" style={authorFont}>
+      <div className="fixed bottom-0 left-0 right-0 lg:left-[250px] z-40 bg-[#4361EE] text-white py-3 px-4 md:py-4 md:px-8 border-t border-blue-500 shadow-2xl flex items-center justify-between gap-3">
+        <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+          <p className="text-[9px] font-black text-white/70 uppercase tracking-widest hidden sm:block" style={authorFont}>
             Submission Status
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             {validating ? (
               <>
-                <Loader2 className="w-4 h-4 text-white animate-spin" />
-                <p className="text-xs text-white/90 font-medium" style={authorFont}>
+                <Loader2 className="w-4 h-4 text-white animate-spin flex-shrink-0" />
+                <p className="text-xs text-white/90 font-medium truncate" style={authorFont}>
                   Checking AI validation status...
                 </p>
               </>
@@ -786,15 +786,15 @@ export default function SubmitTitlePage() {
               <>
                 <Icon
                   icon={validationResult.canSubmit ? "solar:check-circle-bold" : "solar:danger-triangle-bold"}
-                  className={`w-4 h-4 ${validationResult.canSubmit ? 'text-emerald-300' : 'text-amber-300'}`}
+                  className={`w-4 h-4 flex-shrink-0 ${validationResult.canSubmit ? 'text-emerald-300' : 'text-amber-300'}`}
                 />
-                <p className="text-xs text-white font-medium text-left" style={authorFont}>
+                <p className="text-xs text-white font-medium text-left truncate" style={authorFont}>
                   {!validationResult.layers.layer1.passed ? (
                     `Layer 1 Rejected: ${validationResult.layers.layer1.message}`
                   ) : !validationResult.layers.layer2.passed ? (
                     `Passed Layer 1. Layer 2 Rejected: ${validationResult.layers.layer2.message}`
                   ) : !validationResult.layers.layer3.passed ? (
-                    `Passed Layer 1 & 2. Layer 3 Rejected: Score of ${validationResult.scores.total}/95 is below minimum 40`
+                    `Score ${validationResult.scores.total}/95 below 40`
                   ) : (
                     `All 3 layers passed! Score: ${validationResult.scores.total}/95`
                   )}
@@ -802,12 +802,12 @@ export default function SubmitTitlePage() {
               </>
             ) : (
               <>
-                <Icon icon="solar:info-circle-bold" className="w-4 h-4 text-white/70" />
-                <p className="text-xs text-white/70 font-medium" style={authorFont}>
+                <Icon icon="solar:info-circle-bold" className="w-4 h-4 text-white/70 flex-shrink-0" />
+                <p className="text-xs text-white/70 font-medium truncate" style={authorFont}>
                   {!title.trim() || !drugName.trim() || !dosageForm.trim()
-                    ? 'Please Fill All Required Fields'
+                    ? 'Fill all required fields'
                     : title.trim().length <= 10
-                      ? 'Title must be longer than 10 characters'
+                      ? 'Title too short'
                       : 'Waiting for live check...'}
                 </p>
               </>
@@ -819,7 +819,7 @@ export default function SubmitTitlePage() {
           type="submit"
           form="submit-form"
           disabled={!canSubmit}
-          className={`inline-flex items-center gap-2 py-2.5 px-6 font-bold text-sm rounded-xl transition-all active:scale-[0.98] shadow-md ${
+          className={`inline-flex items-center gap-2 py-2.5 px-4 md:px-6 font-bold text-xs md:text-sm rounded-xl transition-all active:scale-[0.98] shadow-md flex-shrink-0 ${
             canSubmit
               ? 'bg-white text-[#4361EE] hover:bg-white/90 shadow-white/10'
               : 'bg-white/20 text-white/50 cursor-not-allowed'
@@ -829,12 +829,13 @@ export default function SubmitTitlePage() {
           {submitting ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Processing...
+              <span className="hidden sm:inline">Processing...</span>
             </>
           ) : (
             <>
               <Icon icon="solar:play-bold" className="w-4 h-4" />
-              {isEditMode ? 'Resubmit Your Tittle' : 'Submit Your Tittle'}
+              <span className="hidden sm:inline">{isEditMode ? 'Resubmit Your Title' : 'Submit Your Title'}</span>
+              <span className="sm:hidden">{isEditMode ? 'Resubmit' : 'Submit'}</span>
             </>
           )}
         </button>

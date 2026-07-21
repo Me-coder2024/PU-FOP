@@ -48,31 +48,64 @@ export function useAuth() {
           // 1. Get Firebase ID token
           const idToken = await firebaseUser.getIdToken();
 
-          // 2. Call sync API to verify token & create/find Supabase Auth user
-          const syncRes = await fetch('/api/auth/sync', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ idToken }),
-          });
+          // 2. Call sync API with exponential backoff for transient 404s (Turbopack/HMR route resolution)
+          let syncRes: Response | null = null;
+          const maxRetries = 4;
+          for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+              syncRes = await fetch('/api/auth/sync', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Cache-Control': 'no-cache, no-store',
+                  'Pragma': 'no-cache',
+                },
+                body: JSON.stringify({ idToken }),
+                cache: 'no-store',
+              });
+            } catch (fetchErr) {
+              // Network error (e.g., dev server restarting) — retry
+              if (attempt < maxRetries) {
+                const backoff = Math.min(500 * Math.pow(2, attempt), 4000);
+                console.warn(`Auth sync network error (attempt ${attempt + 1}), retrying in ${backoff}ms...`);
+                await new Promise(r => setTimeout(r, backoff));
+                continue;
+              }
+              throw new Error('Network error during authentication. Please check your connection and refresh.');
+            }
 
-          // Guard against non-JSON responses (e.g. HTML 404 pages, middleware redirects)
-          const contentType = syncRes.headers.get('content-type') || '';
-          if (!contentType.includes('application/json')) {
-            const text = await syncRes.text();
-            console.error('Auth sync returned non-JSON response:', syncRes.status, text.substring(0, 200));
-            throw new Error(
-              syncRes.status === 404
-                ? 'Auth sync endpoint not found. Please refresh the page.'
-                : `Authentication service error (HTTP ${syncRes.status}). Please try again.`
-            );
+            const contentType = syncRes.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+              break; // Got a valid JSON response
+            }
+
+            // Non-JSON (likely 404 HTML from dev server) — retry with exponential backoff
+            if (attempt < maxRetries) {
+              const backoff = Math.min(500 * Math.pow(2, attempt), 4000);
+              console.warn(`Auth sync attempt ${attempt + 1} returned non-JSON (${syncRes.status}), retrying in ${backoff}ms...`);
+              await new Promise(r => setTimeout(r, backoff));
+              // Refresh the token before retrying
+              await firebaseUser.getIdToken(true);
+            } else {
+              console.error('Auth sync returned non-JSON after all retries:', syncRes.status);
+              // Instead of signing out (login loop), set a recoverable error
+              setState({
+                user: null,
+                loading: false,
+                error: syncRes.status === 404
+                  ? 'Auth service is loading. Please refresh the page.'
+                  : `Authentication service error (HTTP ${syncRes.status}). Please refresh the page.`,
+              });
+              return; // Don't sign out — let user retry by refreshing
+            }
           }
 
-          if (!syncRes.ok) {
-            const errData = await syncRes.json();
+          if (!syncRes!.ok) {
+            const errData = await syncRes!.json();
             throw new Error(errData.error || 'Failed to sync with database.');
           }
 
-          const { email: syncEmail, securePassword } = await syncRes.json();
+          const { email: syncEmail, securePassword } = await syncRes!.json();
 
           // 3. Sign in to Supabase Auth on the client — always sign in to ensure fresh cookies
           const supabase = createClient();

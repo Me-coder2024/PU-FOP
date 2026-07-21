@@ -148,14 +148,14 @@ function checkDosageFormInTitle(dosageForm: string, title: string): { score: num
 
 export async function POST(request: Request) {
   try {
-    let body: ValidationRequest;
+    let body: ValidationRequest & { excludeSubmissionId?: string };
     try {
       body = await request.json();
     } catch {
       return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
     }
 
-    const { title, drugName, dosageForm, keywords, excipients, novelty } = body;
+    const { title, drugName, dosageForm, keywords, excipients, novelty, excludeSubmissionId } = body;
 
     if (!title?.trim()) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
@@ -173,10 +173,16 @@ export async function POST(request: Request) {
       // Query database submissions to append to existingTitles
       try {
         const supabase = createServiceClient();
-        const { data: dbSubmissions } = await supabase
+        let query = supabase
           .from('submissions')
           .select('title, created_at')
           .not('status', 'in', '("guide_rejected","hod_rejected")');
+
+        if (excludeSubmissionId) {
+          query = query.neq('id', excludeSubmissionId);
+        }
+
+        const { data: dbSubmissions } = await query;
 
         if (dbSubmissions) {
           dbSubmissions.forEach(sub => {
@@ -243,6 +249,13 @@ export async function POST(request: Request) {
         passed: false,
         status: 'skipped',
         message: 'Skipped — Layer 1 (Title Uniqueness) must pass first.',
+      };
+    } else if (!novelty?.trim()) {
+      layer2 = {
+        passed: false,
+        status: 'failed',
+        message: 'Statement of Novelty is required for AI novelty check.',
+        details: 'Please fill in the Statement of Novelty field to proceed.',
       };
     } else {
       try {

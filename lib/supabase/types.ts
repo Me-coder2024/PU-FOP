@@ -136,6 +136,29 @@ export type DrugRow = {
   created_at: string;
 };
 
+export type DrugRequestStatus = 'pending' | 'dean_approved' | 'pg_approved' | 'approved' | 'rejected';
+
+export type DrugRequestRow = {
+  id: string;
+  requested_by: string;
+  drug_name: string;
+  dosage_form: string | null;
+  category: string | null;
+  therapeutic: string | null;
+  reason: string | null;
+  status: DrugRequestStatus;
+  dean_reviewed_by: string | null;
+  dean_review_note: string | null;
+  dean_reviewed_at: string | null;
+  pg_reviewed_by: string | null;
+  pg_review_note: string | null;
+  pg_reviewed_at: string | null;
+  rejected_by: string | null;
+  rejection_reason: string | null;
+  rejected_at: string | null;
+  created_at: string;
+};
+
 // --- Guide Load View ---
 
 export type GuideLoadRow = {
@@ -292,6 +315,20 @@ export interface Database {
         Insert: Partial<DrugRow> & { name: string };
         Update: Partial<DrugRow>;
         Relationships: [];
+      };
+      drug_requests: {
+        Row: DrugRequestRow;
+        Insert: Partial<DrugRequestRow> & { requested_by: string; drug_name: string };
+        Update: Partial<DrugRequestRow>;
+        Relationships: [
+          {
+            foreignKeyName: "drug_requests_requested_by_fkey";
+            columns: ["requested_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          }
+        ];
       };
     };
     Views: {
