@@ -197,26 +197,32 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 
         {/* Submission Summary (student only) */}
         {isStudent && (
-          <div className="px-5 pb-6 pt-4 border-t border-white/10 mt-2">
-            <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-3" style={authorFont}>Submission Summary</p>
-            <div className="space-y-3">
+          <div className="px-4 pb-4 pt-3 border-t border-white/10 mt-auto">
+            <p className="text-[9px] font-bold text-white/50 uppercase tracking-widest mb-2.5" style={authorFont}>
+              Submission Summary
+            </p>
+            <div className="space-y-2.5">
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-semibold text-white/90" style={authorFont}>Topic Submission</span>
+                  <span className="text-[11px] font-semibold text-white/80 truncate pr-2" style={authorFont}>
+                    Topic Submission
+                  </span>
+                  <span className="text-[10px] font-bold text-white/60 flex-shrink-0" style={authorFont}>60%</span>
                 </div>
-                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                   <div className="h-full bg-white rounded-full" style={{ width: '60%' }} />
                 </div>
-                <p className="text-[10px] text-white/40 mt-1" style={poppinsFont}>60% of 100%</p>
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-semibold text-white/90" style={authorFont}>Submission Progress</span>
+                  <span className="text-[11px] font-semibold text-white/80 truncate pr-2" style={authorFont}>
+                    Progress
+                  </span>
+                  <span className="text-[10px] font-bold text-white/60 flex-shrink-0" style={authorFont}>10%</span>
                 </div>
-                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                   <div className="h-full bg-white rounded-full" style={{ width: '10%' }} />
                 </div>
-                <p className="text-[10px] text-white/40 mt-1" style={poppinsFont}>10% of 100%</p>
               </div>
             </div>
           </div>
