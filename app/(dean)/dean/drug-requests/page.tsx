@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRole } from '@/hooks/useRole';
 import { Icon } from '@iconify/react';
 import { Loader2, Search, Filter } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
@@ -24,7 +25,7 @@ interface DrugRequest {
   pg_reviewed_at: string | null;
   rejection_reason: string | null;
   created_at: string;
-  requester?: { full_name: string | null; email: string | null; university_id: string | null };
+  requester?: { full_name: string | null; email: string; university_id?: string | null };
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
@@ -37,6 +38,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
 
 export default function DeanDrugRequestsPage() {
   const { profile } = useRole();
+  const { success, error: showError, warning } = useToast();
   const [loading, setLoading] = useState(true);
   const [requests, setRequests] = useState<DrugRequest[]>([]);
   const [statusFilter, setStatusFilter] = useState('all');
@@ -68,7 +70,7 @@ export default function DeanDrugRequestsPage() {
     if (!profile) return;
 
     if (action === 'reject' && !reviewNotes[requestId]?.trim()) {
-      alert('Please provide a reason for rejection.');
+      warning('Please provide a reason for rejection.', 'Warning');
       return;
     }
 
@@ -87,12 +89,13 @@ export default function DeanDrugRequestsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Review failed');
 
+      success(action === 'approve' ? 'Request approved successfully!' : 'Request rejected.', 'Success');
       setModalReq(null);
       setReviewNotes((prev) => ({ ...prev, [requestId]: '' }));
       await fetchRequests();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to review';
-      alert(msg);
+      showError(msg, 'Error');
     } finally {
       setActionLoading(null);
     }
