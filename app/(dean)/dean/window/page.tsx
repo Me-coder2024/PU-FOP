@@ -14,6 +14,8 @@ import {
   History,
 } from 'lucide-react';
 
+import { useToast } from '@/components/ui/Toast';
+
 interface Institute {
   id: string;
   name: string;
@@ -25,11 +27,12 @@ interface WindowRecord {
   start_date: string;
   end_date: string;
   created_at: string;
-  institute?: { name: string };
+  creator?: { full_name: string | null } | null;
 }
 
 export default function DeanWindowPage() {
   const { profile } = useRole();
+  const { success, error: showError, warning } = useToast();
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
@@ -131,7 +134,7 @@ export default function DeanWindowPage() {
   const handleSaveWindow = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedInstituteId || !startDate || !endDate) {
-      alert('Please select institute and enter start and end dates.');
+      warning('Please select institute and enter start and end dates.', 'Warning');
       return;
     }
 
@@ -139,7 +142,7 @@ export default function DeanWindowPage() {
     const endVal = new Date(endDate);
 
     if (endVal <= startVal) {
-      alert('End date must be after start date.');
+      warning('End date must be after start date.', 'Warning');
       return;
     }
 
@@ -181,11 +184,11 @@ export default function DeanWindowPage() {
         await supabase.from('notifications').insert(notifications);
       }
 
-      alert('Submission window set successfully!');
+      success('Submission window set successfully!', 'Success');
       await fetchWindowData(selectedInstituteId);
     } catch (err) {
       console.error('Error saving window', err);
-      alert('Failed to save submission window.');
+      showError('Failed to save submission window.', 'Error');
     } finally {
       setSaving(false);
     }

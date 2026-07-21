@@ -13,6 +13,8 @@ import {
   AlertCircle,
 } from 'lucide-react';
 
+import { useToast } from '@/components/ui/Toast';
+
 interface FeedbackItem {
   id: string;
   subject: string;
@@ -23,6 +25,7 @@ interface FeedbackItem {
 
 export default function GeneralFeedbackPage() {
   const { profile } = useRole();
+  const { success, error } = useToast();
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
@@ -80,11 +83,11 @@ export default function GeneralFeedbackPage() {
 
       setSubject('');
       setMessage('');
-      alert('Feedback submitted successfully. The Super Admin team will review it.');
+      success('Feedback submitted successfully. The Super Admin team will review it.', 'Feedback Submitted');
       await fetchFeedbackHistory();
     } catch (err) {
       console.error('Error submitting feedback', err);
-      alert('Failed to submit feedback.');
+      error('Failed to submit feedback. Please try again.', 'Error');
     } finally {
       setSubmitting(false);
     }

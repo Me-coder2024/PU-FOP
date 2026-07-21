@@ -10,6 +10,8 @@ import { Loader2 } from 'lucide-react';
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
 
+import { useToast } from '@/components/ui/Toast';
+
 interface SubmissionWithStudent extends SubmissionRow {
   student?: {
     full_name: string | null;
@@ -21,6 +23,7 @@ interface SubmissionWithStudent extends SubmissionRow {
 
 export default function GuidePage() {
   const { profile } = useRole();
+  const { success, error: showError, warning } = useToast();
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
@@ -85,7 +88,7 @@ export default function GuidePage() {
         notifType = 'success';
       } else if (action === 'reject') {
         if (!rejectionReason[submissionId]?.trim()) {
-          alert('Please provide a rejection reason.');
+          warning('Please provide a rejection reason.', 'Warning');
           setActionLoading(null);
           return;
         }
@@ -95,7 +98,7 @@ export default function GuidePage() {
         notifType = 'error';
       } else {
         if (!remarks[submissionId]?.trim()) {
-          alert('Please provide remarks for the student.');
+          warning('Please provide remarks for the student.', 'Warning');
           setActionLoading(null);
           return;
         }
@@ -161,11 +164,12 @@ export default function GuidePage() {
         }
       }
 
+      success(action === 'accept' ? 'Title accepted and forwarded to HOD!' : action === 'reject' ? 'Title rejected.' : 'Revisions requested.', 'Success');
       setModalSub(null);
       await fetchSubmissions();
     } catch (err) {
       console.error('Error performing guide action', err);
-      alert('Action failed. Please try again.');
+      showError('Action failed. Please try again.', 'Error');
     } finally {
       setActionLoading(null);
     }

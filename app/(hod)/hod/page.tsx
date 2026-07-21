@@ -10,6 +10,8 @@ import { Loader2 } from 'lucide-react';
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
 
+import { useToast } from '@/components/ui/Toast';
+
 interface SubmissionWithDetails extends SubmissionRow {
   student?: { full_name: string | null; email: string; university_id: string | null; institute_id: string | null };
   guide?: { full_name: string | null };
@@ -17,6 +19,7 @@ interface SubmissionWithDetails extends SubmissionRow {
 
 export default function HodPage() {
   const { profile } = useRole();
+  const { success, error: showError, warning } = useToast();
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
@@ -110,7 +113,7 @@ export default function HodPage() {
         }
       } else {
         if (!hodRemarks[submissionId]?.trim()) {
-          alert('Please provide remarks explaining what needs to be changed.');
+          warning('Please provide remarks explaining what needs to be changed.', 'Warning');
           setActionLoading(null);
           return;
         }
@@ -135,11 +138,12 @@ export default function HodPage() {
         });
       }
 
+      success(action === 'forward' ? 'Title forwarded to PG Director!' : 'Revisions requested successfully.', 'Success');
       setModalSub(null);
       await fetchSubmissions();
     } catch (err) {
       console.error('Error performing HOD action', err);
-      alert('Action failed. Please try again.');
+      showError('Action failed. Please try again.', 'Error');
     } finally {
       setActionLoading(null);
     }

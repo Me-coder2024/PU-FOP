@@ -14,6 +14,9 @@ import {
   Trash2,
 } from 'lucide-react';
 
+import { useToast } from '@/components/ui/Toast';
+import Modal from '@/components/ui/Modal';
+
 interface Institute {
   id: string;
   name: string;
@@ -31,12 +34,14 @@ interface Announcement {
 
 export default function DeanAnnouncementsPage() {
   const { profile } = useRole();
+  const { success, error, warning } = useToast();
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [institutes, setInstitutes] = useState<Institute[]>([]);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   // Form states
   const [title, setTitle] = useState('');
@@ -87,7 +92,7 @@ export default function DeanAnnouncementsPage() {
   const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !message.trim()) {
-      alert('Please fill out the title and message fields.');
+      warning('Please fill out the title and message fields.', 'Warning');
       return;
     }
 
@@ -140,25 +145,26 @@ export default function DeanAnnouncementsPage() {
       setMessage('');
       setTargetRole('all');
       setTargetInstId('all');
-      alert('Announcement published successfully.');
+      success('Announcement published successfully.', 'Published');
       await fetchAnnouncements();
     } catch (err) {
       console.error('Error publishing announcement', err);
-      alert('Failed to publish announcement.');
+      error('Failed to publish announcement.', 'Error');
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this announcement?')) return;
+  const executeDelete = async (id: string) => {
     try {
-      const { error } = await supabase.from('announcements').delete().eq('id', id);
-      if (error) throw error;
+      const { error: deleteErr } = await supabase.from('announcements').delete().eq('id', id);
+      if (deleteErr) throw deleteErr;
+      success('Announcement deleted successfully.', 'Deleted');
+      setDeleteTargetId(null);
       await fetchAnnouncements();
     } catch (err) {
       console.error('Error deleting announcement', err);
-      alert('Failed to delete announcement.');
+      error('Failed to delete announcement.', 'Error');
     }
   };
 
@@ -276,7 +282,7 @@ export default function DeanAnnouncementsPage() {
                 {announcements.map((ann) => (
                   <div key={ann.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100 relative group space-y-2">
                     <button
-                      onClick={() => handleDelete(ann.id)}
+                      onClick={() => setDeleteTargetId(ann.id)}
                       className="absolute top-3 right-3 text-slate-400 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -307,6 +313,35 @@ export default function DeanAnnouncementsPage() {
           </div>
         </div>
       </div>
+
+      {/* ===== Custom Delete Confirmation Modal ===== */}
+      {deleteTargetId && (
+        <Modal
+          isOpen={!!deleteTargetId}
+          onClose={() => setDeleteTargetId(null)}
+          title="Delete Announcement"
+          footer={
+            <div className="flex gap-2">
+              <button
+                onClick={() => setDeleteTargetId(null)}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-750 text-white rounded-xl text-xs font-bold transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => executeDelete(deleteTargetId)}
+                className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold transition-all"
+              >
+                Delete
+              </button>
+            </div>
+          }
+        >
+          <p className="text-xs text-slate-350 leading-relaxed">
+            Are you sure you want to delete this announcement? This action cannot be undone.
+          </p>
+        </Modal>
+      )}
     </div>
   );
 }

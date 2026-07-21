@@ -10,6 +10,8 @@ import { Loader2 } from 'lucide-react';
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
 
+import { useToast } from '@/components/ui/Toast';
+
 interface SubmissionWithDetails extends SubmissionRow {
   student?: { full_name: string | null; email: string; university_id: string | null; institute_id: string | null };
 }
@@ -22,6 +24,7 @@ interface GuideProfile {
 
 export default function HodAssignGuidePage() {
   const { profile } = useRole();
+  const { success, error: showError, warning } = useToast();
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
@@ -79,7 +82,7 @@ export default function HodAssignGuidePage() {
 
   const handleAssignGuide = async (submissionId: string) => {
     const guideId = guideSelection[submissionId];
-    if (!guideId) { alert('Please select a guide.'); return; }
+    if (!guideId) { warning('Please select a guide.', 'Warning'); return; }
     setActionLoading(submissionId);
     try {
       const submission = unassigned.find(s => s.id === submissionId);
@@ -108,10 +111,11 @@ export default function HodAssignGuidePage() {
         link: '/dashboard',
       });
 
+      success('Guide assigned successfully!', 'Success');
       await fetchUnassigned();
     } catch (err) {
       console.error('Error assigning guide', err);
-      alert('Failed to assign guide.');
+      showError('Failed to assign guide.', 'Error');
     } finally {
       setActionLoading(null);
     }
