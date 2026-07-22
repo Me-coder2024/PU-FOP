@@ -92,7 +92,19 @@ export async function POST(request: Request) {
 
     const securePassword = generateSecurePassword(email);
 
-    // 2. Try to create user first, handle "already exists" gracefully
+    // 2. Fast Path: Check if user profile already exists
+    const { data: existingProfile } = await supabaseAdmin
+      .from('profiles')
+      .select('id, email, role')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (existingProfile) {
+      // Existing user — password is deterministic, return immediately (<100ms response time)
+      return NextResponse.json({ email, securePassword });
+    }
+
+    // 3. Slow Path: New user registration — create auth user & profile
     let userId: string;
 
     const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
@@ -103,54 +115,28 @@ export async function POST(request: Request) {
     });
 
     if (createError) {
-      // User already exists — find them and update password
+      // Rare edge case: Auth user exists in auth.users but profile was missing
       if (createError.message?.includes('already been registered') || createError.status === 422) {
-        // Find the existing user by listing with email filter
-        const { data: listData, error: listError } = await supabaseAdmin.auth.admin.listUsers({
-          perPage: 1,
+        // Fetch user from auth by email listing (page 1 with filter if available)
+        const { data: listData } = await supabaseAdmin.auth.admin.listUsers({
+          perPage: 50,
           page: 1,
         });
 
-        // Fallback: search through all users if needed
-        let existingUser = listData?.users?.find((u) => u.email?.toLowerCase() === email);
-
-        if (!existingUser) {
-          // Try paginated search
-          let page = 1;
-          const perPage = 100;
-          while (!existingUser) {
-            const { data: pageData, error: pageError } = await supabaseAdmin.auth.admin.listUsers({
-              perPage,
-              page,
-            });
-            if (pageError || !pageData?.users?.length) break;
-            existingUser = pageData.users.find((u) => u.email?.toLowerCase() === email);
-            if (pageData.users.length < perPage) break; // Last page
-            page++;
-            if (page > 50) break; // Safety limit
-          }
-        }
-
-        if (!existingUser) {
-          console.error('User registered but not found:', email);
+        const foundUser = listData?.users?.find((u) => u.email?.toLowerCase() === email);
+        if (!foundUser) {
+          console.error('User registered in auth but not found in list:', email);
           return NextResponse.json(
-            { error: 'Account sync issue. Please try again or contact support.' },
+            { error: 'Account sync issue. Please try signing in again.' },
             { status: 500 }
           );
         }
 
-        userId = existingUser.id;
-
-        // Update password to stay in sync
-        const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
-          password: securePassword,
-        });
-        if (updateError) {
-          console.error('Password update failed:', updateError);
-          // Non-fatal — continue with existing password
-        }
+        userId = foundUser.id;
+        // Ensure password is in sync
+        await supabaseAdmin.auth.admin.updateUserById(userId, { password: securePassword });
       } else {
-        console.error('createUser failed with unexpected error:', createError);
+        console.error('createUser failed:', createError);
         return NextResponse.json(
           { error: `Auth setup failed: ${createError.message}` },
           { status: 500 }
@@ -160,47 +146,38 @@ export async function POST(request: Request) {
       userId = newUser.user.id;
     }
 
-    // 3. Ensure profile exists
-    const { data: profile } = await supabaseAdmin
-      .from('profiles')
-      .select('id')
-      .eq('id', userId)
+    // 4. Create missing profile for new user
+    const { data: roleGrant } = await supabaseAdmin
+      .from('role_grants')
+      .select('role, institute_id, department_id')
+      .eq('email', email)
       .maybeSingle();
 
-    if (!profile) {
-      // Check for pre-provisioned role grant (re-query with full fields)
-      const { data: roleGrant } = await supabaseAdmin
-        .from('role_grants')
-        .select('role, institute_id, department_id')
-        .eq('email', email)
-        .maybeSingle();
+    const role = email === 'me.coder.in@gmail.com'
+      ? 'super_admin'
+      : (roleGrant?.role || 'student');
 
-      const role = email === 'me.coder.in@gmail.com'
-        ? 'super_admin'
-        : (roleGrant?.role || 'student');
+    const { error: profileError } = await supabaseAdmin
+      .from('profiles')
+      .upsert({
+        id: userId,
+        email,
+        full_name: displayName,
+        avatar_url: photoUrl,
+        role,
+        institute_id: roleGrant?.institute_id || null,
+        department_id: roleGrant?.department_id || null,
+      }, { onConflict: 'id' });
 
-      const { error: profileError } = await supabaseAdmin
-        .from('profiles')
-        .upsert({
-          id: userId,
-          email,
-          full_name: displayName,
-          avatar_url: photoUrl,
-          role,
-          institute_id: roleGrant?.institute_id || null,
-          department_id: roleGrant?.department_id || null,
-        }, { onConflict: 'id' });
-
-      if (profileError) {
-        console.error('Profile creation failed:', profileError);
-        return NextResponse.json(
-          { error: `Profile setup failed: ${profileError.message}` },
-          { status: 500 }
-        );
-      }
+    if (profileError) {
+      console.error('Profile creation failed:', profileError);
+      return NextResponse.json(
+        { error: `Profile setup failed: ${profileError.message}` },
+        { status: 500 }
+      );
     }
 
-    // 4. Return credentials for client-side Supabase sign-in
+    // 5. Return credentials for client-side Supabase sign-in
     return NextResponse.json({ email, securePassword });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Internal server error';
