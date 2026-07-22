@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { clearRoleCache } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
 import { Loader2, CheckCircle2, Play } from 'lucide-react';
 
@@ -91,9 +92,10 @@ export default function OnboardingPage() {
 
       if (updateError) throw new Error(updateError.message);
 
+      clearRoleCache();
       setSuccess(true);
       setTimeout(() => {
-        router.replace('/dashboard');
+        window.location.href = '/dashboard';
       }, 500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to create profile.';

@@ -1,6 +1,7 @@
 import { createServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
+import type { AppRole } from '@/lib/supabase/types';
 
 function generateSecurePassword(email: string): string {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -73,23 +74,6 @@ export async function POST(request: Request) {
 
     const allowedDomain = process.env.NEXT_PUBLIC_ALLOWED_EMAIL_DOMAIN || 'paruluniversity.ac.in';
     const supabaseAdmin = createServiceClient();
-
-    // Query role_grants to see if this email is pre-provisioned
-    const { data: grant } = await supabaseAdmin
-      .from('role_grants')
-      .select('role')
-      .eq('email', email)
-      .maybeSingle();
-
-    const isGranted = !!grant;
-
-    if (!email.endsWith('@' + allowedDomain) && email !== 'me.coder.in@gmail.com' && !isGranted) {
-      return NextResponse.json(
-        { error: `Only @${allowedDomain} accounts are allowed.` },
-        { status: 403 }
-      );
-    }
-
     const securePassword = generateSecurePassword(email);
 
     // 2. Fast Path: Check if user profile already exists
@@ -104,20 +88,49 @@ export async function POST(request: Request) {
       return NextResponse.json({ email, securePassword });
     }
 
-    // 3. Slow Path: New user registration — create auth user & profile
-    let userId: string;
+    // Domain / Grant check
+    const isDomainAllowed = email.endsWith('@' + allowedDomain) || email === 'me.coder.in@gmail.com';
+    let roleGrantData: { role?: string; institute_id?: string | null; department_id?: string | null } | null = null;
 
-    const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
-      email,
-      password: securePassword,
-      email_confirm: true,
-      user_metadata: { full_name: displayName, avatar_url: photoUrl },
-    });
+    if (!isDomainAllowed) {
+      const { data: grant } = await supabaseAdmin
+        .from('role_grants')
+        .select('role, institute_id, department_id')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (!grant) {
+        return NextResponse.json(
+          { error: `Only @${allowedDomain} accounts are allowed.` },
+          { status: 403 }
+        );
+      }
+      roleGrantData = grant;
+    }
+
+    // 3. New User Registration — run Auth user creation and role_grants lookup in parallel
+    const [createRes, grantRes] = await Promise.all([
+      supabaseAdmin.auth.admin.createUser({
+        email,
+        password: securePassword,
+        email_confirm: true,
+        user_metadata: { full_name: displayName, avatar_url: photoUrl },
+      }),
+      roleGrantData
+        ? Promise.resolve({ data: roleGrantData, error: null })
+        : supabaseAdmin
+            .from('role_grants')
+            .select('role, institute_id, department_id')
+            .eq('email', email)
+            .maybeSingle(),
+    ]);
+
+    let userId: string;
+    const { data: newUser, error: createError } = createRes;
 
     if (createError) {
       // Rare edge case: Auth user exists in auth.users but profile was missing
       if (createError.message?.includes('already been registered') || createError.status === 422) {
-        // Fetch user from auth by email listing (page 1 with filter if available)
         const { data: listData } = await supabaseAdmin.auth.admin.listUsers({
           perPage: 50,
           page: 1,
@@ -133,7 +146,6 @@ export async function POST(request: Request) {
         }
 
         userId = foundUser.id;
-        // Ensure password is in sync
         await supabaseAdmin.auth.admin.updateUserById(userId, { password: securePassword });
       } else {
         console.error('createUser failed:', createError);
@@ -146,16 +158,11 @@ export async function POST(request: Request) {
       userId = newUser.user.id;
     }
 
-    // 4. Create missing profile for new user
-    const { data: roleGrant } = await supabaseAdmin
-      .from('role_grants')
-      .select('role, institute_id, department_id')
-      .eq('email', email)
-      .maybeSingle();
-
-    const role = email === 'me.coder.in@gmail.com'
+    // 4. Create profile for new user
+    const roleGrant = grantRes?.data;
+    const role: AppRole = email === 'me.coder.in@gmail.com'
       ? 'super_admin'
-      : (roleGrant?.role || 'student');
+      : ((roleGrant?.role as AppRole) || 'student');
 
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
