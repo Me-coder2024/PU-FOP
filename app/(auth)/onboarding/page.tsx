@@ -15,10 +15,11 @@ export default function OnboardingPage() {
   const [universityId, setUniversityId] = useState('');
   const [selectedInstitute, setSelectedInstitute] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [division, setDivision] = useState('');
+  const [selectedGuide, setSelectedGuide] = useState('');
 
   const [institutes, setInstitutes] = useState<{ id: string; name: string }[]>([]);
   const [departments, setDepartments] = useState<{ id: string; name: string }[]>([]);
+  const [guides, setGuides] = useState<{ id: string; full_name: string | null; email: string }[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +44,7 @@ export default function OnboardingPage() {
     }
   }, [user]);
 
-  // Load institutes and departments from DB
+  // Load institutes, departments, and guides from DB
   useEffect(() => {
     async function loadOptions() {
       const { data: instData } = await supabase.from('institutes').select('id, name').order('name');
@@ -51,6 +52,13 @@ export default function OnboardingPage() {
 
       const { data: deptData } = await supabase.from('departments').select('id, name').order('name');
       if (deptData) setDepartments(deptData);
+
+      const { data: guideData } = await supabase
+        .from('profiles')
+        .select('id, full_name, email')
+        .eq('role', 'guide')
+        .order('full_name');
+      if (guideData) setGuides(guideData);
     }
     loadOptions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,6 +72,7 @@ export default function OnboardingPage() {
     if (!universityId.trim()) { setError('University ID / Enrollment number is required.'); return; }
     if (!selectedInstitute) { setError('Please select your institute.'); return; }
     if (!selectedDepartment) { setError('Please select your department.'); return; }
+    if (!selectedGuide) { setError('Please select your guide.'); return; }
     if (!user) return;
 
     setSubmitting(true);
@@ -76,6 +85,7 @@ export default function OnboardingPage() {
           university_id: universityId.trim(),
           institute_id: selectedInstitute,
           department_id: selectedDepartment,
+          guide_id: selectedGuide,
         })
         .eq('id', user.id);
 
@@ -83,8 +93,8 @@ export default function OnboardingPage() {
 
       setSuccess(true);
       setTimeout(() => {
-        router.push('/dashboard');
-      }, 1500);
+        router.replace('/dashboard');
+      }, 500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to create profile.';
       setError(msg);
@@ -211,17 +221,27 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            {/* Division */}
+            {/* Select Guide */}
             <div>
-              <label className="text-sm font-bold text-white mb-2 block">Division</label>
-              <input
-                id="profile-division"
-                type="text"
-                value={division}
-                onChange={(e) => setDivision(e.target.value)}
-                placeholder="e.g. Section B"
-                className="w-full px-4 py-3 bg-white rounded-xl text-gray-800 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
-              />
+              <label className="text-sm font-bold text-white mb-2 block">Select Guide</label>
+              <div className="relative">
+                <select
+                  id="profile-guide"
+                  value={selectedGuide}
+                  onChange={(e) => setSelectedGuide(e.target.value)}
+                  className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer"
+                >
+                  <option value="">Select Guide</option>
+                  {guides.map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.full_name ? `${g.full_name} (${g.email})` : g.email}
+                    </option>
+                  ))}
+                </select>
+                <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
 
             {error && (

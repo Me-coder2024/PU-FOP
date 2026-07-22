@@ -325,6 +325,7 @@ export default function SubmitTitlePage() {
           .from('submissions')
           .insert({
             student_id: profile.id,
+            guide_id: profile.guide_id || null,
             title: title.trim(),
             description: novelty.trim(),
             criteria_details: criteriaDetails,
@@ -337,8 +338,6 @@ export default function SubmitTitlePage() {
           }
           throw new Error(insertError.message);
         }
-
-        // Guide will be assigned by HOD manually — no auto-assignment
       }
 
       setSuccess(true);
@@ -407,7 +406,7 @@ export default function SubmitTitlePage() {
         <p className="text-sm text-slate-500" style={authorFont}>
           {isEditMode
             ? 'Your revised title has been resubmitted for guide review.'
-            : "A guide has been assigned to review your title. You'll receive notifications about the progress."}
+            : "Your title has been submitted to your selected guide. You'll receive notifications about the progress."}
         </p>
       </div>
     );

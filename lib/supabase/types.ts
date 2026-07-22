@@ -29,6 +29,7 @@ export type ProfileRow = {
   role: AppRole;
   institute_id: string | null;
   department_id: string | null;
+  guide_id: string | null;
   avatar_url: string | null;
   created_at: string;
   updated_at: string;

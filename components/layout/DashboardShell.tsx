@@ -50,7 +50,7 @@ const OTHER_NAV: Record<Exclude<AppRole, 'student'>, NavItem[]> = {
   ],
   hod: [
     { label: 'Review Queue', href: '/hod', lucideIcon: ClipboardCheck },
-    { label: 'Assign Guide', href: '/hod/assign', iconifyIcon: 'solar:user-plus-bold-duotone' },
+    { label: 'Manage Guides', href: '/hod/assign', iconifyIcon: 'solar:user-plus-bold-duotone' },
     { label: 'All Titles', href: '/hod/all', lucideIcon: Eye },
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
   ],
