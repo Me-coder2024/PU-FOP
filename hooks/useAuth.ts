@@ -1,17 +1,16 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { auth } from '@/lib/firebase/config';
 import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut as firebaseSignOut,
   onAuthStateChanged,
+  type User as FirebaseUser,
 } from 'firebase/auth';
 import { createClient } from '@/lib/supabase/client';
 import { clearRoleCache } from './useRole';
-
-const ALLOWED_DOMAIN = process.env.NEXT_PUBLIC_ALLOWED_EMAIL_DOMAIN || 'paruluniversity.ac.in';
 
 export interface UnifiedUser {
   id: string; // The Supabase auth user.id (UUID)
@@ -26,12 +25,68 @@ interface AuthState {
   error: string | null;
 }
 
+// ── Core sync logic (shared between signInWithGoogle and onAuthStateChanged) ──
+
+async function performSync(
+  firebaseUser: FirebaseUser
+): Promise<UnifiedUser> {
+  const email = firebaseUser.email;
+  if (!email) throw new Error('No email associated with account.');
+
+  // 1. Get Firebase ID token
+  const idToken = await firebaseUser.getIdToken();
+
+  // 2. Call sync API (single attempt — fast fail)
+  const syncRes = await fetch('/api/auth/sync', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache, no-store',
+    },
+    body: JSON.stringify({ idToken, emailHint: email }),
+    cache: 'no-store',
+  });
+
+  if (!syncRes.ok) {
+    const contentType = syncRes.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const errData = await syncRes.json();
+      throw new Error(errData.error || 'Failed to sync with database.');
+    }
+    throw new Error(`Authentication service error (HTTP ${syncRes.status}). Please refresh.`);
+  }
+
+  const { email: syncEmail, securePassword } = await syncRes.json();
+
+  // 3. Sign in to Supabase Auth on the client
+  const supabase = createClient();
+  const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+    email: syncEmail,
+    password: securePassword,
+  });
+  if (signInError) throw signInError;
+  const supabaseUser = signInData.user;
+
+  return {
+    id: supabaseUser!.id,
+    email,
+    displayName: firebaseUser.displayName,
+    photoURL: firebaseUser.photoURL,
+  };
+}
+
+// ─── Hook ─────────────────────────────────────────────────────────────────────
+
 export function useAuth() {
   const [state, setState] = useState<AuthState>({
     user: null,
     loading: true,
     error: null,
   });
+
+  // Flag to prevent onAuthStateChanged from duplicating work that
+  // signInWithGoogle already did directly.
+  const syncInProgress = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -42,7 +97,6 @@ export function useAuth() {
         const supabase = createClient();
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user && !cancelled) {
-          // We have a valid Supabase session — use it directly without Firebase round-trip
           setState({
             user: {
               id: session.user.id,
@@ -53,129 +107,40 @@ export function useAuth() {
             loading: false,
             error: null,
           });
-          return true; // Signal that we handled auth
+          return true;
         }
       } catch {
-        // Session check failed — fall through to Firebase flow
+        // Fall through to Firebase flow
       }
       return false;
     };
 
-    // Try fast path first
     checkExistingSession().then((handled) => {
       if (handled || cancelled) return;
 
-      // Slow path: Firebase auth state listener
+      // Slow path: Firebase auth state listener (handles page reload when
+      // Firebase has a persisted session but Supabase session expired)
       const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
         if (cancelled) return;
 
+        // Skip if signInWithGoogle is already handling sync
+        if (syncInProgress.current) return;
+
         if (firebaseUser) {
-          const email = firebaseUser.email;
-          if (!email) {
-            await firebaseSignOut(auth);
-            if (!cancelled) setState({ user: null, loading: false, error: 'No email associated with account.' });
-            return;
-          }
-
           try {
-            // 1. Get Firebase ID token
-            const idToken = await firebaseUser.getIdToken();
-
-            // 2. Call sync API with reduced retries for faster failure
-            let syncRes: Response | null = null;
-            const maxRetries = 2;
-            for (let attempt = 0; attempt <= maxRetries; attempt++) {
-              try {
-                syncRes = await fetch('/api/auth/sync', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'no-cache, no-store',
-                    'Pragma': 'no-cache',
-                  },
-                  body: JSON.stringify({ idToken, emailHint: email }),
-                  cache: 'no-store',
-                });
-              } catch (fetchErr) {
-                if (attempt < maxRetries) {
-                  const backoff = Math.min(200 * Math.pow(2, attempt), 2000);
-                  console.warn(`Auth sync network error (attempt ${attempt + 1}), retrying in ${backoff}ms...`);
-                  await new Promise(r => setTimeout(r, backoff));
-                  continue;
-                }
-                throw new Error('Network error during authentication. Please check your connection and refresh.');
-              }
-
-              const contentType = syncRes.headers.get('content-type') || '';
-              if (contentType.includes('application/json')) {
-                break;
-              }
-
-              if (attempt < maxRetries) {
-                const backoff = Math.min(200 * Math.pow(2, attempt), 2000);
-                console.warn(`Auth sync attempt ${attempt + 1} returned non-JSON (${syncRes.status}), retrying in ${backoff}ms...`);
-                await new Promise(r => setTimeout(r, backoff));
-                await firebaseUser.getIdToken(true);
-              } else {
-                console.error('Auth sync returned non-JSON after all retries:', syncRes.status);
-                if (!cancelled) {
-                  setState({
-                    user: null,
-                    loading: false,
-                    error: syncRes.status === 404
-                      ? 'Auth service is loading. Please refresh the page.'
-                      : `Authentication service error (HTTP ${syncRes.status}). Please refresh the page.`,
-                  });
-                }
-                return;
-              }
-            }
-
-            if (!syncRes!.ok) {
-              const errData = await syncRes!.json();
-              throw new Error(errData.error || 'Failed to sync with database.');
-            }
-
-            const { email: syncEmail, securePassword } = await syncRes!.json();
-
-            // 3. Sign in to Supabase Auth on the client
-            const supabase = createClient();
-            const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-              email: syncEmail,
-              password: securePassword,
-            });
-            if (signInError) throw signInError;
-            const supabaseUser = signInData.user;
-
-            // 4. Done — set the unified user
-            if (!cancelled) {
-              setState({
-                user: {
-                  id: supabaseUser!.id,
-                  email,
-                  displayName: firebaseUser.displayName,
-                  photoURL: firebaseUser.photoURL,
-                },
-                loading: false,
-                error: null,
-              });
-            }
+            const user = await performSync(firebaseUser);
+            if (!cancelled) setState({ user, loading: false, error: null });
           } catch (err: unknown) {
             const message = err instanceof Error ? err.message : 'Authentication failed.';
-            console.error('Auth sync error:', message);
-            // Don't sign out Firebase on transient errors — lets user retry
-            // without re-opening the Google popup
+            console.error('Auth sync error (onAuthStateChanged):', message);
             if (!cancelled) setState({ user: null, loading: false, error: message });
           }
         } else {
           // Signed out
-          const supabase = createClient();
-          await supabase.auth.signOut();
           if (!cancelled) setState({ user: null, loading: false, error: null });
         }
       });
 
-      // Store unsubscribe for cleanup
       cleanupRef.current = unsubscribe;
     });
 
@@ -188,15 +153,28 @@ export function useAuth() {
 
   const signInWithGoogle = useCallback(async () => {
     setState((prev) => ({ ...prev, loading: true, error: null }));
+
+    // Set flag so onAuthStateChanged doesn't do duplicate work
+    syncInProgress.current = true;
+
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
-      await signInWithPopup(auth, provider);
-      // onAuthStateChanged will handle the rest
+
+      // signInWithPopup returns the FirebaseUser immediately —
+      // no need to wait for onAuthStateChanged to fire (saves 500ms-2s)
+      const result = await signInWithPopup(auth, provider);
+      const firebaseUser = result.user;
+
+      // Perform sync directly (token + API + Supabase signIn)
+      const user = await performSync(firebaseUser);
+
+      setState({ user, loading: false, error: null });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Google sign-in failed.';
       setState((prev) => ({ ...prev, loading: false, error: message }));
-      throw err;
+    } finally {
+      syncInProgress.current = false;
     }
   }, []);
 
@@ -223,3 +201,4 @@ export function useAuth() {
     signOut,
   };
 }
+
