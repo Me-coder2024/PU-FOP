@@ -93,7 +93,7 @@ export function useAuth() {
                     'Cache-Control': 'no-cache, no-store',
                     'Pragma': 'no-cache',
                   },
-                  body: JSON.stringify({ idToken }),
+                  body: JSON.stringify({ idToken, emailHint: email }),
                   cache: 'no-store',
                 });
               } catch (fetchErr) {
@@ -163,7 +163,8 @@ export function useAuth() {
           } catch (err: unknown) {
             const message = err instanceof Error ? err.message : 'Authentication failed.';
             console.error('Auth sync error:', message);
-            await firebaseSignOut(auth);
+            // Don't sign out Firebase on transient errors — lets user retry
+            // without re-opening the Google popup
             if (!cancelled) setState({ user: null, loading: false, error: message });
           }
         } else {
