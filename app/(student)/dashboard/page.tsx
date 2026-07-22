@@ -48,6 +48,7 @@ export default function StudentDashboard() {
           .limit(1)
           .maybeSingle();
 
+        let foundGuide = false;
         if (subData) {
           setSubmission(subData as SubmissionRow);
           if (subData.guide_id) {
@@ -59,7 +60,22 @@ export default function StudentDashboard() {
             if (guideData) {
               setGuideName(guideData.full_name);
               setGuideEmail(guideData.email);
+              foundGuide = true;
             }
+          }
+        }
+
+        // If no guide found from submission, check the profile's guide_id
+        // (set during onboarding when student selects their guide)
+        if (!foundGuide && profile.guide_id) {
+          const { data: profileGuideData } = await supabase
+            .from('profiles')
+            .select('full_name, email')
+            .eq('id', profile.guide_id)
+            .single();
+          if (profileGuideData) {
+            setGuideName(profileGuideData.full_name);
+            setGuideEmail(profileGuideData.email);
           }
         }
 
@@ -191,7 +207,7 @@ export default function StudentDashboard() {
           <div className="bg-white rounded-2xl p-5 border border-slate-200 min-h-[155px] flex flex-col justify-between">
             <div className="flex items-start justify-between">
               <div className="w-8 h-8 rounded-lg bg-[#4361EE] flex items-center justify-center">
-                <Icon icon="solar:document-bold" className="w-4 h-4 text-white" />
+                <Icon icon="solar:user-check-rounded-bold" className="w-4 h-4 text-white" />
               </div>
               {guideName && (
                 <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-sm">
@@ -202,7 +218,7 @@ export default function StudentDashboard() {
             <div>
               <p className="text-sm font-bold text-slate-900" style={authorFont}>{guideName || 'Not Assigned'}</p>
               <p className="text-[10px] text-slate-400 mt-0.5" style={authorFont}>
-                {guideEmail || (submission?.guide_id ? 'Reviewing your title' : 'Assigned after submission')}
+                {guideEmail || (guideName ? 'Your selected guide' : 'Select during onboarding')}
               </p>
               {guideName && guideEmail && (
                 <a

@@ -68,13 +68,10 @@ export default function HodManageGuidesPage() {
       const { data: guideData, error: guideErr } = await guideQuery.order('full_name');
       if (guideErr) throw guideErr;
 
-      // 2. Fetch all Students in institute
+      // 2. Fetch all Students in institute (without FK join — more robust)
       let studentQuery = supabase
         .from('profiles')
-        .select(`
-          id, full_name, email, university_id, guide_id,
-          guide:profiles!profiles_guide_id_fkey(full_name, email)
-        `)
+        .select('id, full_name, email, university_id, guide_id')
         .eq('role', 'student');
       if (profile.institute_id) {
         studentQuery = studentQuery.eq('institute_id', profile.institute_id);
@@ -82,12 +79,20 @@ export default function HodManageGuidesPage() {
       const { data: studentData, error: studentErr } = await studentQuery.order('full_name');
       if (studentErr) throw studentErr;
 
-      // Calculate student counts per guide
+      // Build a guide lookup map for resolving names
+      const guideMap = new Map<string, { full_name: string | null; email: string }>();
+      (guideData || []).forEach((g) => guideMap.set(g.id, { full_name: g.full_name, email: g.email }));
+
+      // Calculate student counts per guide & attach guide info
       const counts: Record<string, number> = {};
-      (studentData || []).forEach((st) => {
+      const processedStudents: StudentProfile[] = (studentData || []).map((st) => {
         if (st.guide_id) {
           counts[st.guide_id] = (counts[st.guide_id] || 0) + 1;
         }
+        return {
+          ...st,
+          guide: st.guide_id ? guideMap.get(st.guide_id) || null : null,
+        };
       });
 
       const processedGuides = (guideData || []).map((g) => ({
@@ -96,7 +101,7 @@ export default function HodManageGuidesPage() {
       }));
 
       setGuides(processedGuides);
-      setStudents(studentData as unknown as StudentProfile[] || []);
+      setStudents(processedStudents);
     } catch (err) {
       console.error('Error loading guide management data', err);
       showError('Failed to load guide records.', 'Error');
