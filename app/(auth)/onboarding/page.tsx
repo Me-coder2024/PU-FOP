@@ -45,7 +45,7 @@ export default function OnboardingPage() {
     }
   }, [user]);
 
-  // Load institutes, departments, and guides from DB
+  // Load institutes and departments on mount
   useEffect(() => {
     async function loadOptions() {
       const { data: instData } = await supabase.from('institutes').select('id, name').order('name');
@@ -53,17 +53,36 @@ export default function OnboardingPage() {
 
       const { data: deptData } = await supabase.from('departments').select('id, name').order('name');
       if (deptData) setDepartments(deptData);
-
-      const { data: guideData } = await supabase
-        .from('profiles')
-        .select('id, full_name, email')
-        .eq('role', 'guide')
-        .order('full_name');
-      if (guideData) setGuides(guideData);
     }
     loadOptions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Load guides filtered by selected institute
+  useEffect(() => {
+    if (!selectedInstitute) {
+      setGuides([]);
+      setSelectedGuide('');
+      return;
+    }
+
+    async function loadGuides() {
+      const { data: guideData, error: guideErr } = await supabase
+        .from('profiles')
+        .select('id, full_name, email')
+        .eq('role', 'guide')
+        .eq('institute_id', selectedInstitute)
+        .order('full_name');
+
+      if (guideErr) {
+        console.error('Error loading guides:', guideErr);
+      }
+      setGuides(guideData || []);
+      setSelectedGuide(''); // Reset guide selection when institute changes
+    }
+    loadGuides();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedInstitute]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -231,9 +250,16 @@ export default function OnboardingPage() {
                   id="profile-guide"
                   value={selectedGuide}
                   onChange={(e) => setSelectedGuide(e.target.value)}
-                  className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer"
+                  disabled={!selectedInstitute}
+                  className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <option value="">Select Guide</option>
+                  <option value="">
+                    {!selectedInstitute
+                      ? '← Select Institute first'
+                      : guides.length === 0
+                        ? 'No guides available for this institute'
+                        : 'Select Guide'}
+                  </option>
                   {guides.map((g) => (
                     <option key={g.id} value={g.id}>
                       {g.full_name ? `${g.full_name} (${g.email})` : g.email}
@@ -244,6 +270,11 @@ export default function OnboardingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
+              {selectedInstitute && guides.length === 0 && (
+                <p className="text-[10px] text-amber-300 mt-1.5 font-medium">
+                  No guides found for this institute. Contact HOD to add guides.
+                </p>
+              )}
             </div>
 
             {error && (

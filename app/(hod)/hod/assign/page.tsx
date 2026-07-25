@@ -154,7 +154,7 @@ export default function HodManageGuidesPage() {
     try {
       const { error } = await supabase
         .from('profiles')
-        .update({ role: 'guide' })
+        .update({ role: 'guide', institute_id: profile?.institute_id || null })
         .eq('id', targetUser.id);
 
       if (error) throw error;
