@@ -55,10 +55,11 @@ export async function POST(request: NextRequest) {
     const supabase = createServiceClient();
     const body = await request.json();
 
-    const { userId, drugName, dosageForm, category, therapeutic, reason } = body;
+    const { userId, drugName, dosageForm, category, therapeutic, reason, requestType } = body;
+    const isDosageFormRequest = requestType === 'dosage_form';
 
     if (!userId || !drugName?.trim()) {
-      return NextResponse.json({ error: 'userId and drugName are required' }, { status: 400 });
+      return NextResponse.json({ error: isDosageFormRequest ? 'userId and dosage form name are required' : 'userId and drugName are required' }, { status: 400 });
     }
 
     // Verify user is a student
@@ -69,7 +70,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (!profile || profile.role !== 'student') {
-      return NextResponse.json({ error: 'Only students can submit drug requests' }, { status: 403 });
+      return NextResponse.json({ error: isDosageFormRequest ? 'Only students can submit dosage form requests' : 'Only students can submit drug requests' }, { status: 403 });
     }
 
     // Check for duplicate pending request
@@ -82,18 +83,20 @@ export async function POST(request: NextRequest) {
       .maybeSingle();
 
     if (existing) {
-      return NextResponse.json({ error: 'You already have a pending request for this drug.' }, { status: 409 });
+      return NextResponse.json({ error: isDosageFormRequest ? 'You already have a pending request for this dosage form.' : 'You already have a pending request for this drug.' }, { status: 409 });
     }
 
-    // Check if drug already exists in database
-    const { data: existingDrug } = await supabase
-      .from('drugs')
-      .select('id')
-      .ilike('name', drugName.trim())
-      .maybeSingle();
+    // Check if drug/dosage form already exists in database
+    if (!isDosageFormRequest) {
+      const { data: existingDrug } = await supabase
+        .from('drugs')
+        .select('id')
+        .ilike('name', drugName.trim())
+        .maybeSingle();
 
-    if (existingDrug) {
-      return NextResponse.json({ error: 'This drug already exists in the database.' }, { status: 409 });
+      if (existingDrug) {
+        return NextResponse.json({ error: 'This drug already exists in the database.' }, { status: 409 });
+      }
     }
 
     // Insert the request
@@ -102,9 +105,9 @@ export async function POST(request: NextRequest) {
       .insert({
         requested_by: userId,
         drug_name: drugName.trim(),
-        dosage_form: dosageForm?.trim() || null,
-        category: category?.trim() || null,
-        therapeutic: therapeutic?.trim() || null,
+        dosage_form: isDosageFormRequest ? null : (dosageForm?.trim() || null),
+        category: isDosageFormRequest ? 'DOSAGE_FORM_REQUEST' : (category?.trim() || null),
+        therapeutic: isDosageFormRequest ? null : (therapeutic?.trim() || null),
         reason: reason?.trim() || null,
         status: 'pending',
       })
@@ -123,10 +126,11 @@ export async function POST(request: NextRequest) {
       .in('role', ['dean', 'pg_director']);
 
     if (reviewers) {
+      const requestLabel = isDosageFormRequest ? 'Dosage Form' : 'Drug';
       const notifications = reviewers.map((r) => ({
         user_id: r.id,
-        title: 'New Drug Request',
-        message: `Student ${profile.full_name || profile.email} has requested to add "${drugName.trim()}" to the drug database.`,
+        title: `New ${requestLabel} Request`,
+        message: `Student ${profile.full_name || profile.email} has requested to add "${drugName.trim()}" as a new ${requestLabel.toLowerCase()}.`,
         type: 'info' as const,
         link: r.id ? '/dean/drug-requests' : '/pg-director/drug-requests',
       }));
@@ -141,8 +145,8 @@ export async function POST(request: NextRequest) {
 
         await supabase.from('notifications').insert({
           user_id: reviewer.id,
-          title: 'New Drug Request',
-          message: `Student ${profile.full_name || profile.email} has requested to add "${drugName.trim()}" to the drug database.`,
+          title: `New ${requestLabel} Request`,
+          message: `Student ${profile.full_name || profile.email} has requested to add "${drugName.trim()}" as a new ${requestLabel.toLowerCase()}.`,
           type: 'info',
           link: reviewerProfile?.role === 'dean' ? '/dean/drug-requests' : '/pg-director/drug-requests',
         });
@@ -151,19 +155,19 @@ export async function POST(request: NextRequest) {
         if (reviewer.email) {
           await sendNotificationEmail(
             reviewer.email,
-            'New Drug Request Submitted',
+            `New ${requestLabel} Request Submitted`,
             `
-              <p>A student has submitted a new drug request that requires your review.</p>
+              <p>A student has submitted a new ${requestLabel.toLowerCase()} request that requires your review.</p>
               <table style="width:100%; border-collapse:collapse; margin:16px 0;">
                 <tr style="border-bottom:1px solid #e2e8f0;">
                   <td style="padding:8px 0; color:#94a3b8; font-size:12px; width:120px;">Student</td>
                   <td style="padding:8px 0; color:#1e293b; font-weight:600;">${profile.full_name || profile.email}</td>
                 </tr>
                 <tr style="border-bottom:1px solid #e2e8f0;">
-                  <td style="padding:8px 0; color:#94a3b8; font-size:12px;">Drug Name</td>
+                  <td style="padding:8px 0; color:#94a3b8; font-size:12px;">${isDosageFormRequest ? 'Dosage Form' : 'Drug Name'}</td>
                   <td style="padding:8px 0; color:#1e293b; font-weight:600;">${drugName.trim()}</td>
                 </tr>
-                ${dosageForm ? `
+                ${!isDosageFormRequest && dosageForm ? `
                 <tr style="border-bottom:1px solid #e2e8f0;">
                   <td style="padding:8px 0; color:#94a3b8; font-size:12px;">Dosage Form</td>
                   <td style="padding:8px 0; color:#1e293b; font-weight:600;">${dosageForm.trim()}</td>
@@ -184,10 +188,10 @@ export async function POST(request: NextRequest) {
     // Audit log
     await supabase.from('audit_logs').insert({
       user_id: userId,
-      action: 'create_drug_request',
+      action: isDosageFormRequest ? 'create_dosage_form_request' : 'create_drug_request',
       table_name: 'drug_requests',
       record_id: newRequest.id,
-      new_data: { drug_name: drugName.trim(), dosage_form: dosageForm?.trim() },
+      new_data: { drug_name: drugName.trim(), request_type: isDosageFormRequest ? 'dosage_form' : 'drug', dosage_form: dosageForm?.trim() },
     });
 
     return NextResponse.json({ request: newRequest });

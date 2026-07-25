@@ -31,10 +31,11 @@ interface DrugRequest {
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   pending: { label: 'Pending', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200' },
-  dean_approved: { label: 'Dean Approved', color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200' },
-  pg_approved: { label: 'PG Dir Approved', color: 'text-indigo-700', bg: 'bg-indigo-50 border-indigo-200' },
-  approved: { label: 'Fully Approved', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
+  approved: { label: 'Approved', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
   rejected: { label: 'Rejected', color: 'text-red-700', bg: 'bg-red-50 border-red-200' },
+  // Legacy statuses
+  dean_approved: { label: 'Approved', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
+  pg_approved: { label: 'Approved', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
 };
 
 export default function PgDirectorDrugRequestsPage() {
@@ -90,7 +91,7 @@ export default function PgDirectorDrugRequestsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Review failed');
 
-      success(action === 'approve' ? 'Request approved successfully!' : 'Request rejected.', 'Success');
+      success(action === 'approve' ? 'Request approved and added to database!' : 'Request rejected.', 'Success');
       setModalReq(null);
       setReviewNotes((prev) => ({ ...prev, [requestId]: '' }));
       await fetchRequests();
@@ -102,6 +103,10 @@ export default function PgDirectorDrugRequestsPage() {
     }
   };
 
+  const getRequestType = (req: DrugRequest): 'drug' | 'dosage_form' => {
+    return req.category === 'DOSAGE_FORM_REQUEST' ? 'dosage_form' : 'drug';
+  };
+
   const filtered = requests.filter((r) => {
     const matchesSearch = !searchQuery.trim()
       || r.drug_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -111,8 +116,8 @@ export default function PgDirectorDrugRequestsPage() {
     return matchesSearch && matchesStatus;
   });
 
-  const pendingCount = requests.filter((r) => r.status === 'pending' || r.status === 'dean_approved').length;
-  const approvedCount = requests.filter((r) => r.status === 'approved' || r.status === 'pg_approved').length;
+  const pendingCount = requests.filter((r) => r.status === 'pending').length;
+  const approvedCount = requests.filter((r) => ['approved', 'dean_approved', 'pg_approved'].includes(r.status)).length;
 
   if (loading) {
     return (
@@ -127,7 +132,7 @@ export default function PgDirectorDrugRequestsPage() {
       <div>
         <h1 className="text-2xl font-black text-slate-900 tracking-tight" style={authorFont}>Drug & Dosage Requests</h1>
         <p className="text-sm text-slate-500 mt-1" style={authorFont}>
-          Review student requests to add new drugs/dosage forms. Both Dean and PG Director must approve.
+          Review student requests to add new drugs or dosage forms. Your approval will immediately add the item to the database.
         </p>
       </div>
 
@@ -177,9 +182,7 @@ export default function PgDirectorDrugRequestsPage() {
           >
             <option value="all">All Statuses</option>
             <option value="pending">Pending</option>
-            <option value="dean_approved">Dean Approved (needs PG Dir)</option>
-            <option value="pg_approved">PG Dir Approved</option>
-            <option value="approved">Fully Approved</option>
+            <option value="approved">Approved</option>
             <option value="rejected">Rejected</option>
           </select>
         </div>
@@ -189,14 +192,15 @@ export default function PgDirectorDrugRequestsPage() {
       {filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center">
           <Icon icon="solar:pill-bold-duotone" className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-sm font-bold text-slate-900" style={authorFont}>No drug requests found</p>
+          <p className="text-sm font-bold text-slate-900" style={authorFont}>No requests found</p>
           <p className="text-xs text-slate-400 mt-1" style={authorFont}>Adjust filters or wait for student submissions.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {filtered.map((req) => {
             const config = STATUS_CONFIG[req.status] || STATUS_CONFIG.pending;
-            const needsMyReview = (req.status === 'pending' || req.status === 'dean_approved') && !req.pg_reviewed_by;
+            const needsMyReview = req.status === 'pending' && !req.pg_reviewed_by;
+            const reqType = getRequestType(req);
 
             return (
               <div
@@ -206,8 +210,18 @@ export default function PgDirectorDrugRequestsPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <Icon icon="solar:pill-bold-duotone" className="w-4 h-4 text-[#4361EE]" />
+                      <Icon
+                        icon={reqType === 'dosage_form' ? 'solar:medical-kit-bold-duotone' : 'solar:pill-bold-duotone'}
+                        className="w-4 h-4 text-[#4361EE]"
+                      />
                       <p className="text-sm font-bold text-slate-900" style={authorFont}>{req.drug_name}</p>
+                      <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider ${
+                        reqType === 'dosage_form'
+                          ? 'bg-indigo-50 text-indigo-600 border border-indigo-200'
+                          : 'bg-blue-50 text-blue-600 border border-blue-200'
+                      }`}>
+                        {reqType === 'dosage_form' ? 'Dosage Form' : 'Drug'}
+                      </span>
                       {needsMyReview && (
                         <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-bold rounded-full">
                           NEEDS YOUR REVIEW
@@ -217,27 +231,14 @@ export default function PgDirectorDrugRequestsPage() {
                     <div className="flex items-center gap-3 text-[11px] text-slate-500 ml-6" style={poppinsFont}>
                       <span>By: {req.requester?.full_name || 'Student'}</span>
                       {req.requester?.university_id && <><span>•</span><span>{req.requester.university_id}</span></>}
-                      {req.dosage_form && <><span>•</span><span>Form: {req.dosage_form}</span></>}
-                      {req.category && <><span>•</span><span>{req.category}</span></>}
+                      {reqType === 'drug' && req.dosage_form && <><span>•</span><span>Form: {req.dosage_form}</span></>}
+                      {reqType === 'drug' && req.category && req.category !== 'DOSAGE_FORM_REQUEST' && <><span>•</span><span>{req.category}</span></>}
                     </div>
                     {req.reason && (
                       <p className="text-[11px] text-slate-500 mt-1.5 ml-6 line-clamp-2" style={authorFont}>
                         Reason: {req.reason}
                       </p>
                     )}
-
-                    {/* Approval progress */}
-                    <div className="mt-3 ml-6 flex items-center gap-2">
-                      <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold ${req.dean_reviewed_by ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                        <Icon icon={req.dean_reviewed_by ? 'solar:check-circle-bold' : 'solar:clock-circle-bold'} className="w-3 h-3" />
-                        Dean {req.dean_reviewed_by ? '✓' : '⏳'}
-                      </div>
-                      <div className="w-4 h-0.5 bg-slate-200 rounded-full" />
-                      <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold ${req.pg_reviewed_by ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                        <Icon icon={req.pg_reviewed_by ? 'solar:check-circle-bold' : 'solar:clock-circle-bold'} className="w-3 h-3" />
-                        PG Dir {req.pg_reviewed_by ? '✓' : '⏳'}
-                      </div>
-                    </div>
                   </div>
 
                   <div className="flex items-center gap-2 flex-shrink-0">
@@ -266,7 +267,9 @@ export default function PgDirectorDrugRequestsPage() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setModalReq(null)}>
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
-              <h2 className="text-lg font-black text-slate-900" style={authorFont}>Review Drug Request</h2>
+              <h2 className="text-lg font-black text-slate-900" style={authorFont}>
+                Review {getRequestType(modalReq) === 'dosage_form' ? 'Dosage Form' : 'Drug'} Request
+              </h2>
               <button onClick={() => setModalReq(null)} className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all">
                 <Icon icon="solar:close-circle-bold-duotone" className="w-5 h-5" />
               </button>
@@ -275,21 +278,29 @@ export default function PgDirectorDrugRequestsPage() {
             <div className="px-6 py-5 space-y-5">
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-[#F0F2F8] rounded-xl p-3">
-                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Drug Name</p>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>
+                    {getRequestType(modalReq) === 'dosage_form' ? 'Dosage Form Name' : 'Drug Name'}
+                  </p>
                   <p className="text-sm font-bold text-slate-900 mt-0.5" style={authorFont}>{modalReq.drug_name}</p>
                 </div>
                 <div className="bg-[#F0F2F8] rounded-xl p-3">
-                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Dosage Form</p>
-                  <p className="text-sm font-bold text-slate-900 mt-0.5" style={authorFont}>{modalReq.dosage_form || 'Not specified'}</p>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Type</p>
+                  <p className="text-sm font-bold text-slate-900 mt-0.5" style={authorFont}>
+                    {getRequestType(modalReq) === 'dosage_form' ? 'Dosage Form' : 'Drug'}
+                  </p>
                 </div>
-                <div className="bg-[#F0F2F8] rounded-xl p-3">
-                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Category</p>
-                  <p className="text-sm font-bold text-slate-900 mt-0.5" style={authorFont}>{modalReq.category || 'N/A'}</p>
-                </div>
-                <div className="bg-[#F0F2F8] rounded-xl p-3">
-                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Therapeutic</p>
-                  <p className="text-sm font-bold text-slate-900 mt-0.5" style={authorFont}>{modalReq.therapeutic || 'N/A'}</p>
-                </div>
+                {getRequestType(modalReq) === 'drug' && (
+                  <>
+                    <div className="bg-[#F0F2F8] rounded-xl p-3">
+                      <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Category</p>
+                      <p className="text-sm font-bold text-slate-900 mt-0.5" style={authorFont}>{modalReq.category || 'N/A'}</p>
+                    </div>
+                    <div className="bg-[#F0F2F8] rounded-xl p-3">
+                      <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Therapeutic</p>
+                      <p className="text-sm font-bold text-slate-900 mt-0.5" style={authorFont}>{modalReq.therapeutic || 'N/A'}</p>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="bg-[#F0F2F8] rounded-xl p-3">
@@ -305,19 +316,12 @@ export default function PgDirectorDrugRequestsPage() {
                 </div>
               )}
 
-              {/* Dean status */}
-              {modalReq.dean_reviewed_by && (
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl">
-                  <p className="text-[9px] font-bold text-blue-600 uppercase" style={poppinsFont}>Dean Review</p>
-                  <p className="text-xs text-blue-800 mt-0.5" style={authorFont}>
-                    ✓ Approved{modalReq.dean_review_note ? `: ${modalReq.dean_review_note}` : ''}
-                  </p>
-                </div>
-              )}
-
               {/* Review form */}
               <div className="border-t border-slate-100 pt-5 space-y-4">
                 <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest" style={poppinsFont}>Your Decision</h4>
+                <p className="text-[11px] text-slate-500" style={authorFont}>
+                  Your approval will immediately add this {getRequestType(modalReq) === 'dosage_form' ? 'dosage form' : 'drug'} to the database.
+                </p>
                 <div>
                   <label className="text-xs font-bold text-slate-700 block mb-1" style={authorFont}>
                     Review Note <span className="text-slate-400 font-normal">(required for rejection)</span>

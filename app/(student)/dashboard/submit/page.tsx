@@ -78,8 +78,9 @@ export default function SubmitTitlePage() {
   // Form fields
   const [title, setTitle] = useState('');
   const [novelty, setNovelty] = useState('');
-  const [drugName, setDrugName] = useState('');
-  const [dosageForm, setDosageForm] = useState('');
+  // Multi-select drugs & dosage forms
+  const [selectedDrugs, setSelectedDrugs] = useState<string[]>([]);
+  const [selectedDosageForms, setSelectedDosageForms] = useState<string[]>([]);
   const [primarySubject, setPrimarySubject] = useState('');
   const [coreDomain, setCoreDomain] = useState('');
   const [methodology, setMethodology] = useState('');
@@ -115,6 +116,10 @@ export default function SubmitTitlePage() {
     existingSubmission.status === 'revision_requested' ||
     existingSubmission.edit_unlocked
   );
+
+  // Primary drug/dosage for validation (first selected)
+  const primaryDrug = selectedDrugs[0] || '';
+  const primaryDosageForm = selectedDosageForms[0] || '';
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -167,10 +172,20 @@ export default function SubmitTitlePage() {
           setTitle(subData.title);
           const details = (subData.criteria_details as Record<string, unknown>) || {};
           setNovelty((details.novelty as string) || '');
-          setDrugName((details.drugName as string) || '');
-          setDrugSearch((details.drugName as string) || '');
-          setDosageForm((details.dosageForm as string) || '');
-          setDosageSearch((details.dosageForm as string) || '');
+
+          // Backward compat: load old string format or new array format
+          if (Array.isArray(details.drugNames) && (details.drugNames as string[]).length > 0) {
+            setSelectedDrugs(details.drugNames as string[]);
+          } else if (details.drugName) {
+            setSelectedDrugs([details.drugName as string]);
+          }
+
+          if (Array.isArray(details.dosageForms) && (details.dosageForms as string[]).length > 0) {
+            setSelectedDosageForms(details.dosageForms as string[]);
+          } else if (details.dosageForm) {
+            setSelectedDosageForms([details.dosageForm as string]);
+          }
+
           setPrimarySubject((details.primarySubject as string) || '');
           setCoreDomain((details.coreDomain as string) || '');
           setMethodology((details.methodology as string) || '');
@@ -192,9 +207,9 @@ export default function SubmitTitlePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
-  // Run validation
+  // Run validation (using primary drug + dosage form)
   const runValidation = useCallback(async () => {
-    if (!title.trim() || !drugName.trim() || !dosageForm.trim()) return;
+    if (!title.trim() || !primaryDrug.trim() || !primaryDosageForm.trim()) return;
 
     setValidating(true);
     setValidationResult(null);
@@ -206,8 +221,8 @@ export default function SubmitTitlePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: title.trim(),
-          drugName: drugName.trim(),
-          dosageForm: dosageForm.trim(),
+          drugName: primaryDrug.trim(),
+          dosageForm: primaryDosageForm.trim(),
           keywords: keywords.trim(),
           excipients: excipients.trim(),
           novelty: novelty.trim(),
@@ -228,11 +243,11 @@ export default function SubmitTitlePage() {
     } finally {
       setValidating(false);
     }
-  }, [title, drugName, dosageForm, keywords, excipients, novelty, existingSubmission]);
+  }, [title, primaryDrug, primaryDosageForm, keywords, excipients, novelty, existingSubmission]);
 
   // Live Validation with debounce
   useEffect(() => {
-    if (!title.trim() || !drugName.trim() || !dosageForm.trim()) {
+    if (!title.trim() || !primaryDrug.trim() || !primaryDosageForm.trim()) {
       setValidationResult(null);
       setValidationRun(false);
       return;
@@ -244,10 +259,10 @@ export default function SubmitTitlePage() {
 
     const delayDebounceFn = setTimeout(() => {
       runValidation();
-    }, 1000); // 1000ms delay
+    }, 1000);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [title, drugName, dosageForm, keywords, excipients, novelty, runValidation]);
+  }, [title, primaryDrug, primaryDosageForm, keywords, excipients, novelty, runValidation]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -255,12 +270,11 @@ export default function SubmitTitlePage() {
 
     if (!title.trim()) { setError('Dissertation Title is required.'); return; }
     if (!novelty.trim()) { setError('Statement of Novelty is required.'); return; }
-    if (!drugName.trim()) { setError('Drug Name is required.'); return; }
-    if (!dosageForm.trim()) { setError('Dosage Form is required.'); return; }
+    if (selectedDrugs.length === 0) { setError('At least one Drug Name is required.'); return; }
+    if (selectedDosageForms.length === 0) { setError('At least one Dosage Form is required.'); return; }
     if (!primarySubject.trim()) { setError('Primary Subject / Target Active Ingredient is required.'); return; }
     if (!coreDomain.trim()) { setError('Core Project Domain is required.'); return; }
 
-    // Must have passed all validation layers
     if (!validationResult?.canSubmit) {
       setError('Please run validation and ensure all 3 layers pass before submitting.');
       return;
@@ -270,7 +284,6 @@ export default function SubmitTitlePage() {
 
     setSubmitting(true);
 
-    // Prevent duplicate title or duplicate novelty submission
     try {
       const { data: dupTitle } = await supabase
         .from('submissions')
@@ -303,8 +316,10 @@ export default function SubmitTitlePage() {
 
     const criteriaDetails = {
       novelty: novelty.trim(),
-      drugName: drugName.trim(),
-      dosageForm: dosageForm.trim(),
+      drugName: primaryDrug.trim(),
+      dosageForm: primaryDosageForm.trim(),
+      drugNames: selectedDrugs,
+      dosageForms: selectedDosageForms,
       primarySubject: primarySubject.trim(),
       coreDomain: coreDomain.trim(),
       methodology: methodology.trim(),
@@ -364,14 +379,15 @@ export default function SubmitTitlePage() {
 
   // Filtered dropdowns
   const filteredDrugs = drugs.filter(d =>
-    d.name.toLowerCase().includes(drugSearch.toLowerCase())
+    d.name.toLowerCase().includes(drugSearch.toLowerCase()) &&
+    !selectedDrugs.includes(d.name)
   );
   const filteredDosageForms = dosageForms.filter(f =>
-    f.toLowerCase().includes(dosageSearch.toLowerCase())
+    f.toLowerCase().includes(dosageSearch.toLowerCase()) &&
+    !selectedDosageForms.includes(f)
   );
 
-  // Can run validation?
-  const canValidate = title.trim().length > 10 && drugName.trim() && dosageForm.trim();
+  const canValidate = title.trim().length > 10 && primaryDrug.trim() && primaryDosageForm.trim();
   const canSubmit = validationResult?.canSubmit && !submitting && (windowOpen || !!isEditMode);
 
   if (loading) {
@@ -439,7 +455,6 @@ export default function SubmitTitlePage() {
       <div className="flex gap-6">
         {/* ===== Main Form Column ===== */}
         <div className="flex-1 space-y-6 max-w-3xl">
-          {/* Header */}
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-xl sm:text-[32px] font-black text-slate-900 tracking-tight italic" style={authorFont}>
@@ -480,11 +495,39 @@ export default function SubmitTitlePage() {
 
             <FormTextArea id="novelty" label="Statement of Novelty" required value={novelty} onChange={setNovelty} placeholder="Describe what makes your research novel and how it differs from existing work..." rows={4} />
 
-            {/* Drug Name Searchable Dropdown */}
+            {/* ===== Drug Name Multi-Select ===== */}
             <div ref={drugRef} className="relative">
               <label className="text-[11px] font-black text-slate-700 uppercase tracking-widest block mb-2" style={authorFont}>
-                Drug Name <span className="text-red-500">*</span>
+                Drug Name(s) <span className="text-red-500">*</span>
+                <span className="text-slate-400 font-normal normal-case ml-1">(select one or more)</span>
               </label>
+
+              {selectedDrugs.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {selectedDrugs.map((drug, idx) => (
+                    <span
+                      key={drug}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+                        idx === 0
+                          ? 'bg-[#4361EE]/10 text-[#4361EE] border-[#4361EE]/30'
+                          : 'bg-slate-100 text-slate-700 border-slate-200'
+                      }`}
+                    >
+                      <Icon icon="solar:pill-bold-duotone" className="w-3 h-3" />
+                      {drug}
+                      {idx === 0 && <span className="text-[8px] opacity-60 uppercase ml-0.5">Primary</span>}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedDrugs(prev => prev.filter(d => d !== drug))}
+                        className="ml-0.5 hover:text-red-500 transition-colors"
+                      >
+                        <Icon icon="solar:close-circle-bold" className="w-3.5 h-3.5" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
               <div className="relative">
                 <Icon icon="solar:pill-bold-duotone" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4361EE]" />
                 <input
@@ -492,20 +535,16 @@ export default function SubmitTitlePage() {
                   value={drugSearch}
                   onChange={(e) => {
                     setDrugSearch(e.target.value);
-                    setDrugName('');
                     setShowDrugDropdown(true);
                   }}
                   onFocus={() => setShowDrugDropdown(true)}
-                  placeholder="Search drugs..."
+                  placeholder={selectedDrugs.length > 0 ? "Add another drug..." : "Search drugs..."}
                   className="w-full pl-10 pr-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/20 focus:border-[#4361EE] transition-all"
                   style={authorFont}
                 />
-                {drugName && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Selected</span>
-                    <button type="button" onClick={() => { setDrugName(''); setDrugSearch(''); setDosageForm(''); setDosageSearch(''); setDosageForms(allDosageFormsList); }} className="text-slate-400 hover:text-red-500">
-                      <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
-                    </button>
+                {selectedDrugs.length > 0 && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{selectedDrugs.length} selected</span>
                   </div>
                 )}
               </div>
@@ -516,32 +555,55 @@ export default function SubmitTitlePage() {
                       key={drug.id}
                       type="button"
                       onClick={() => {
-                        setDrugName(drug.name);
-                        setDrugSearch(drug.name);
+                        setSelectedDrugs(prev => [...prev, drug.name]);
+                        setDrugSearch('');
                         setShowDrugDropdown(false);
-                        setDosageForm('');
-                        setDosageSearch('');
-                        const combinedForms = Array.from(new Set([...(drug.dosage_forms || []), ...allDosageFormsList, 'Emulgel', 'Scaffold formulation']));
-                        setDosageForms(combinedForms);
                       }}
-                      className={`w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors flex items-center justify-between ${drug.name === drugName ? 'bg-[#4361EE]/10' : ''}`}
+                      className="w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors flex items-center justify-between"
                     >
                       <div>
                         <p className="text-sm font-semibold text-slate-900" style={authorFont}>{drug.name}</p>
                         <p className="text-[10px] text-slate-500" style={authorFont}>{drug.category} • {drug.therapeutic}</p>
                       </div>
-                      {drug.name === drugName && <Icon icon="solar:check-circle-bold" className="w-4 h-4 text-[#4361EE]" />}
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Dosage Form Searchable Dropdown */}
+            {/* ===== Dosage Form Multi-Select ===== */}
             <div ref={dosageRef} className="relative">
               <label className="text-[11px] font-black text-slate-700 uppercase tracking-widest block mb-2" style={authorFont}>
-                Dosage Form <span className="text-red-500">*</span>
+                Dosage Form(s) <span className="text-red-500">*</span>
+                <span className="text-slate-400 font-normal normal-case ml-1">(select one or more)</span>
               </label>
+
+              {selectedDosageForms.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {selectedDosageForms.map((form, idx) => (
+                    <span
+                      key={form}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+                        idx === 0
+                          ? 'bg-[#4361EE]/10 text-[#4361EE] border-[#4361EE]/30'
+                          : 'bg-slate-100 text-slate-700 border-slate-200'
+                      }`}
+                    >
+                      <Icon icon="solar:medical-kit-bold-duotone" className="w-3 h-3" />
+                      {form}
+                      {idx === 0 && <span className="text-[8px] opacity-60 uppercase ml-0.5">Primary</span>}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedDosageForms(prev => prev.filter(f => f !== form))}
+                        className="ml-0.5 hover:text-red-500 transition-colors"
+                      >
+                        <Icon icon="solar:close-circle-bold" className="w-3.5 h-3.5" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
               <div className="relative">
                 <Icon icon="solar:medical-kit-bold-duotone" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4361EE]" />
                 <input
@@ -549,21 +611,16 @@ export default function SubmitTitlePage() {
                   value={dosageSearch}
                   onChange={(e) => {
                     setDosageSearch(e.target.value);
-                    setDosageForm('');
                     setShowDosageDropdown(true);
                   }}
                   onFocus={() => setShowDosageDropdown(true)}
-                  placeholder={drugName ? `Select dosage form for ${drugName}...` : 'Select a drug first...'}
-                  disabled={!drugName}
-                  className="w-full pl-10 pr-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/20 focus:border-[#4361EE] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder={selectedDosageForms.length > 0 ? "Add another dosage form..." : "Search dosage forms..."}
+                  className="w-full pl-10 pr-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/20 focus:border-[#4361EE] transition-all"
                   style={authorFont}
                 />
-                {dosageForm && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Selected</span>
-                    <button type="button" onClick={() => { setDosageForm(''); setDosageSearch(''); }} className="text-slate-400 hover:text-red-500">
-                      <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
-                    </button>
+                {selectedDosageForms.length > 0 && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{selectedDosageForms.length} selected</span>
                   </div>
                 )}
               </div>
@@ -574,11 +631,11 @@ export default function SubmitTitlePage() {
                       key={form}
                       type="button"
                       onClick={() => {
-                        setDosageForm(form);
-                        setDosageSearch(form);
+                        setSelectedDosageForms(prev => [...prev, form]);
+                        setDosageSearch('');
                         setShowDosageDropdown(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors text-sm font-semibold text-slate-900 ${form === dosageForm ? 'bg-[#4361EE]/10' : ''}`}
+                      className="w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors text-sm font-semibold text-slate-900"
                       style={authorFont}
                     >
                       {form}
@@ -642,14 +699,12 @@ export default function SubmitTitlePage() {
         {/* ===== Right Sidebar — Research Alignment Score ===== */}
         <div className="hidden xl:block w-[280px] flex-shrink-0">
           <div className="sticky top-24 space-y-4">
-            {/* Info icon */}
             <div className="flex justify-end">
               <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center">
                 <Icon icon="solar:info-circle-linear" className="w-4 h-4 text-slate-400" />
               </div>
             </div>
 
-            {/* Score Card — Blue header */}
             <div className="rounded-2xl border border-[#4361EE] overflow-hidden bg-[#4361EE]">
               <div className="bg-[#4361EE] px-5 py-4 flex items-center gap-2.5">
                 <Icon icon="simple-icons:securityscorecard" className="w-6 h-6 text-white" />
@@ -658,114 +713,59 @@ export default function SubmitTitlePage() {
 
               <div className="bg-[#4361EE] p-4 pt-0">
                 <div className="grid grid-cols-2 gap-3">
-                  <ScoreCard
-                    icon="solar:pill-bold-duotone"
-                    label="Drug Name"
-                    score={validationResult?.scores?.drugName?.score ?? 0}
-                    max={30}
-                    sub="in title"
-                  />
-                  <ScoreCard
-                    icon="solar:medical-kit-bold-duotone"
-                    label="Dosage Form"
-                    score={validationResult?.scores?.dosageForm?.score ?? 0}
-                    max={35}
-                    sub="in title"
-                  />
-                  <ScoreCard
-                    icon="solar:widget-5-bold-duotone"
-                    label="Excipients"
-                    score={validationResult?.scores?.excipients?.score ?? 0}
-                    max={15}
-                    sub="AI Verification"
-                  />
-                  <ScoreCard
-                    icon="solar:key-minimalistic-bold-duotone"
-                    label="Keywords"
-                    score={validationResult?.scores?.keywords?.score ?? 0}
-                    max={15}
-                    sub="AI Verification"
-                  />
+                  <ScoreCard icon="solar:pill-bold-duotone" label="Drug Name" score={validationResult?.scores?.drugName?.score ?? 0} max={30} sub="in title" />
+                  <ScoreCard icon="solar:medical-kit-bold-duotone" label="Dosage Form" score={validationResult?.scores?.dosageForm?.score ?? 0} max={35} sub="in title" />
+                  <ScoreCard icon="solar:widget-5-bold-duotone" label="Excipients" score={validationResult?.scores?.excipients?.score ?? 0} max={15} sub="AI Verification" />
+                  <ScoreCard icon="solar:key-minimalistic-bold-duotone" label="Keywords" score={validationResult?.scores?.keywords?.score ?? 0} max={15} sub="AI Verification" />
                 </div>
 
-                {/* Total Score */}
                 <div className="mt-3 bg-white/10 rounded-xl p-3 text-center">
                   <p className="text-[10px] text-white/70 uppercase tracking-widest font-bold" style={authorFont}>Total Score</p>
                   <div className="flex items-baseline justify-center gap-1 mt-1">
-                    <span className="text-3xl font-black text-white" style={poppinsFont}>
-                      {validationResult?.scores?.total ?? 0}
-                    </span>
+                    <span className="text-3xl font-black text-white" style={poppinsFont}>{validationResult?.scores?.total ?? 0}</span>
                     <span className="text-sm text-white/50 font-bold" style={poppinsFont}>/95</span>
                   </div>
                   <div className="mt-2 w-full bg-white/20 rounded-full h-1.5">
                     <div
-                      className={`h-1.5 rounded-full transition-all duration-500 ${
-                        (validationResult?.scores?.total ?? 0) >= 40 ? 'bg-emerald-400' : 'bg-red-400'
-                      }`}
+                      className={`h-1.5 rounded-full transition-all duration-500 ${(validationResult?.scores?.total ?? 0) >= 40 ? 'bg-emerald-400' : 'bg-red-400'}`}
                       style={{ width: `${Math.min(100, ((validationResult?.scores?.total ?? 0) / 95) * 100)}%` }}
                     />
                   </div>
-                  <p className="text-[9px] text-white/50 mt-1.5" style={authorFont}>
-                    Minimum 40 required to submit
-                  </p>
+                  <p className="text-[9px] text-white/50 mt-1.5" style={authorFont}>Minimum 40 required to submit</p>
                 </div>
               </div>
             </div>
-            {/* Validation Layer Details in Sidebar */}
+
             {validationResult && (
               <div className="mt-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-3">
-                <p className="text-[11px] font-bold text-slate-700 uppercase tracking-widest" style={authorFont}>
-                  Layer Details
-                </p>
-                
-                {/* Layer 1 */}
+                <p className="text-[11px] font-bold text-slate-700 uppercase tracking-widest" style={authorFont}>Layer Details</p>
                 <div className="text-[11px]" style={authorFont}>
                   <div className="flex items-center gap-1.5 font-bold text-slate-800">
-                    <Icon
-                      icon={validationResult.layers.layer1.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"}
-                      className={`w-3.5 h-3.5 ${validationResult.layers.layer1.passed ? 'text-emerald-500' : 'text-red-500'}`}
-                    />
+                    <Icon icon={validationResult.layers.layer1.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer1.passed ? 'text-emerald-500' : 'text-red-500'}`} />
                     <span>Layer 1: Uniqueness</span>
                   </div>
                   <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer1.message}</p>
-                  {validationResult.layers.layer1.details && (
-                    <p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer1.details}</p>
-                  )}
+                  {validationResult.layers.layer1.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer1.details}</p>)}
                 </div>
-
-                {/* Layer 2 */}
                 <div className="text-[11px] border-t border-slate-100 pt-2" style={authorFont}>
                   <div className="flex items-center gap-1.5 font-bold text-slate-800">
-                    <Icon
-                      icon={validationResult.layers.layer2.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"}
-                      className={`w-3.5 h-3.5 ${validationResult.layers.layer2.passed ? 'text-emerald-500' : 'text-red-500'}`}
-                    />
+                    <Icon icon={validationResult.layers.layer2.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer2.passed ? 'text-emerald-500' : 'text-red-500'}`} />
                     <span>Layer 2: AI Novelty</span>
                   </div>
                   <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer2.message}</p>
-                  {validationResult.layers.layer2.details && (
-                    <p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer2.details}</p>
-                  )}
+                  {validationResult.layers.layer2.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer2.details}</p>)}
                 </div>
-
-                {/* Layer 3 */}
                 <div className="text-[11px] border-t border-slate-100 pt-2" style={authorFont}>
                   <div className="flex items-center gap-1.5 font-bold text-slate-800">
-                    <Icon
-                      icon={validationResult.layers.layer3.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"}
-                      className={`w-3.5 h-3.5 ${validationResult.layers.layer3.passed ? 'text-emerald-500' : 'text-red-500'}`}
-                    />
+                    <Icon icon={validationResult.layers.layer3.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer3.passed ? 'text-emerald-500' : 'text-red-500'}`} />
                     <span>Layer 3: Alignment Score</span>
                   </div>
                   <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer3.message}</p>
-                  {validationResult.layers.layer3.details && (
-                    <p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer3.details}</p>
-                  )}
+                  {validationResult.layers.layer3.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer3.details}</p>)}
                 </div>
               </div>
             )}
 
-            {/* AI Suggestions in Sidebar */}
             {validationResult && validationResult.suggestions.length > 0 && !validationResult.canSubmit && (
               <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl shadow-sm">
                 <div className="flex items-center gap-1.5 mb-2">
@@ -789,23 +789,16 @@ export default function SubmitTitlePage() {
       {/* ===== Fixed Bottom Blue Footer ===== */}
       <div className="fixed bottom-0 left-0 right-0 lg:left-[250px] z-40 bg-[#4361EE] text-white py-3 px-4 md:py-4 md:px-8 border-t border-blue-500 shadow-2xl flex items-center justify-between gap-3">
         <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-          <p className="text-[9px] font-black text-white/70 uppercase tracking-widest hidden sm:block" style={authorFont}>
-            Submission Status
-          </p>
+          <p className="text-[9px] font-black text-white/70 uppercase tracking-widest hidden sm:block" style={authorFont}>Submission Status</p>
           <div className="flex items-center gap-2 min-w-0">
             {validating ? (
               <>
                 <Loader2 className="w-4 h-4 text-white animate-spin flex-shrink-0" />
-                <p className="text-xs text-white/90 font-medium truncate" style={authorFont}>
-                  Checking AI validation status...
-                </p>
+                <p className="text-xs text-white/90 font-medium truncate" style={authorFont}>Checking AI validation status...</p>
               </>
             ) : validationResult ? (
               <>
-                <Icon
-                  icon={validationResult.canSubmit ? "solar:check-circle-bold" : "solar:danger-triangle-bold"}
-                  className={`w-4 h-4 flex-shrink-0 ${validationResult.canSubmit ? 'text-emerald-300' : 'text-amber-300'}`}
-                />
+                <Icon icon={validationResult.canSubmit ? "solar:check-circle-bold" : "solar:danger-triangle-bold"} className={`w-4 h-4 flex-shrink-0 ${validationResult.canSubmit ? 'text-emerald-300' : 'text-amber-300'}`} />
                 <p className="text-xs text-white font-medium text-left truncate" style={authorFont}>
                   {!validationResult.layers.layer1.passed ? (
                     `Layer 1 Rejected: ${validationResult.layers.layer1.message}`
@@ -822,7 +815,7 @@ export default function SubmitTitlePage() {
               <>
                 <Icon icon="solar:info-circle-bold" className="w-4 h-4 text-white/70 flex-shrink-0" />
                 <p className="text-xs text-white/70 font-medium truncate" style={authorFont}>
-                  {!title.trim() || !drugName.trim() || !dosageForm.trim()
+                  {selectedDrugs.length === 0 || selectedDosageForms.length === 0 || !title.trim()
                     ? 'Fill all required fields'
                     : title.trim().length <= 10
                       ? 'Title too short'
