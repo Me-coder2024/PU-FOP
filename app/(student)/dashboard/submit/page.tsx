@@ -25,7 +25,10 @@ const DEFAULT_DOSAGE_FORMS = [
   'Emulgel', 'Scaffold formulation', 'Suppository', 'Inhaler',
   'Transdermal Patch', 'Film', 'Microspheres', 'Nanoparticles',
   'Gel', 'Ointment', 'Cream', 'Suspension', 'Emulsion', 'Elixir',
-  'Syrup', 'Lozenge', 'Implants', 'Spray', 'Other'
+  'Syrup', 'Lozenge', 'Implants', 'Spray',
+  'Nano structured Lipid carriers',
+  'NLC-loaded biodegradable polymeric scaffold (nanocomposite/medicated sponge dressing)',
+  'Other'
 ];
 
 interface LayerResult {
