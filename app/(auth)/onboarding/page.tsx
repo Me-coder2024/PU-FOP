@@ -67,18 +67,22 @@ export default function OnboardingPage() {
     }
 
     async function loadGuides() {
-      const { data: guideData, error: guideErr } = await supabase
-        .from('profiles')
-        .select('id, full_name, email')
-        .eq('role', 'guide')
-        .eq('institute_id', selectedInstitute)
-        .order('full_name');
-
-      if (guideErr) {
-        console.error('Error loading guides:', guideErr);
+      try {
+        const res = await fetch(`/api/guides?institute_id=${selectedInstitute}`);
+        if (!res.ok) throw new Error('Failed to load guides');
+        const data = await res.json();
+        setGuides(data.guides || []);
+      } catch (err) {
+        console.error('Error loading guides via API:', err);
+        const { data: guideData } = await supabase
+          .from('profiles')
+          .select('id, full_name, email')
+          .eq('role', 'guide')
+          .eq('institute_id', selectedInstitute)
+          .order('full_name');
+        setGuides((guideData as unknown as { id: string; full_name: string | null; email: string }[]) || []);
       }
-      setGuides(guideData || []);
-      setSelectedGuide(''); // Reset guide selection when institute changes
+      setSelectedGuide('');
     }
     loadGuides();
     // eslint-disable-next-line react-hooks/exhaustive-deps
