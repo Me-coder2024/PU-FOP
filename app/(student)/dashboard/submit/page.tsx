@@ -20,6 +20,14 @@ interface Drug {
   therapeutic: string;
 }
 
+const DEFAULT_DOSAGE_FORMS = [
+  'Tablet', 'Capsule', 'Liquid', 'Topical', 'Injectable', 'NDDS',
+  'Emulgel', 'Scaffold formulation', 'Suppository', 'Inhaler',
+  'Transdermal Patch', 'Film', 'Microspheres', 'Nanoparticles',
+  'Gel', 'Ointment', 'Cream', 'Suspension', 'Emulsion', 'Elixir',
+  'Syrup', 'Lozenge', 'Implants', 'Spray', 'Other'
+];
+
 interface LayerResult {
   passed: boolean;
   status: 'passed' | 'failed' | 'skipped';
@@ -91,7 +99,8 @@ export default function SubmitTitlePage() {
   const [drugs, setDrugs] = useState<Drug[]>([]);
   const [drugSearch, setDrugSearch] = useState('');
   const [showDrugDropdown, setShowDrugDropdown] = useState(false);
-  const [dosageForms, setDosageForms] = useState<string[]>([]);
+  const [dosageForms, setDosageForms] = useState<string[]>(DEFAULT_DOSAGE_FORMS);
+  const [allDosageFormsList, setAllDosageFormsList] = useState<string[]>(DEFAULT_DOSAGE_FORMS);
   const [dosageSearch, setDosageSearch] = useState('');
   const [showDosageDropdown, setShowDosageDropdown] = useState(false);
   const drugRef = useRef<HTMLDivElement>(null);
@@ -125,8 +134,9 @@ export default function SubmitTitlePage() {
         if (res.ok) {
           const data = await res.json();
           setDrugs(data.drugs || []);
-          // Always show all unique dosage forms from the dataset
-          setDosageForms(data.dosageForms || []);
+          const fetchedForms = Array.from(new Set([...(data.dosageForms || []), ...DEFAULT_DOSAGE_FORMS]));
+          setAllDosageFormsList(fetchedForms);
+          setDosageForms(fetchedForms);
         }
       } catch (err) {
         console.error('Failed to fetch drugs:', err);
@@ -493,7 +503,7 @@ export default function SubmitTitlePage() {
                 {drugName && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
                     <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Selected</span>
-                    <button type="button" onClick={() => { setDrugName(''); setDrugSearch(''); setDosageForm(''); setDosageSearch(''); }} className="text-slate-400 hover:text-red-500">
+                    <button type="button" onClick={() => { setDrugName(''); setDrugSearch(''); setDosageForm(''); setDosageSearch(''); setDosageForms(allDosageFormsList); }} className="text-slate-400 hover:text-red-500">
                       <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
                     </button>
                   </div>
@@ -511,7 +521,8 @@ export default function SubmitTitlePage() {
                         setShowDrugDropdown(false);
                         setDosageForm('');
                         setDosageSearch('');
-                        setDosageForms(drug.dosage_forms || []);
+                        const combinedForms = Array.from(new Set([...(drug.dosage_forms || []), ...allDosageFormsList, 'Emulgel', 'Scaffold formulation']));
+                        setDosageForms(combinedForms);
                       }}
                       className={`w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors flex items-center justify-between ${drug.name === drugName ? 'bg-[#4361EE]/10' : ''}`}
                     >

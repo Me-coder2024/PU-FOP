@@ -27,8 +27,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch drugs' }, { status: 500 });
     }
 
-    // Extract all unique dosage forms from the entire database
-    const allDosageForms = new Set<string>();
+    // Default dosage forms including Emulgel and Scaffold formulation
+    const DEFAULT_DOSAGE_FORMS = [
+      'Tablet', 'Capsule', 'Liquid', 'Topical', 'Injectable', 'NDDS',
+      'Emulgel', 'Scaffold formulation', 'Suppository', 'Inhaler',
+      'Transdermal Patch', 'Film', 'Microspheres', 'Nanoparticles',
+      'Gel', 'Ointment', 'Cream', 'Suspension', 'Emulsion', 'Elixir',
+      'Syrup', 'Lozenge', 'Implants', 'Spray'
+    ];
+    const allDosageForms = new Set<string>(DEFAULT_DOSAGE_FORMS);
     const { data: allDrugs, error: formsError } = await supabase
       .from('drugs')
       .select('dosage_forms');
