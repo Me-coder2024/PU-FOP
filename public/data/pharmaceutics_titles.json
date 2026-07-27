@@ -1,136 +1,4588 @@
 [
-  {"title": "Formulation development of Taste Masked Mouth Dissolution Film of Chlorpheniration", "year": 2010, "department": "Pharmaceutics", "status": "approved", "novelty": "First application of taste masking polymer complex in mouth dissolving film for chlorpheniramine using ion exchange resin approach"},
-  {"title": "Formulation and Development of an Immediate drug", "year": 2010, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Formulation and Development of Transdermal Patch of Ketorolac Tromethamine", "year": 2010, "department": "Pharmaceutics", "status": "approved", "novelty": "Novel transdermal patch design utilizing permeation enhancers for ketorolac tromethamine with controlled release over 24 hours"},
-  {"title": "Formulation and Evaluation of sustained release matrix tablet of captopril", "year": 2010, "department": "Pharmaceutics", "status": "approved", "novelty": "Use of novel polymer combination HPMC K4M and ethyl cellulose for sustained release of captopril over 12 hours"},
-  {"title": "Formulation and Evaluation of PH sensitive Enteric Coated Pellets of Ibuprofen", "year": 2010, "department": "Pharmaceutics", "status": "approved", "novelty": "pH-dependent enteric coating strategy for ibuprofen pellets using Eudragit polymer system"},
-  {"title": "Formulation, Optimization and Characterization of Floating Microspheres of Celecoxib", "year": 2010, "department": "Pharmaceutics", "status": "approved", "novelty": "Optimization of floating microspheres using design of experiments for gastroretentive delivery of celecoxib"},
-  {"title": "Formulation development of Taste Masked Fast dissolving film of sildenafil citrate", "year": 2010, "department": "Pharmaceutics", "status": "approved", "novelty": "Novel taste masking technique for sildenafil citrate using cyclodextrin inclusion complex in fast dissolving film"},
-  {"title": "Microemulsion based in situ intranasal spray of fluconazole", "year": 2010, "department": "Pharmaceutics", "status": "approved", "novelty": "First microemulsion-based in situ gelling intranasal delivery system for fluconazole targeting brain delivery"},
-  {"title": "Fast dissolving tablet of lorazepam using synthetic & natural disintegrants", "year": 2010, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Mucoadhesive microemulsion for intranasal brain delivery", "year": 2010, "department": "Pharmaceutics", "status": "approved", "novelty": "Mucoadhesive microemulsion formulation for nose-to-brain drug delivery bypassing blood-brain barrier"},
-  {"title": "Formulation evaluation and Optimization of taste masked mouth dissolving film of rizatriptan benzoate", "year": 2011, "department": "Pharmaceutics", "status": "approved", "novelty": "Taste masking of rizatriptan benzoate using drug-resin complex incorporated in mouth dissolving film"},
-  {"title": "Losartan potassium coated sustained release matrix using hydrophilic polymers", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Mouth dissolving tablets of flurbiprofen", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Taste masked mouth dissolving film of ropinirole hydrochloride", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Extended release tablet of zolpidem with biphasic release", "year": 2011, "department": "Pharmaceutics", "status": "approved", "novelty": "Biphasic release tablet design combining immediate and extended release layers for zolpidem"},
-  {"title": "Vitamin based liquid oral dosage form", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Self micro emulsifying drug delivery system of ramipril", "year": 2011, "department": "Pharmaceutics", "status": "approved", "novelty": "SMEDDS formulation to enhance oral bioavailability of poorly water soluble ramipril using lipid based approach"},
-  {"title": "Floating microspheres of antibiotic drug", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Buccal tablet using natural mucoadhesive materials", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Extended release buccal tablets of felodipine", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Fast dissolving tablets of fexofenadine", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Sustained release matrix tablet of rivastigmine", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Bioadhesive vaginal gel formulation", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Gastroretentive formulation of metoprolol", "year": 2011, "department": "Pharmaceutics", "status": "approved", "novelty": "Gastroretentive floating formulation of metoprolol using gas generating system for extended gastric residence time"},
-  {"title": "Floating tablets of nizatidine", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Osmotic pump tablet of propranolol", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Oral strips of salmeterol xinafoate", "year": 2011, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Preparation and evaluation of effervescent bioadhesive vaginal tablet", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Formulation and evaluation of nano suspension tablet", "year": 2012, "department": "Pharmaceutics", "status": "approved", "novelty": "Nanosuspension approach to enhance dissolution rate and oral bioavailability of BCS class II drug in tablet form"},
-  {"title": "Fast dissolving film for psychotic disorders", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Novel drug delivery system of anti-hypertensive agents", "year": 2012, "department": "Pharmaceutics", "status": "approved", "novelty": "Novel NDDS approach combining nanoparticles with controlled release mechanism for antihypertensive drug delivery"},
-  {"title": "Vesicular drug delivery system of corticosteroid", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanoparticle based sunscreen formulation", "year": 2012, "department": "Pharmaceutics", "status": "approved", "novelty": "Zinc oxide nanoparticle based sunscreen formulation with improved UV protection and skin compatibility"},
-  {"title": "Intranasal microemulsion delivery of curcumin", "year": 2012, "department": "Pharmaceutics", "status": "approved", "novelty": "Intranasal microemulsion delivery system for curcumin targeting neuroinflammation via nose-to-brain pathway"},
-  {"title": "Medicated chewing gum of ondansetron", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Long acting injectable formulation", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Chronotherapeutic drug delivery system", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Agglomerated crystal formulation of antiarrhythmic drug", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Cyclodextrin complex of furosemide", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Brain targeted drug delivery system", "year": 2012, "department": "Pharmaceutics", "status": "approved", "novelty": "Brain targeted polymeric nanoparticle system with surface modification for enhanced BBB penetration"},
-  {"title": "Sustained release ophthalmic gel", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Microemulsion gel of clobetasol", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Matrix tablet of nicorandil", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanoparticulate system of anticancer drug", "year": 2012, "department": "Pharmaceutics", "status": "approved", "novelty": "Polymeric nanoparticulate system for targeted delivery of anticancer drug with enhanced tumor accumulation"},
-  {"title": "SMEDDS of atorvastatin", "year": 2012, "department": "Pharmaceutics", "status": "approved", "novelty": "Self micro emulsifying drug delivery system to improve oral bioavailability of atorvastatin calcium"},
-  {"title": "Transferosome drug delivery system", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Hydrogel based gastroretentive system", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Curcumin nanocrystal formulation", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanosuspension of antiepileptic drug", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Microemulsion of repaglinide", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Floating capsule of pantoprazole", "year": 2012, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Development of oral nanoparticle for brain targeting", "year": 2013, "department": "Pharmaceutics", "status": "approved", "novelty": "Oral polymeric nanoparticle formulation with surface ligand modification for brain targeted drug delivery"},
-  {"title": "Formulation and evaluation of SMEDDS containing clotrimazole", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Floating tablet of ferrous sulphate", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanoemulsion of methotrexate for transdermal delivery", "year": 2013, "department": "Pharmaceutics", "status": "approved", "novelty": "Nanoemulsion formulation of methotrexate for transdermal delivery targeting psoriasis with enhanced skin permeation"},
-  {"title": "Nanosuspension formulation", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Antifungal microspheres in bioadhesive gel", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Oral disintegrating tablets for insomnia", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Ophthalmic in-situ gel of dorzolamide", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Mouth dissolving tablet of antihypertensive drug", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Chronotherapeutic tablet for hypertension", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Microemulsion drug delivery system", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Sustained release microspheres for inhalation", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Fast dissolving tablets using herbal disintegrants", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Topical microemulsion gel of curcumin", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Enteric coated beads", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Fast dissolving film of antiemetic drug", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "SMEDDS formulation", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Transferosome formulation", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Buccal tablet using thiolated alginate", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanogel for rheumatoid arthritis", "year": 2013, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Formulation and evaluation of floating microspheres of glipizide", "year": 2014, "department": "Pharmaceutics", "status": "approved", "novelty": "Floating microspheres of glipizide using ethyl cellulose and HPMC with optimized drug release in gastric environment"},
-  {"title": "Development of oral controlled release tablet of antihypertensive drug", "year": 2014, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanoemulsion formulation for transdermal delivery of NSAIDs", "year": 2014, "department": "Pharmaceutics", "status": "approved", "novelty": "Nanoemulsion with novel permeation enhancer combination for transdermal delivery of NSAIDs with reduced GI side effects"},
-  {"title": "Formulation of fast dissolving oral films of antiemetic drug", "year": 2014, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Development of mucoadhesive buccal tablets for antihypertensive drug", "year": 2014, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Sustained release matrix tablet of antidiabetic drug", "year": 2014, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Formulation and evaluation of SMEDDS of poorly soluble drug", "year": 2015, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Development of nanoparticle drug delivery system for anticancer drug", "year": 2015, "department": "Pharmaceutics", "status": "approved", "novelty": "PLGA nanoparticle system with folic acid conjugation for targeted anticancer drug delivery to tumor cells"},
-  {"title": "Fast dissolving tablet of antihistamine drug", "year": 2015, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Microemulsion based gel for topical delivery", "year": 2015, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Gastroretentive drug delivery system for antiulcer drug", "year": 2015, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Development of nanostructured lipid carriers for topical delivery", "year": 2016, "department": "Pharmaceutics", "status": "approved", "novelty": "Nanostructured lipid carriers with dual lipid matrix for enhanced topical penetration and sustained drug release"},
-  {"title": "Formulation of sustained release pellets for cardiovascular drug", "year": 2016, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Preparation and evaluation of transdermal patch of analgesic drug", "year": 2016, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Oral dispersible tablets of antiemetic drug", "year": 2016, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nano suspension formulation for poorly soluble drug", "year": 2016, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Formulation and evaluation of floating tablets of antibiotic drug", "year": 2017, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Development of microspheres for sustained release of anticancer drug", "year": 2017, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanoemulsion for enhanced bioavailability of herbal drug", "year": 2017, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Fast dissolving films of anti-allergic drug", "year": 2017, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Mucoadhesive gel for buccal delivery", "year": 2017, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Development of lipid based drug delivery system for CNS drug", "year": 2018, "department": "Pharmaceutics", "status": "approved", "novelty": "Solid lipid nanoparticle system with brain targeting ligand for CNS drug delivery across blood-brain barrier"},
-  {"title": "Formulation and evaluation of nanosuspension for antidiabetic drug", "year": 2018, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Transdermal patch for anti-inflammatory drug", "year": 2018, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Oral controlled release formulation of antihypertensive drug", "year": 2018, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Formulation and evaluation of polymeric nanoparticles for anticancer drug", "year": 2019, "department": "Pharmaceutics", "status": "approved", "novelty": "Polymeric nanoparticle formulation using chitosan and PLGA for targeted anticancer drug delivery with pH responsive release"},
-  {"title": "Nanoemulsion gel for topical delivery of antifungal drug", "year": 2019, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Fast dissolving tablets of analgesic drug", "year": 2019, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Floating drug delivery system for antiulcer drug", "year": 2019, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Development of solid lipid nanoparticles for drug delivery", "year": 2020, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Formulation and evaluation of buccal tablets for antihypertensive drug", "year": 2020, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nano suspension for enhanced solubility of drug", "year": 2020, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Sustained release tablets for cardiovascular drug", "year": 2020, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Formulation of nanocrystal for poorly soluble drug", "year": 2021, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Development of controlled release oral tablets", "year": 2021, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanoemulsion based transdermal delivery system", "year": 2021, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Fast dissolving films of antiemetic drug", "year": 2021, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Development of polymeric micelles for anticancer drug delivery", "year": 2022, "department": "Pharmaceutics", "status": "approved", "novelty": "Polymeric micelle system with PEG-PLGA copolymer for enhanced tumor targeting and sustained anticancer drug release"},
-  {"title": "Formulation and evaluation of gastroretentive tablets", "year": 2022, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nano gel for topical drug delivery", "year": 2022, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Sustained release formulation of antihypertensive drug", "year": 2022, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Formulation and evaluation of nanoemulsion for oral delivery", "year": 2023, "department": "Pharmaceutics", "status": "approved", "novelty": "Nanoemulsion formulation with novel surfactant combination for enhanced oral bioavailability of lipophilic drug"},
-  {"title": "Development of SMEDDS formulation for lipid soluble drug", "year": 2023, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Fast dissolving tablets of analgesic drug", "year": 2023, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Transdermal drug delivery system for NSAIDs", "year": 2023, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Development of nanocarrier system for targeted drug delivery", "year": 2024, "department": "Pharmaceutics", "status": "approved", "novelty": "Novel nanocarrier system using biodegradable polymer with active targeting ligands for site-specific drug delivery"},
-  {"title": "Formulation and evaluation of sustained release tablets", "year": 2024, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nanoemulsion gel for topical antifungal drug", "year": 2024, "department": "Pharmaceutics", "status": "approved"},
-
-  {"title": "Development of advanced drug delivery system using nanotechnology", "year": 2025, "department": "Pharmaceutics", "status": "approved", "novelty": "Advanced nanotechnology based drug delivery system with stimuli-responsive release mechanism for targeted therapy"},
-  {"title": "Formulation and evaluation of controlled release tablets", "year": 2025, "department": "Pharmaceutics", "status": "approved"},
-  {"title": "Nano-based drug delivery system for anticancer drug", "year": 2025, "department": "Pharmaceutics", "status": "approved", "novelty": "Nano-based targeted drug delivery system using PEGylated liposomes for enhanced anticancer drug accumulation in tumor tissue"}
+  {
+    "title": "Formulation development of Taste Masked Mouth Dissolution Film of Chlorpheniration",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "First application of taste masking polymer complex in mouth dissolving film for chlorpheniramine using ion exchange resin approach"
+  },
+  {
+    "title": "Formulation and Development of an Immediate drug",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Development of Transdermal Patch of Ketorolac Tromethamine",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Novel transdermal patch design utilizing permeation enhancers for ketorolac tromethamine with controlled release over 24 hours"
+  },
+  {
+    "title": "Formulation and Evaluation of sustained release matrix tablet of captopril",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Use of novel polymer combination HPMC K4M and ethyl cellulose for sustained release of captopril over 12 hours"
+  },
+  {
+    "title": "Formulation and Evaluation of PH sensitive Enteric Coated Pellets of Ibuprofen",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "pH-dependent enteric coating strategy for ibuprofen pellets using Eudragit polymer system"
+  },
+  {
+    "title": "Formulation, Optimization and Characterization of Floating Microspheres of Celecoxib",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Optimization of floating microspheres using design of experiments for gastroretentive delivery of celecoxib"
+  },
+  {
+    "title": "Formulation development of Taste Masked Fast dissolving film of sildenafil citrate",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Novel taste masking technique for sildenafil citrate using cyclodextrin inclusion complex in fast dissolving film"
+  },
+  {
+    "title": "Microemulsion based in situ intranasal spray of fluconazole",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "First microemulsion-based in situ gelling intranasal delivery system for fluconazole targeting brain delivery"
+  },
+  {
+    "title": "Fast dissolving tablet of lorazepam using synthetic & natural disintegrants",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Mucoadhesive microemulsion for intranasal brain delivery",
+    "year": 2010,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Mucoadhesive microemulsion formulation for nose-to-brain drug delivery bypassing blood-brain barrier"
+  },
+  {
+    "title": "Formulation evaluation and Optimization of taste masked mouth dissolving film of rizatriptan benzoate",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Taste masking of rizatriptan benzoate using drug-resin complex incorporated in mouth dissolving film"
+  },
+  {
+    "title": "Losartan potassium coated sustained release matrix using hydrophilic polymers",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Mouth dissolving tablets of flurbiprofen",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Taste masked mouth dissolving film of ropinirole hydrochloride",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Extended release tablet of zolpidem with biphasic release",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Biphasic release tablet design combining immediate and extended release layers for zolpidem"
+  },
+  {
+    "title": "Vitamin based liquid oral dosage form",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Self micro emulsifying drug delivery system of ramipril",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "SMEDDS formulation to enhance oral bioavailability of poorly water soluble ramipril using lipid based approach"
+  },
+  {
+    "title": "Floating microspheres of antibiotic drug",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Buccal tablet using natural mucoadhesive materials",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Extended release buccal tablets of felodipine",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fast dissolving tablets of fexofenadine",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Sustained release matrix tablet of rivastigmine",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Bioadhesive vaginal gel formulation",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Gastroretentive formulation of metoprolol",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Gastroretentive floating formulation of metoprolol using gas generating system for extended gastric residence time"
+  },
+  {
+    "title": "Floating tablets of nizatidine",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Osmotic pump tablet of propranolol",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Oral strips of salmeterol xinafoate",
+    "year": 2011,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation and evaluation of effervescent bioadhesive vaginal tablet",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of nano suspension tablet",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Nanosuspension approach to enhance dissolution rate and oral bioavailability of BCS class II drug in tablet form"
+  },
+  {
+    "title": "Fast dissolving film for psychotic disorders",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Novel drug delivery system of anti-hypertensive agents",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Novel NDDS approach combining nanoparticles with controlled release mechanism for antihypertensive drug delivery"
+  },
+  {
+    "title": "Vesicular drug delivery system of corticosteroid",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoparticle based sunscreen formulation",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Zinc oxide nanoparticle based sunscreen formulation with improved UV protection and skin compatibility"
+  },
+  {
+    "title": "Intranasal microemulsion delivery of curcumin",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Intranasal microemulsion delivery system for curcumin targeting neuroinflammation via nose-to-brain pathway"
+  },
+  {
+    "title": "Medicated chewing gum of ondansetron",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Long acting injectable formulation",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Chronotherapeutic drug delivery system",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Agglomerated crystal formulation of antiarrhythmic drug",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Cyclodextrin complex of furosemide",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Brain targeted drug delivery system",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Brain targeted polymeric nanoparticle system with surface modification for enhanced BBB penetration"
+  },
+  {
+    "title": "Sustained release ophthalmic gel",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Microemulsion gel of clobetasol",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Matrix tablet of nicorandil",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoparticulate system of anticancer drug",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Polymeric nanoparticulate system for targeted delivery of anticancer drug with enhanced tumor accumulation"
+  },
+  {
+    "title": "SMEDDS of atorvastatin",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Self micro emulsifying drug delivery system to improve oral bioavailability of atorvastatin calcium"
+  },
+  {
+    "title": "Transferosome drug delivery system",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Hydrogel based gastroretentive system",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Curcumin nanocrystal formulation",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanosuspension of antiepileptic drug",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Microemulsion of repaglinide",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Floating capsule of pantoprazole",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of oral nanoparticle for brain targeting",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Oral polymeric nanoparticle formulation with surface ligand modification for brain targeted drug delivery"
+  },
+  {
+    "title": "Formulation and evaluation of SMEDDS containing clotrimazole",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Floating tablet of ferrous sulphate",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoemulsion of methotrexate for transdermal delivery",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Nanoemulsion formulation of methotrexate for transdermal delivery targeting psoriasis with enhanced skin permeation"
+  },
+  {
+    "title": "Nanosuspension formulation",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Antifungal microspheres in bioadhesive gel",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Oral disintegrating tablets for insomnia",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Ophthalmic in-situ gel of dorzolamide",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Mouth dissolving tablet of antihypertensive drug",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Chronotherapeutic tablet for hypertension",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Microemulsion drug delivery system",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Sustained release microspheres for inhalation",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fast dissolving tablets using herbal disintegrants",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Topical microemulsion gel of curcumin",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Enteric coated beads",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fast dissolving film of antiemetic drug",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "SMEDDS formulation",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Transferosome formulation",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Buccal tablet using thiolated alginate",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanogel for rheumatoid arthritis",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of floating microspheres of glipizide",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Floating microspheres of glipizide using ethyl cellulose and HPMC with optimized drug release in gastric environment"
+  },
+  {
+    "title": "Development of oral controlled release tablet of antihypertensive drug",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoemulsion formulation for transdermal delivery of NSAIDs",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Nanoemulsion with novel permeation enhancer combination for transdermal delivery of NSAIDs with reduced GI side effects"
+  },
+  {
+    "title": "Formulation of fast dissolving oral films of antiemetic drug",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of mucoadhesive buccal tablets for antihypertensive drug",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Sustained release matrix tablet of antidiabetic drug",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of SMEDDS of poorly soluble drug",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of nanoparticle drug delivery system for anticancer drug",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "PLGA nanoparticle system with folic acid conjugation for targeted anticancer drug delivery to tumor cells"
+  },
+  {
+    "title": "Fast dissolving tablet of antihistamine drug",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Microemulsion based gel for topical delivery",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Gastroretentive drug delivery system for antiulcer drug",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of nanostructured lipid carriers for topical delivery",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Nanostructured lipid carriers with dual lipid matrix for enhanced topical penetration and sustained drug release"
+  },
+  {
+    "title": "Formulation of sustained release pellets for cardiovascular drug",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation and evaluation of transdermal patch of analgesic drug",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Oral dispersible tablets of antiemetic drug",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nano suspension formulation for poorly soluble drug",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of floating tablets of antibiotic drug",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of microspheres for sustained release of anticancer drug",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoemulsion for enhanced bioavailability of herbal drug",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fast dissolving films of anti-allergic drug",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Mucoadhesive gel for buccal delivery",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of lipid based drug delivery system for CNS drug",
+    "year": 2018,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Solid lipid nanoparticle system with brain targeting ligand for CNS drug delivery across blood-brain barrier"
+  },
+  {
+    "title": "Formulation and evaluation of nanosuspension for antidiabetic drug",
+    "year": 2018,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Transdermal patch for anti-inflammatory drug",
+    "year": 2018,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Oral controlled release formulation of antihypertensive drug",
+    "year": 2018,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of polymeric nanoparticles for anticancer drug",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Polymeric nanoparticle formulation using chitosan and PLGA for targeted anticancer drug delivery with pH responsive release"
+  },
+  {
+    "title": "Nanoemulsion gel for topical delivery of antifungal drug",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fast dissolving tablets of analgesic drug",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Floating drug delivery system for antiulcer drug",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of solid lipid nanoparticles for drug delivery",
+    "year": 2020,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of buccal tablets for antihypertensive drug",
+    "year": 2020,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nano suspension for enhanced solubility of drug",
+    "year": 2020,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Sustained release tablets for cardiovascular drug",
+    "year": 2020,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation of nanocrystal for poorly soluble drug",
+    "year": 2021,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of controlled release oral tablets",
+    "year": 2021,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoemulsion based transdermal delivery system",
+    "year": 2021,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fast dissolving films of antiemetic drug",
+    "year": 2021,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of polymeric micelles for anticancer drug delivery",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Polymeric micelle system with PEG-PLGA copolymer for enhanced tumor targeting and sustained anticancer drug release"
+  },
+  {
+    "title": "Formulation and evaluation of gastroretentive tablets",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nano gel for topical drug delivery",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Sustained release formulation of antihypertensive drug",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of nanoemulsion for oral delivery",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Nanoemulsion formulation with novel surfactant combination for enhanced oral bioavailability of lipophilic drug"
+  },
+  {
+    "title": "Development of SMEDDS formulation for lipid soluble drug",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Transdermal drug delivery system for NSAIDs",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of nanocarrier system for targeted drug delivery",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Novel nanocarrier system using biodegradable polymer with active targeting ligands for site-specific drug delivery"
+  },
+  {
+    "title": "Formulation and evaluation of sustained release tablets",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoemulsion gel for topical antifungal drug",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of advanced drug delivery system using nanotechnology",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Advanced nanotechnology based drug delivery system with stimuli-responsive release mechanism for targeted therapy"
+  },
+  {
+    "title": "Formulation and evaluation of controlled release tablets",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nano-based drug delivery system for anticancer drug",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved",
+    "novelty": "Nano-based targeted drug delivery system using PEGylated liposomes for enhanced anticancer drug accumulation in tumor tissue"
+  },
+  {
+    "title": "Bioanalyticalmentod of development & validation of antihypertensive drug in human plasma by LC-MS/MS",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Bioanalyticalmentod of development & validation of antifungal drug in human plasma by LC-MS/MS",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of cefpodoxime proxehil oral suspension I.P",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Novel spectrophotometric & HPLC method development & validation for multi ingredient cough suppresants & a haematinic preparation",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Validation of water treatment for pharmaceutical dosage forms & development & validation of analytical method for determination of balofloxacin in bulk & pharmaceutical dosdage forms",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Validation of HVAC system in pharmaceutical facilities",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of pharmaceutical liquid dosage form",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of solid dosage form- tablet",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of new analytical methods for estimation of drugs in their combined dosage forms & validation of Gc method for estimation of diethylamine & 2EHA in amplcillin for injection",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and characterization of mouth dissolving tablet of antiemetic drug",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Matrix tablet of Lornoxicam",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evalaution of Dry Powder Inhaler of Salbutamol Sulphate and Fluticasone Propionate Combination",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Characterization of Topical liposomal gel of Tacrolimus",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and In Vitro Evaluation of Gastroretentive Oral Controlled Release Floating Bioadhesive Tablet of Antiulcer Drug",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Mouth Dissolving Film of Levocetrizine Dihydrocloride",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and in vitro Evaluation of pH independent controlled release tablets of model antihypertensive drug",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Design and Development of Novel Buccal ReleaseFormulation",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and in-vitro Evaluation of Dispersible tablets of antitubercular drugs",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and characterization of rosuvastatin calcium microemulsion",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Liposomes as drug carriers for the treatment of lymphatic filariasis",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Anti Acne Gel",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation, optimization and evaluation of tablets of novel cholereticagent",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Study and Optimization of processing parameters for preparation of the delayed release oral dosage form",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and in vitro Evaluation of Buccoadhesive film for cancer chemoprevention",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation and evaluation of Floating Microsphere for Pulmonary Oedema",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "To prepare and evaluate Orodispersible tablets of venlaflaxine hydrochloride",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & development of immediate release tablet containing drug for erectile dysfunction",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Development of Hydrochlorthiazide and potassium chloride tablet",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Lamotrigine Oral Disintegrating Extended Release Formulations",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Colon Targeted Mucoadhesive Drug Delivery System for Treatment of Inflammatory Bowel Disease",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Characterization of Novel Floating In Situ Gelling System for Treatment of Peptic Ulcer",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Study of process variables of a matrix type extended release oral dosage form",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of floating beads for chronotropic delivery of lornoxicam",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation and characterization of In situ gel for the treatment of conjunctivitis",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation And Evalution Of Cefixime Oral Suspension",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation And Evaluation Of Bilayer Tablets Of Diclofenac Sodium & Ranitidine hydrochloride",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and In Vitro Evaluation of Buccoadhesive Discs",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation And Evaluation of Mouth Disolving Tablets of Atenolol",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation development and in-vitro evaluation of once daily sustained release tablets of antiparkinsonism drug",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of extended release floating microspheres of Captopril for better management of hypertension",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evalution of floating time dependent chronotropic drug delivery system of nifedipine hydrochloride",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Telmisartan tablet with increased dissolution profile",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of floating tablets of Lebetalol Hydrochloride",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Microemulsion Based Hydrogel for Topical Delivery",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Bioadhesive Occular Inserts",
+    "year": 2012,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method Development and validation of simultaneous estimation of Cefixime and Azithromycin in bulk and tablet dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of Cefixime 200 dispersible tablet IP",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of stability indicating RP-HPLC method for simultaneous estimation of Mitoprolol succinate and Olmesartan medoxomil in bulk and tablet dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of Stability indicating RP-HPLC method for estimation of Lafutidine bullk and Pharmaceutical dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of Stability indicating RP-HPLC methods for estimation of related substances of Cevimeline hydrochloride in capsule dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "RP-HPLC method development for estimation of recombinant tissue plasminogen activator in IT's pharmacesutical dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of Levofloxacin intavenous injection product",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of Albendazole oral suspension IP (100mcg/5ml)",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of ofloxacin film coated tablet and Diazepam tablet",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of stability indicating RP-HPLC methods for simultaneous estimation of ofloxacine and Cefpodoxime proxetil in bulk and tablet dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability indicating RP-HPLC method devwelopment and its validation for Psychostimulant drugs in syrup dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of Pentoprazole and rabeprazole Lyophilised Product",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of UV spectrophotometric and RP-HPLC method for estimation of Aliskiren hemifumarate and Valsartan in bulk and pharmaceutical dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of UV spectrophotometric and RP-HPLC method for estimation of Diclofenac sodium and ranitidine HCl in bulk and tablet dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Prospective and concurrent process validation of Ranitidine film coated tablet BP 150MG & Amlodipin tablet BP 10MG",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of Roncold plus tablet",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of Stability indicating RP-HPLC method for estimation of related substances of Esomeperazole in capsule dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of UV-spectrophotometric and RP-HPLC method for simultaneous estimation of Livosulpiride and Rabeprazole sodium in bulk and capsule dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of RP-HPLC method and dissolution profile study for estimation of Tianeptine sodium in its pharmaceutical dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of stability indicating RP-HPLC method for simultaneous estimation of Sitagliptin and Simvastatin in bulk and pharmaceutical dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Method development and validation for the determination of related substances of ezetimide in tablet dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of Amoxicilin Dicloxacillin capsule IP",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of UV spectrophotometric and RP-HPLC method for simultaneous estimation of Esomeprazole magnessium trihydrate and Neproxen in bulk and tablet dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of RP-HPLC method for simultaneous estimation of Adapalene and azithromycin combination in bulk and anti acne formulation",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of stability indicating RP-HPLC methods for simultaneous estimation of Lafutiidine and Domeperidone in bulk and pharmaceutical dosage form",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Study of epidemiology and treatment pattern of chronic obstructive pulmonary disease in patients of Vadodara with special reference to study of alpha-1 antitrypsin deficiency",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of Cardioprotective effect of conbination therapy of PPAR-α and PPAR-γ agonist in metabolic syndrome in diabetic rats",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Pharmacological evaluation of synthesized 1,6,-Diphenyl-2-amino pyrimidine derivatives",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Pharmacological evaluation of synthesized derivatives of substituted 5,7-diphenyl-2,3-dihydro-1H-1,4-diazepines",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Study of the hepatoprotective activity of polyherbal formulation on alcohol and Paracetamol induced hepatotoxicity",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Pharmacological evaluation of polyherbal formulation for antiobese activity",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Acute toxicity study and evaluation of antidiabetic activity of polyherbal formulations",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of cardioprotective activity of leaf extract of Lagenaria siceraria in Isoproterenol induced cardiotoxicity in rats",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Randomized, open label, balanced, two-treatment, two-period, two-sequence, single dose, cross over, bioequivalence study of Atorvastatin calcium tablet 80mg in normal healthy adult human subjects under fasting conditions",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Bioequivalence study of bupripion hydrochloride 150MG extended release tablet in health human volunteer under fasting condition",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Study of role of nitricoxide synthase modulation in the occurrence of myocardial infarction",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Pharmacological investigation of antiasthmatics activity of phyllanthus emblica",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of the anti depressant effect of antidiabetic drugs glibenclamide,metformin & non diabetic animals",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of acute toxicity & anti-osteopprotic activity of hemidesmus indicus linn on ovariectomised rats",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of analgesic, anti-inflammatory and antioxidant activity of a polyherbal formulation",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of new analytical methods for antihypertensive drugs in pharmaceutical dosage forms",
+    "year": 2011,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of nephroprotective activity of Trichosanthes dioica on gentamicin induced nephrotoxicity in Wistar rats",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Comparative evalution of bioavaibility of antiemetic drug through nasal and oromucosal drug delivery system in rats and rabbits",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of RP-HPLC method for the determination of impurity profile of desuenlafaxine extended release tablet",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of amoxicilin trihydrate & potassium clavulanate combined dosage form tablet USP",
+    "year": 2012,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Bioequivalance study of rabeprazole sodium 20mg tablet with standard rabeprazole sodium 20mg tablet (pariet) by a randomized, open label, balanced two tratment, two period",
+    "year": 2012,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of nephroprotective activity of morus alba in gentamicin induced nephrotoxicity in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of antiarthritic activity of tamarix gallica using rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluatoin of the effect of abutilon indicum linn in experimentally induced acute pancreatitis in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of antihyper homocysteinemic actoin of withania somnifera in L-Methionine induced hyper homocysteinemia in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Effect of vildagliptin on fructose & high fat diet induced metabolic syndrome in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Bioequivalance study of verapamil hydrochloride 240mg extended release tablet in healthy human volunteers under fasting condition",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of anti urolithiatic activity of withania somnifera in ethylene glycol induced urolithiasis in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Sub acute oral toxicity study of roflumilast on swiss albino mice",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of the effect of solanum NIGRUM in experimentally indued actue pancreatitis in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of the effect of PPAR receptor modulators in experimentlly induced inflammatory bowel disease",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of hepatoprotective activity of polyherbal formulation in paracetamol induecd hepatotoxicity in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of antidiabetic activity of thevetia peruviana in diabatic rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of antidiabetic activity of extract of bunanania lanzan in diabetic rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evalution of antiarthritic activity of solamun nigrum in complete freond's adjuvant induce roeumatoid arthritis in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evalution of nephroprotective activity of polyherbal formulaton in gentamicin induced nephromicin in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of antiasthmatic activity of TAMARIX GALLICA",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Pharmacological investigation of calophyllum inophyllum linn. For the treatment of CROHN's disease",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluatoin of hepatoprotective activity of polyherbal formulatoin in carbon tetrachloride induced hepatoxicity in rats",
+    "year": 2013,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of stability indicating assay method for estimation of fosaprepitant dimeglumine in bulk & its dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of anaytical method for simultaneous estimation of aiprazolom andimipramine HCL in bulk & in tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of cefixime trihydrate & moxifloxacin HCL in bulk & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of doxophylline & ambroxol hydrochloride as API & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of preservatives in polyherbal cough syrup",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of metformin HCL & ALPHA LIPOIC ACID in synthetic mixture",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of montelukast sodium & olopatadine hydrochloride as API & its dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of lornoxicam & eperisone as API & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of metoprolol succinate & chlorthalidone as API & its form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of calcium in herbomineral formulation by atomic absorption spectrophotometry",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of diclofenac sodium & tramadol HCL in bulk & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of dexamethasone & sparfloxacin in eye/ear drops",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of 1,4- dioxane in herbal shampoo by gas chromatography",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of pantoprazole sodium sesquihydrate & diclofenac sodium in bulk & its dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of olopatadine hydrochloride in bulk & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of docofylline & terbutaline sulphate in bulk & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of ambroxol hydrochloride & deslorat",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of indapamide & nebivolol in bulk & its tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of lisinopril & hydrochlorothiazide in bulk & its dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of prothionamide tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of cefuroxime & clavulanic acid in bulk & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of metformin HCL & saxagliptin in bulk & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of amikacin sulphate & dexamethasone in parentrals",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method Development and validation of simultaneous estimation of fluoxetine hydrochloride & sildenafilcitrate in combined tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of timololmaleate & hydrochlorothazide in bulk & in their tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of etizolam & propranolol hydrochloride in bulk & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Method development & validation of analytical method for simultaneous estimation of diclofenac sodium & serratlopeptidase in bulk & tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of dithranol & salicyclic acid in bulk & its dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of metformin hydrochloride tablet",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of mometosone furoate & terbinafine hydrochloride in pharmaceutical dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of chlorthalidone & olmesartan medoxomil in tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of rabeprazole sodium & lafutidine in capsule dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of atorvastatin calcium & vitamin D3 in bulk & solid dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of ramipril & cilnidipine as API & its dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of propofol & lignocaine in bulk & parenteral frmulation",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for estimation of withanplide A & withanoside IV",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of stability indicating Rp-HPLC method for estimation of Aliskiren hemifumarate & amlodipine besylate in bulk & their pharmaceutical dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of high performance thin layer chromatographic technique for simulataneous estimation of piperine & gallic acid in poly herbal formulation",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simulatneous estimation of acte aminophen & pamabrom in bulk & in tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Stability indicating method simultaneous estimation of linagliptin & metformin hydrochloride in their combine dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Process validation of aluminium hydroxide,magnesium hydroxide & simethicone oral suspension",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of febuxostat & diclofenac potassium in bulk & its tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of ofloxacin & flavoxate HCL in bulk & its tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of camylofin dihydrochloride & mefenamic acid combination in bulk & its tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of levosulpiride & pantoprazole sodium in capsule dosage",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of paracetamol &A tapentadol hydrochloride in tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of cyclobenzaprine hydrochloride & aceclofenac in tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of ceftazidime & clavulanic acid in their pharmaceutical dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of eperisone hydrochloride & paracetamol in their tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of bioanalytical method for estimation of linezolid in K3 EDTA human plasma by using HPLC-ESI-MS/MS",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for estimation of ILAPRAZOLE in its tablet dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for estimation of ezetimibe & fenofibrate in bulk & their pharmaceutical dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for estimation of aliskiren hemifumarate & hydrochlorothiazide in bulk & pharmaceutical dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for estimation of beclomethasone dipropionate & salicylic acid in bulk & its pharmaceutical dosage form",
+    "year": 2013,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Biodegradable IN-SITU Gel for subcutaneous administration of a statin drug for osteoporosis",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of trandermal patch of tramadol HCL",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Liquisolid tablets for dissolution enhancement of hypolipidemic drug",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Mucadesive IN-SITU nasal gel of anticholinesterase drug for alzheimer disease",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of topical spray of antiacne agent",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of floating microspheres of an anti ulcer drug",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & characterization of film coated matrix tablets of antianginal drugs",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation & In - Vitro characterization of sustained release ranolazine HCL swellable microsheres",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of microemulsion based hydrogel for topical drug delivery of ketoconazole",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "chitosan - gellan gum microbeads as gastroretentive drug delivery system for antihypertensive drugs",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of double layered microspheres of antihypertensive drugs",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Proniosomal topical gel of tacrolimus for atopic dermatitis",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & characterization of micelles based hydrogel for topical delivery",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of ethosomal gel of antiscabetic agent",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "IN SITU nasal gel of almotriptan",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of sublingual tablets of metoprolol tartrate",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of microsponge loaded hydrogel for topical delivery",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of floating beads for chronotherapy of hypertension",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & characterization of mouth dissolving tablets for E Mesis",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of fast dissolving tablets using beta cyclodextrin complexation",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of fast dissolving tablets for anticonvulsant drugs",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of floating microspheres osa anti anginal drug",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation & evaluation of nanosuspension of erythromycin stearate",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of nanoparticulate INSITU gel for ocular delivery",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of microemulsion based V aginal gel",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of topical antifungal emulgel",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of trandermal patch of antipsychotic",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & IN VITRO evaluation of pushpull osmotic pump tablets of mefenamic acid for oral contrlled drug delivery",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Characterization & evaluation of taste masked suspension of lornoxicam",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation & characterization of liposome of antimalarial agents",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulatiion & evaluation of microemulsion for the treatment of hypertension",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development of microparticulate drug delivery system for colon targeting using natural gum",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of time dependent pulsatile drug delivery system for treatment for asthma",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of gastroretentive floating drug delivery system of an anti psychotic agent",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of mouth dissolving film for treatment of hypertension",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of dry syrup of an antiretroviral drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of polymeric pseudolaties bearing acetazolamidefor the management of glaucoma",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of solid lipid nanoparticles as ocular drug delivery system",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of fast dissolving sublingual thin film for management of migraine",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of buccoadhesive patch for treatment of chronic stable angina pectoris",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of microemulsion based gel for acne vulgaris",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of transdermal drug delivery of anti emetic drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Design & development of niosome based topical delivery of mometasone furoate",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation development & evaluation of bilayer matrix tablet of diclofenac potassium & famotidine",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Design & evalution of lornoxicam transdermal patch",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of solid dispersion of anti epileptic drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of nanosuspension of antipsychotropic drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & characterization of floating microsphers of gabapentin",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of mouth dissolving film of anti emetic drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & charaterization of microemulsion based hydrogel for topical drug delivery system",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of mouth dissolving tablet of anti migraine drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation of nanostructured lipid carrier based topical drug delivery of antifungal drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "On demand drug delivery from self assembled hydrogel of methotrex for treatment of rheumatoid arthritis",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development & characterization of tizanidine hydrochloride loaded polymeric nasal insert",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of pectin chitos composite particles of an anticancer drug for colon targeting",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development & charcterization of liquid solid tablet for poorly water soluable drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Dry powder inhaler of physically improved pulmospheres for peptide delivery",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development & evaluation of self emulsified freeze dried nasal powder for peptide delivery",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Topically applied ultra deformable transfer osomal based gel for the treatment of psoriasis",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation & evaluation of niosome based ophthalmic gel of prednisolone acetate",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Studies on design & development of tablet in capsule system of zolpidem tartrate",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Studies on formulation development & evaluation of microemulsion system of antihypertensive drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation development & evaluation of colon targeted drug delivery system of praziquantel for the treatment of schistosomiasis",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development & characterization of telmisatan nanosuspension for the treatment of hypertension",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development & evaluation of push-pull osmotic tablet of nitrofuraantoin",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of cefixime trihydrate & levofloxacin hemihydrate in bulk & tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of azithromycin & levofloxacin in bulk & its dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of paracetamol & flupirtine maleate as API & its formulation",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous of ramipril & chlorthalidone in bulk & in tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for estimation of losartan potassium & chlorthalidone in bulk & their tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for estimation of tolperisone hydrochloride & diclofenac sodium in their pharmaceutical dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of cefixime & linezolid in bulk & tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of eperisone hydrochloride & diclofenac sodium in bulk & solid dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for the simultaneous estimation of montelukast sodium & desloratadine in bulk & in their tablet dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & IN VITRO evaluation of mucoadhesive film of antifungal drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation,development & charaterization of controlled porosity osmotic pump tablets of anti hypertensive drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of oral nanosuspension of antipsychotics drug",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of floating pulsatile drug delivery system for hypertension",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Transfersomes loaded topical drug delivery sytem of methotrexate for rheumatoid arthritis",
+    "year": 2013,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of oral solid micro emulsion of anti psychotic drug",
+    "year": 2013,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for estimation of metronidazole & mupirocin in bulk & its pharmaceutical dosage form",
+    "year": 2013,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Fabrication & evaluation of biodegradable vaginal ring for contraceptive therapy of ethinyl estradial & levanorgestrel",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of sublingual tablets of almotriptan malate",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of intra oral pump spray of cholipe salicylate",
+    "year": 2014,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of fast dissolving film of cyproheptadine hydrochloride",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Design & evalution of transdermal patch of anthypertensive agent using natural polymer & essential oil",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development & evaluation of mucoadhesive nasaldrops of almotriptan malate for the treatment of migrane",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of sublingual tablet of IV abradine hydrochloride for the treatment of stable anginapectoris",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation development & evaluation of bilayer tablet using combination of antidiabetic agents",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation development & evaluation of pulsatile drug delivery system for treatment of asthma",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Amino acid modified proliposumes based spray dried respirable powder of colistin sulphate for lung targeting",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fabrication & evaluation of trandermal patch of antihypertensive drug",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Design development & charaterization of pulsatile drug delivery for chronotherapy of aging pectoris",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of bilayer tablet of prochlorperazine maleate",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of oradlspersible tablet of cefadroxil",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fromulation & charaterization of phospholipid based micellesl a potential carrier for cancer",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & IN VITRO evaluation of topical gel using natural polymers",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & characterizaton of self emulsifying drug delivery system for improved oral delivery of lipophilic",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Enhanced topical administration of astaxanthin from activated nanogel",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Dissolution rate enhancement ofpoorly water soluable drug using liquisolid tablet",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "On Demand delivery of methatrexate from self assembled nano construts for the treatment of rheumatoid arthritis",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development & evaluation of boronate dextran based an acid responsive biodegradable nano constructs for cancer targeting",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development & evaluation of amino acid based lyophilized dry powder inhalers of theophylline & montelukast for treatment of asthma",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & INVITRO evaluation of floating & bioadhesive drug delivery system",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of nano suspension of felodipine for solubilty enhancement",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simultaneous estimation of fluorometholone & ketorolac in combined dosage form",
+    "year": 2014,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simultaneous of cilnidipine & olmesartan medoxomil in pharmaceutical dosage form",
+    "year": 2014,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical method for simultaneous estimation of ebastine & phenylephrine hydrochloride in tablet dosage form",
+    "year": 2014,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Stability indicating liquid chromatographic method development & validation for simultaneous estimation of emtricitabine efavirenz",
+    "year": 2014,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical nethod for simultaneous estimation of doxycycline monohydrate & ornidazole in its pharmaceutical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simultaneous estimation of dextromethorphan hydrobromide & quinidine sulphate in its pharmaceutical dosage form",
+    "year": 2014,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of stability indicating assay method for simultaneous estimation of ofloxacin & ornidazole in tanlet dosage form by UPLC",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Develpoment & validation of HPLC method for simultaneous estimation of ofloxacin & orindazole in tablet dosage form by UPLC",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of various analytical methods for simultaneous estimation of amiodipine besylate & irbesartan in combined dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simultaneous estimation of tapentadol & thiocolchicoside in bulk & its formulation",
+    "year": 2014,
+    "department": "QAT",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simultaneous estimation of gatifloxacin & flurbiprofen sodium in eye drop",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simultaneous estimation of brinzolamide & brimonidine tartrate in their pharmaceutical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simulatneous estimation of cinnarizine & pamabrom in bulk & in tablet dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of Stability indicating assay held for simulitinious estimitation of ofloxacy and flavodzadic hydrocloric in tablet Dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of stability idintifing HPLC method for estimation of Labetalol in Pharmasutical Dose form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Velidation of stability indicating assay method for simultaneous estimetion of cebxine and ordinary zole in pharsuetical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical metod for simutemous estimetion of cinnarignize and dimennhydrrinate in tablet of dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation pf Analyrical methods for simulatneous estimation of higlitol and metdumun Hydrochroride in Tablet Dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of Stability identifing HPLC Methods for sumulitation in Pharmasseutical Formulation",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical metods for simulitation esstimation of XYLOMC tagline Hydrochloric and Ipratropium Brohide in Bulk and Nasal and Pray",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process Validation of Lisinopril Tablet",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Analytical methods for simulitaneous estimention of Lidocaie and tetracaiue in bulk and its formulation",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Analytical methods for simulitaneous estimention of a,oxicildin trihydrade and prodencidly in tablet dsage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulaneous of brilmonidance tartvate and timolol malcate inlouk and dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical Method development and validation for Simulancous estimation f ivermention and colorsulan in combinedd pharmaceutical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulaneous estimate of atenolol ddonepel in bulk and its combined dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulaneous estimate of furosemide and triqmtereue in tablet Dosge Form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulaneous estimation of Montelukast studing and theophylinc in Pharmaceutical Dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulaneous estimation of Levodropropigine and chlorphenniraminc Maleate in bulk and its Formulations",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of Spectrophotometic abd stability indicating HPLC Methods for the Simulaneous estimation of Ranitidincc and Domoeridone in their combined tablet dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of Stability indicationg assay method for simulate ease estimation of ceflxmc and cloxacling in pharmaceutical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Prepration and Evaluation of Venlayagraine Hydroclaloriade transdermat pateh using matiral Polumers",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Velidation of stability analytical method for simultaneous estimetion of Clomimagole and Tindazole in pharsuetical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Velidation of stability Indicationg method for simultaneous estimetion of Eperisone Hydrochloric and Para Cetamol",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulaneous estimation of ketocnad and beclomethasone Dipropioonate in bulk and Pharmaseutical Dosage Form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of oral insitu floating gel of Antiucler Drug",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and characterization of Tizanidine Hicro calsusion",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of antifungal Topical Spray",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulitation estimation of clindamyesh phusphatc and nicotinamide in bulk and its formulation",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulitation estimation of Triprolidine ,phenylepherine and paracetamol in their pharmaceutical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulitation estimation of Cefpodoxime proretil and dicloxaclim sodium in bulk and pharmaseutical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Develpoment & validation of stabiliting assay method for simultaneous estimation of lafutidine & rabeprazole sodium in capsule dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of stability indicating analytical method for estimation of amlodipine besylate, olmesartan medoxomil & hydrochlorthiazide in bulk & pharmaceutical dosage form",
+    "year": 2014,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Bioequivalence study of fenofibric acid 135mg delayed release capsule under fasting condition",
+    "year": 2014,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of oxiconazole nitrate emulgel for topical application",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Comparative evaluation of natural superdisinyrgants with standard superdisintegarants in mouth dissolving tablets",
+    "year": 2014,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulitation estimation of bupropion and naitrexone in combination",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of Stability indicating RPHPLC Method for simulataneous estimation of alislciren enalapnil in bulk and synthesis Mixture",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method of development and validation for simuktaneous estimation of simvastation and Fenofiberate in combined dosage form",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical Method development and validation for simultanous estimation of azilsartan medoxomil and amlodipine besylake hydrochloride in bulk and Pharmaseutical Dosage form",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simultaneous estimation of valsartan and clinidipine in combination",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Process Validation of Diazpan in Pharmaceutical Dosage form",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability indicationf RRPHPLC method development and validation od amiloride hydrocloride and furosemide in pharmaseutical dosage form",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validitation of analytical methods for simultaneous estimation of atorvastatin calciomand irbestan in their pharmaseutical dosage form",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development and validation for simultanous estimation of pravasta in sodium penocibrate in combination",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability indicationf analytical method development and validation for simultaneous estimation of paracetamol and zaltoproten in solid dosage form",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simulationeous estimation of ketorolac tromethamine and phenylephnix hydrochloride in pharmacesutical dosage form",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Spectrophotometric and stability indicating HPLC methods for simulataneous estimation of nifedipine and candesartan cilexehil insynthesis mixture",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of stability for simultaneous estimation of furosemide and triamterence In tablet dosage form",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simultaneous estimation of asprin and landsopragle in sintetic mixure",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability indicating HPLC method development and validation od hydroxycitric acid in capsule",
+    "year": 2015,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Fabrication and Characterization of niosumal gel for osteoporsis",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Design development and characterization of microemulson based topical gel for rheumatiod arthritis",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fabrication and Evaluation of injectable in situ forming biodegradabic scaffuld for anti cancer drug delivery",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of Troplsetrop HCL orodispersible tablet using natural Superdisintgrants",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Characterization of colon specific drug delivery for inflammatory bowel disease",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Mucoadhesive Buccal film contaning antladiabetic agent",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Hydrugel based woond dressing of functional bio polymers for wound care application",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fabrication and characterization of Scafful od blode gradable plymers and inorganic substrate nanon hydroxyapatite for osteomyclitis",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Dissolution rate enhancement of indapamide using liquid solid tablet",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Comparative Study of natural Muxoadhesive agents in the formulation of mucoadisve nasal drops for the treatment of parkinson 's disease",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fourmulation development and characterization of extended release tablet containing combination of anti diabetic agents",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Hyquluronan midifies prollposomal dry poweder for pulmonary drug dilivery",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Characterization of albumin based nano particles for anti tumor activity",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Methotrexate encapsulates albimin hyaloronate nano particals seletive nanovectors for yheumatoid arthritis",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Permeation enhancement of model anti hypertensive drug form transdermal patehes using essential oils",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Coprocessed directly compressible excipient for extended release tablet",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evalvation of orodispersible film of hydroxyzine hydrichiloride",
+    "year": 2015,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Pharmacological evaluation of withania somifera in prevention & treatment of acute pancreatitis in rats",
+    "year": 2016,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validation of analytical methods for simulataneous estimation of escitalopramoxalate & flupentixel dihydrochloride in their tablet dosage form",
+    "year": 2016,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & validatin of spectrophotometric & stability indicating HPLC method for simultaneous estimation of valsartan & cilnidipine in synthetics mixture",
+    "year": 2016,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development validatin & stability indicating RP-HPLC method for estimation of prucalopride in pharmaceutical formulation",
+    "year": 2016,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for simultaneous estimation of ROSUV astatin calcium, clopidogrel, bisulphate ^ asprin in pharmaceutical dosage form",
+    "year": 2016,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development & validation for simultaneous estimation of clindamyein phosphate & benzoyl peroxide in combined dosage form",
+    "year": 2016,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoparticles based formulation of silver sulphadiazine for treatment of burn wound",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of mucoadhesive insitu nasal gel of cylobenzaprine hydrochloride",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulatiion & evaluation of topical calcineurin inhibitor loded transfersumal drug delivery for vitiligo",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Colon targeted Mucoadhesive Drug Delivery System for capecitabine for treatment of colorectal cancer",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Dissolution rate enhancement of febuxost at by liquisolid technique",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation development &characterization of controlled release tablet of haloperidel using geomatrix technique",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of porous hyaluronic acid based dry powder inhalation system of topotecan hydrochloride using spray drying technique",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of orodispersible tablet of hydroxyzine hydrochloride by using natural super disintegrant",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of microsponge based drug delivery system for treatment of fungal infection",
+    "year": 2016,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development & evaluatin of gastro retentive dosage form of chlordiazepoxide",
+    "year": 2017,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development & characterization of bromfenac sodium loaded lyophilized polymeric micelles for post operative cataract treatment",
+    "year": 2017,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation & ex-vivo evaluation of clindamycin phosphate dental films for peridontitis",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Design development and characterize leflunpmide organogel for the treatment of rheumatoid arthritis",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of enzyme dependent pellets for inflamed colon targeting",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Bioresponsive proliposomes based dry powder of anti-neoplastic agent for lung cancer targeting",
+    "year": 2017,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of effect of dragon fruit in drug induced liver injury",
+    "year": 2018,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Pharmacological evaluation of anti urolithiatics activity of an ayurvedic formulation goumutradi kshar in ethylene glycol induecd urolithiasis in rats",
+    "year": 2018,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Effect of empagliflozin and its combinatin with metformin in experimentally induced myocardial infarction in diabetic rats",
+    "year": 2018,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Design and development of ciclopiroxolamin transfersomal gel for subungula onychomycosis",
+    "year": 2018,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Local delivery of ornidazole - loaded chitosan nanoparticles containning ethyl cellulose flim for the enhanced treatment of periodontitis",
+    "year": 2018,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation, characterization and evaluation of wafer containing antimicrobial agent for would infection",
+    "year": 2018,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Eugenol, nano-composites loaded in-situ gel for enhanced prevention of periodontitis : formulation and evaluation",
+    "year": 2018,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Bioresponsive drug delivery for the treatment of knee osteoarthritis",
+    "year": 2018,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Cardioprotective pitential of empagliflozin &linagliptin in experimentally indued cardiotoxicity in Rats",
+    "year": 2019,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Effect of angiotensin receptor blocker on experimentally indued hyperurecemia in rats",
+    "year": 2019,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Development & evaluation of floating in - situ gelling system of metronidazole",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & development of valsartan co0crystal",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Design & development of microneedle patch of leflunomide",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation & evaluation of mucoadhesive vaginel tablet of posaconazole",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of safer polyherbal hair spray for the treatment of alofecia",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "The augmentation in bioavailabilty of bilastine by inclusion complexation",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development & evaluation of fast dissolving oral films of meclizine",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Caffeine nanoparticle loaded films as local antimicrobial treatment of infected periodontal pockets",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Nanoliposomal topical formulation for increasing safety & combatingmicrobial drug resistance in leprosy",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development & in-vitro evaluate medicated lollipop contanng meclizine hydrochloride",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Mucus penetrating dextran microparticulate inhalable dry powder for the treatment of cystic fibrosis & mubopolysaccnaridosis",
+    "year": 2019,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "SOLUBILITY ENHANCEMENT OF FENOFIBRATE - AMINO ACID A NOVEL CO- AMORPHOUS SOLID DISPERSION APPROACH",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "VAGINAL DOSAGE FORM OF STATIN DRUG FOR OSTEOPOROSIS (VAGINAL RING)",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION AND EVALUATION OF SUSTAINED RELEASE LINEZOLID TABLET USING NATURAL ANTIBACTERIAL POLYMER AEGLE MARMELOS",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION DEVELOPMENT AND EVALUATION OF BILAYER TABLET OF RIVAROXABAN AND ASPIRIN",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "NON PROPELLANT FOAM FORMULATION OF FLUCONAZOLE FOR FUNGAL INFECTION",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION AND EVALUATION OF ALCOHOL-FREE HERBAL HAND SANITIZER GEL CONTAINING ESSENTIAL OILS",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT OF COATED FLOATING TABLET USING NUTRACEUTICAL FOR PREVENTION OF GASTRITIS CAUSED BY HELICOBACTER PYLORI INFECTION",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION AND EVALUATION OF MICONAZOLE ROLL-ON TO TREAT JOCK ITCHES",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "PREPARATION AND CHARACTERIZATION OF NANOSTRUCTURED LIPID CARRIER (NLC) BASED HYDROGEL FOR THE TREATMENT OF FUNGAL DISEASE",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION AND CHARACTERIZATION OF OLMESARTAN MEDOXOMIL SOLID DISPERSION LOADED SUBLINGUAL TABLET",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION AND OPTIMIZATION OF TOPICAL HYDROGEL BEARING OZENOXACIN LOADED HP-BETA-CYCLODEXTRIN BASED NANO-SPONGES FOR THE TREATMENT OF IMPETIGO",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FABRICATION AND EVALUATION OF ELECTROSPUN POSACONAZOLE NANOSUSPENSION LOADED NANOFIBERS FOR PREVENTION OF VULVOVAGINAL CANDIDIASIS",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION AND EVALUATION OF DELAFLOXACIN LYOPHILIZED FAST DISINTEGRATING TABLETS",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION AND EVALUATION OF ANTIBIOTIC LOADED TRANSDERMAL PATCH FOR CELLULITIS TREATMENT",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "TOPICAL DELIVERY OF FLUOXETINE LOADED NANOSPONGE GEL FOR EFFEVTIVE WOUND HEALING: FORMULATION, DEVELOPMENT AND EVALUATION",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "STUDIES OF VARIOUS POLYMERS FOR ENHANCEMENT OF SOLUBILITY BILASTINE IN SOLID DRUG FORMULATION",
+    "year": 2022,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF ANALYTICAL METHOD FOR SIMULTANEOUS ESTIMATION OF ERTUGLIFLOZIN AND SITAGLIPTIN",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "RP-HPLC METHOD DEVELOPMENT AND VALIDATION FOR SIMULTANEOUS ESTIMATION OF RUTIN, LUTEOLIN AND SCOPOLETIN IN AYURVEDIC FORMULATION",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "NOVEL AND ECOFRIENDLY ANALYTICAL METHOD DEVELOPMENT AND VALIDATION FOR BILASTINE AND METFORMIN HYDROCHLORIDE USING HYDROTROPIC SOLVENT",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "SIMULTANEOUS METHOD DEVELOPMENT AND VALIDATION OF 1, 8-CINEOLE AND BETULINIC ACID IN SHATI VATI - AN AYURVEDIC FORMULATION BY HPTLC",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF STABILITY INDICATING HPTLC METHOD FOR SIMULTANEOUS ESTIMATION OF BENIDIPINE HCL AND TELMISARTAN",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "NOVEL AND ECOFRIENDLY ANALYTICAL METHOD DEVELOPMENT AND VALIDATION FOR SAXAGLIPTIN HYDROCHLORIDE AND RIFAMPICIN USING HYDROTROPIC SOLVENT",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "ANALYTICAL METHODS DEVELOPMENT AND VALIDATION FOR SIMULTANEOUS ESTIMATION OF MIRABEGRON AND SOLIFENACIN SUCCINATE IN COMBINED DOSAGE FORM",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF HPTLC METHOD FOR THE EVALUATION OF RASAM",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "STABILITY INDICATING ANALYTICAL METHOD DEVELOPMENT AND VALIDATION FOR ESTIMATION OF SUCROFERRIC OXYHYDROXIDE",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF STABILITY INDICATING CHROMATOGRAPHIC METHODS FOR SIMULTANEOUS ESTIMATION OF BISOPROLOL FUMARATE AND HYDROCHLOROTHIAZIDE",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF ANALYTICAL METHODS FOR SIMULTANEOUS ESTIMATION OF AZELNIDIPINE AND METOPROLOL SUCCINATE",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT & VALIDATION OF HPTLC METHOD FOR THE EVALUATION OF KABASURA KUDINEER",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF ANALYTICAL METHODS FOR SIMULTANEOUS ESTIMATION OF AZELNIDIPINE AND CHLORTHALIDONE",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "BIOANALYTICAL METHOD DEVELOPMENT AND VALIDATION FOR SIMULTANEOUS ESTIMATION OF VILDAGLIPTIN AND REMOGLIFLOZIN ETABONATE IN PLASMA BY RP-HPLC",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF ANALYTICAL METHOD FOR SIMULTANEOUS ESTIMATION OF OLMESARTAN MEDOXOMIL, AMLODIPINE BESILATE AND HYDROCHLOROTHIAZIDE",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF HPTLC METHOD FOR SIMULTANEOUS ESTIMATION OF PIPERINE & SCOPOLETIN IN AJMODADI CHURNA",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION, METHOD DEVELOPMENT AND VALIDATION OF HPTLC METHOD FOR SIMULTANEOUS ESTIMATION OF BERBERINE, ELLAGIC ACID AND FERULIC ACID IN AMRTADI CHURNA",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF A DISSOLUSION METHOD FOR CIPROFIBRATE TABLETS",
+    "year": 2022,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "EFFECT OF COLESEVELAM HYDROCHLORIDE ALONE AND ITS COMBINATION WITH ATORVASTATIN ON EXPERIMENTALLY INDUCED HYPERLIPIDEMIA IN WISTAR RATS",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF POLYHERBAL FORMULATION FOR ANTIHYPERLIPIDEMIC ANTIDIABETIC IN EXPERIMENTAL INDUCED DIABETIC RATS",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF POLYHERBAL FORMULATION ON LETROZOLE INDUCED POLYCYSTIC OVARIAN SYNDROME IN EXPERIMENTAL RAT MODEL",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EFFECT OF POLY-HERBAL FORMULATION IN EXPERIMENTALLY INDUCED DIABETIC NEPHROPATHY IN RATS",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF SIMAROUBA GLAUCO BARK ON EXPERIMENTALLY INDUCED NON-ALCHOLIC FATTY LIVER DISEASE IN MALE ALBINO WSTAR RATS",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EFFECT OF EMPAGLIFLOZIN ALONE AND ITS COMBINATION WITH COLESEVELAM ON EXPERIMENTALLY INDUCED DIABETIC DYSLIPIDEMIA IN WISTAR RATS",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "ANTIHYPERLIPIDEMIC EFFECT OF POLYHERBAL FORMULATOIN ON EXPERIMENTALLY INDUCED HYPERLIPIDEMIA",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF EFFLUX PUMP INHIBITORS WITH ANTIMICROBIAL AGENT",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "IN-VITRO AND IN-VIVO EVALUATION OF AGARICUS SILVATICUS FOR TREATMENT OF GASTRIC ULCER IN ALBINO WISTAR RATS",
+    "year": 2022,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Characterization of 5-Fluorouracil Sprayable Gel for the Treatment of Skin Cancer",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of letrozole loaded polymeric micelles incorporated hydrogel for the treatment of breast cancer",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fabrication and characterization of luliconazole nanosuspension loaded nanofibers for the treatment of fungal skin infections",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fabrication & Evaluation of Lurasidone Hydrochloride Effervescent Liqui-pellets",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Nanoparticle loaded Microneedle Patch using Quetiapine Fumarate in the treatment of Antipsychotic disorder",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of sustained release posaconazole tablet using natural antibacterial polymer Aegle marmelos",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of Ziprasidone Nanocrystals to improve Pysicochemical properties and Dissolution profile",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Design & characterization of Ethosomal Transdermal Patch of Ivermectin",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation and evaluation of Vitamin B6 Oro-dispersible Nutraceutical film for nausea and vomiting during Pregnancy",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of Raloxifene loaded Vaginal ring for the treatment of Osteoporosis in post menopausal women",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation,Development and Evaluation of Transungual drug delivery of antifungal drug for onychomycosis",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Brexpiprazole loaded intranasal brain targeting nanoemulsion spray to treat Schizophrenia",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of Tioconazole loaded nanosponge based Hydrogel for the treatment of ringworm Tinea corporis",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of injectable hydrogel systems for cervical cancer treatment",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of sprayable dry hydrogel of mafenide acetate for second and third degree burns",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of injectable scaffolds loaded with Laroxifene Hydrochloride for Bone Regeneration",
+    "year": 2023,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPTLC method for Simultaneous estimation of fixed dose combination of Vildagliptin and Pioglitazone HCl synthetic mixture",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPTLC method of Lincomycin and Spectinomycin in Combination",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of analytical methods for Simultaneous estimation of Dapagliflozin and Vildagliptin in combined dosage form",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of analytical methods for Simultaneous estimation of Teneligliptin Hydrobromide and Pioglitazone Hydrochloride",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development,validation and experimental design assisted robustness testing of RP-HPLC method for Simultaneous estimation of Alpha-Asarone and Reserpine in Ayurvedic Formulation",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Method development and validation of HPTLC method for Simultaneous estimation of Atropine, Vasicine and Piperine in Dhumayoga Churna",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPTLC method for Simultaneous estimation of Lupeol,Thymol and Piperine in Ayurvedic Formulation",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of analytical methods for Simultaneous estimation of Bisoprolol Fumarate and Telmisartan in combined dosage form",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability Indicating HPTLC method for simltaneous estimation of Silodosin and Tadalafil",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Simultaneous Estimation of Silodosin and Dutasteride in Bulk Drug and in Tablet Dosage Form",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability Indicating HPLC method for simltaneous estimation of Remogliflozin and Teneligliptin in Tablet Dosage Form",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Stability indicating RP-HPLC method for simultaneous estimation of Teneligliptin and Rosuvastatin calcium",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation,Development and validation for simultaneous estimation of phytoconstituents in Haritakyadi Kvatha Churna",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of RP-HPLC method for Simultaneous estimation of Teneligliptin and Dapagliflozin in combined dosage form",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development & Validation of HPTLC Method for Simultaneous Estination of Pregabalin and Etoricoxib in Pharmaceutical Dosage Form Using Fractional Factorial Design",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Stability indicating RP-HPLC method for simultaneous estimation of Silodosin and Solifinacin Succinate in solid dosage form",
+    "year": 2023,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Phytochemical analysis of a polyherbal preparation",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Simultaneous method development and Validation of Embelin,Gallic acid and Scopoletin in Manibhadra Avaleha by HPTLC",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Simultaneous method development and Validation of Embelin,Gallic acid and Piperine in Vidanga Vati by HPLC",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Method Development and Validation for simulatneous estimation Phytoconstituents (Plumbagin, Berberine, Conessine) in Ayurvedic Formulation by HPLC",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Phytochemical analysis of a polyherbal formulation traditionally claimed for healthy hair",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Identification and characterisation of chemical consituents in Ether Extract of RASAM",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPTLC method for estimation of Ibuprofen and Chlorzoxazone in bulk and Tablet dosage form",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Stability Indicating RP-HPLC method for simultaneous estimation of Meloxicam,Paracetamol and Lignocaine in Pharmaceutical Dosage form",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPTLC method for estimation of Bisoprolol and Amlodipine in bulk and Tablet dosage form",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Stability indating RP-HPLC method for estimation of Omeprazole and Ondensetron",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Method Development and Validation for simulatneous estimation Phytoconstituents (Azadirachtin and embelin) in Ayurvedic Formulation by HPTLC",
+    "year": 2023,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Prepration of Draft Investigational Medicinal Product Dossier for Tirzepatide (2.5 mg) as per EMA",
+    "year": 2023,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "A Comparative Study of Regulatory Requirements for Medical Devices Approval Process in Different Countries and Preparation of Draft Application for USA",
+    "year": 2023,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation of Draft New Drug Application for Registration of Tapinarof in Canada and India",
+    "year": 2023,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "To Study Regulatory Requirements for ANDA submission and Preparation of Draft Dossier of Prednisone Tablet for USFDA",
+    "year": 2023,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "Understand a Regulatory Process of API Export from India to Brazil and Compilation of Documents as per Rgulations",
+    "year": 2023,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "Preparation of Draft marketing Authorization Application of Mavacamten for Europe",
+    "year": 2023,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "A Study of Regulatory Provisions and Preparation of Draft Device Master File of Organ Care System (OCSTM) Heart System for CDSCO Submission",
+    "year": 2023,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATE THE EFFECT OF POLYHERBAL FORMULATION IN THE TREATMENT OF LIVER FIBROSIS IN WISTAR RATS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF LYSYL OXIDSE IN CARDIAC FIBROSIS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF ANTIDIABETIC EFFECT OF NUCIFERINE IN COMBINATION WITH BERBERINE IN EXPERIMENTALLY INDUCED TYPE-2 DIABETIC RATS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF ANTI-OBESITY POTENTIAL OF CALOTROPIS PROCERA IN EXPERIMENTAL ANIMALS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF POLYHERBAL MIXTURE ON DIET INDUCED OBESITY IN EXPERIMENTAL ANIMALS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF ANTI-ULCER ACTIVITY OF PAPAYA SEED AND FLAXSEED IN EXPERIMENTALLY INDUCED ULCER IN RATS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF WOUND HEALING ACTIVITY OF A NOVEL FORMULATION OF CYNODON DACTYLON AND CALENDULA OFFICINALIS SPRAY IN ALBINO WISTAR RATS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EFFECT OF POLYHERBAL FORMULATION ALONE AND ITS COMBINATION WITH LEVOTHYROXINE ON EXPERIMENTALLY INDUCED HYPOTHYROIDISM IN RATS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF SUGAR ANALOGUE AND BILE ACID SEQUESTRANTS IN EXPERIMENTALLY INDUCED DIABETES MELLITUS IN RATS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "ANTI-PSORIATIC ACTIVITY OF A HERBAL FORMULATION ON IMIQUIMOD INDUCED PSORIATIC LIKE MICE MODEL",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF A POLYHERBAL FORMULATION IN EXPERIMENTALLY INDUCED ASTHMA IN SPRAGUE DAWLEY RATS",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATION OF POLYHERBAL FORMULATION ON EXPERIMENTALLY INDUCED ATOPIC DERMATITIS IN MICE",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "EFFECT OF DAPTOMYCIN ON EXPERIMENTALLY INDUCED DIABETIC FOOT ULCER IN ANIMAL MODEL",
+    "year": 2023,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Colon Targeted Liqui-Pellets of Budesonide: Development, Optimization and Stability Assessment",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development, Optimization and Stability Assessment of Taste-masked Orally Disintegrating Film for Ergoloid Mesylate",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Intravenous solid lipid nanoparticles for prostate cancer treatment, formulation , evaluation, and therapeutic potential",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation And Evaluation Of Ivermectin Loaded Niosomal Gel",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development of Nanolipid Carrier Based Nanofiber Patch Of Minocycline",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Fabrication of Hyaluronic acid loaded Dexamethasone Ethosomal sprayable hydrogel for Osteoarthritis",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation And Evaluation Of Nano Lipid Carrier Based Nasal Drop For Parkinson Disease Treatment",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Relugolix oral bioavailability enhancement by P-gp inhibitory effect with solid dispersion by using a P-Glycoprotein inhibitor",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and evaluation of antifungal agent loaded ufasomes containing eye drop for improved antifungal activity",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Evaluation of Ketotifen Micelle Loaded In-Situ Hydrogel for Allergic Conjunctivitis",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Optimization of Spherical Agglomerates of Lurasidone Hydrochloride",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation, Optimisation And Evaluation Of Kojic Acid Hexosome Loaded Facial Serum For The Treatment Of Hyperpigmentation",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development And Optimization Of Atomoxetine Hydrochloride Sprinkle Granules",
+    "year": 2024,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "ANALYTICAL METHODS DEVELOPMENT AND VALIDATION OF ATORVASTATIN CALCIUM AND BEMPEDOIC ACID IN TABLET DOSAGE FORM",
+    "year": 2024,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "STABILITY INDICATING ANALYTICAL METHOD DEVELOPMENT AND VALIDATION OF LIDOCAINE HYDROCHLORIDE AND DILTIAZEM HYDROCHLORIDE USING HPTLC",
+    "year": 2024,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "HPTLC ANALYTICAL METHOD DEVELOPMENT AND VALIDATION FOR SIMULTANEOUS ESTIMATION OF BUDESONIDE AND INDACATEROL MALEATE IN DRY POWDER INHALATION CAPSULES BY DOE APPROACH",
+    "year": 2024,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "ANALYTICAL METHOD DEVELOPMENT AND VALIDATION FOR ESTIMATION OF LOBEGLITAZONE SULFATE AND GLIMEPIRIDE IN SYNTHETIC MIXTURE",
+    "year": 2024,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "ANALYTICAL METHOD DEVELOPMENT AND VALIDATION FOR SIMULTANEOUS ESTIMATION OF DAPAGLIFLOZIN PROPANEDIOL MONOHYDRATE, SITAGLIPTIN PHOSPHATE MONOHYDRATE AND METFORMIN HYDROCHLORIDE",
+    "year": 2024,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF HPTLC METHOD FOR ESTIMATION OF NIRMATRELVIR AND RITONAVIR IN PHARMACEUTICAL DOSAGE FORM BY USING QbD APPROACH",
+    "year": 2024,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "COMPARATIVE STUDY ON SUSPECTED UNEXPECTED SERIOUS ADVERSE REACTION REPORTING IN DIFFERENT COUNTRIES [ U.S., EUROPE, CANADA, INDIA] AND SUGGESTING IMPROVEMENTS IN SUSAR FORMAT",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "TO PREPARE DOSSIER FOR BIOSIMILAR PRODUCT OF NATALIZUMAB INJECTION AS PER USFDA",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "PREPARING APPLICATION FOR COMBINATION OF ATAZANAVIR ANDRITONAVIR TABLET FOR PREQUALIFCATION PROGRAMME OF WHO",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "SURVEY OF USAGE AND POST-MARKETING SURVEILLANCE SYSTEM OF PACEMAKER IN INDIA",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "PREPARATION OF PMA APPLICATION FOR BIOTIN SOFT GELATINE CAPSULES IN CANADA",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "DRAFT PREPARATION OF CE MARKING FOR CRANISEAL DURAL SEALANT AS PER EMA REGULATIONS",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "DRAFT DOSSIER OF NDA FOR KIT OF LEVENORGESTRELAND ETHINYLESTRADIOL TABLET WITH FERROUS BISGLYCINATE TABLET AS PER TGA REGULATION",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "PREPARATION OF DRAFT DOSSIER FOR ANDA OF INCLISIRAN SODIUM INJECTION AS PER USFDA REGULATIONS",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "REPARATION OF DRAFT ANDA FOR REGISTRATION OF OLAPARIB TABLET AS PER CANADA AND INDIA",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "COMPARATIVE STUDY OF DRUG MASTER FILE AS PER USA, CANADA, AUSTRALIA AND FILING DRAFT DMF OF RUCAPARIB CAMSYLATE AS PER USA",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "APPLICATION FOR GMP CERTIFICATION OF LASMIDITAN TABLET IN INDIA AND COMPARATIVE STUDY OF REGULATORY REQUIREMENTS FOR GMP FOR INDIA AND USA",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "TO PREPARE ABRIGED APPLICATION OF LISDEXAMFETAMINE DIMESYLATE IN EUROPE",
+    "year": 2024,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "RP-HPLC Analytical Method Development and Validation For Simultaneous Estimation of Indacaterol Maleate (IND) and Budesonide (BUD) in Dry Powder Inhalation Capsules by DOE Approach",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Analytical Method for Simultaneous Estimation of Teneligliptin Hydrobromide Hydrate, Pioglitazone Hydrochloride and Metformin Hydrochloride in Pharmaceutical Dosage Form",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of High Performance Thin Layer Chromatography Method for Simultaneous Estimation of Catechin, Bergenin and Diosgenin in Varunadi Kvatha Churna",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development And Validation Of Chromatographic Method For Simultaneous Estimation Of Metformin Hydrochloride, Glimepiride And Dapagliflozin Propanediol Monohydrate Using Experimental Design",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability- Indicating HPTLC Method for Estimation of Cubebin in Crude Drug and Marketed Formulations",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Method Development and Validation for Simultaneous Estimation of Lupeol,Diosgenin, Oleanolic acid and Caffeic acid in Ayurvedic Formulation by High Performance Thin Layer Chromatography",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Method development and validation of hptlc method for simultaneous estimation of phytoconstituents in chitrakAdi vati",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPTLC Method for Simultaneous Estimation of Embelin, Gallic acid and Piperine in Vidanga Vati",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPLC method for simultaneous estimation of Embelin, Gallic acid and Scopoletin in Manibhadra Avaleha",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "development and Validation of Stability indicating HPLC Method for Simultaneous Estimation of Efonidipine Hydrochloride Ethanolate, Telmisartan, and Chlorthalidone in a Synthetic Mixture",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability Indicating Novel Analytical Method Development And Validation Of Gabapentin And Nortriptyline Using Hptlc",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of new analytical method for the estimation of Rosuvastatin calcium and Telmisartan in bulk and combined pharmaceutical dosage form",
+    "year": 2024,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "DESIGN, SYNTHESIS AND EVALUATION OF HETEROCYCLIC ANALOGUES AS ANTI-TUBERCULAR AGENTS",
+    "year": 2024,
+    "department": "Pharm. Chemistry",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of anticancer drug loaded biodegredable cervical cap for cervical cancer",
+    "year": 2024,
+    "department": "Industrial Pharmacy",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of hydrogel for the treatment of cellulitis",
+    "year": 2024,
+    "department": "Industrial Pharmacy",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of topical hydrogel loaded HP-β- CD based nanosponges for treatment of atopic dermatitis",
+    "year": 2024,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "formulation and evaluation of sustain release linezolid tablet using natural antibacterial agent – musa paradisiaca peel",
+    "year": 2024,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation And Evaluation Of Tioconazole Non- Propellant Foam For Fungal Infection",
+    "year": 2024,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Evaluation of β-blocker loaded nanocapsules eyedrops for treatment of glaucoma",
+    "year": 2024,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evalution of pH-Sensitive In-situ Hydrogel Using Raloxifene Hydrochloride to Treat Osteoarthritis",
+    "year": 2024,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Nose to Brain Formulation of Sumatriptan Succinate: Development And In-Vivo Assessment",
+    "year": 2024,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Guanfacine Hydrochloride Loaded Intranasal Nanoemulsion Spray For The Treatment of Attention Deficit Hyperactivity Disorder",
+    "year": 2024,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of essential oil blend in experimentally inducedpolycystic ovarian syndrome",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of lawsone as a therapeutic agent for getamicin induced acuterenal injury - A Rat Model study",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "An Experimatal Study to evaluate of ksharagada on cisplatin induced nephrotoxicity in wistar albino rats",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of antihyperglycemia effect of pectolinarigenin in experimentally induced type 2 diabetes mellitus in rats",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of antihyperlipidemic effect of test formulation of 1-octacosanol on high fat diet induced hyperlipidemia in expertimental rats",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluate the different dose of atorvastatin and its combination with bempedoic acid on experimnetally induced hyperlipidemia in rats",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of hepatoprotective activity of corydalis tomentella in experimentally induced hepatotoxicity in rats",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluationof antihemorrhoidal activity of caralluma fimbriata in an experimentally induced hemorrhoidal model in rat",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "The Histologiclaand biochemial study of formononetin's therapeutic potential in the treatment of polycystic ovarian syndrome in letrozole induced rat model",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evalutionof antihyperlipidemic activity of bilastine in experimentally induced hyperlipidemia in rats",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of ulcer protecting potential of polyherbalformulationin experimentally induced pepetic ulcer in rats",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Effect of polyherbal formulation in streptozotocin induced diabetes and elevated level of blood lippid level",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Novel Galabtamine - ferulic hybrids: A multi-target approach to alzheimer's Disease",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of hepatoprotective activity of momordicasubangulata in drugs induced hepatotoxicity",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of annona squamosa and concolculus pluricaulis in experimentally induced hepatotoxicity in animal model",
+    "year": 2024,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "DEVELOPMENT AND VALIDATION OF HIGH PERFORMANCE LIQUID CHROMATOGRAPHY METHOD FOR SIMULTANEOUS ESTIMATION OF PHYTOCONSTITUENTS IN MARKETED FORMULATION",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPTLC method for simultaneous estimation of Phytoconstituents (Gallic acid, Piperine, Plumbagin and Chebulinic acid) in Amlakyadi Churna",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Method development and validation for simultaneous estimation of glycopyrronium bromide,fluticasone furoate and vilanterol trifenate by HPLC by using DOE approach",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPLC method for simultaneous estimation of Phytoconstituents(Zingerone,Ellagic acid, Piperine and Scopoletin) in Panchasama Churna",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Method development and validation for simultaneous estimation of glycopyrronium bromide,fluticasone furoate and vilanterol trifenate by HPTLC by using DOE approach",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of high-performance liquid chromatography (hplc) method for simultaneous estimation of phytoconstituents in marketed formulation",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical method development and validation for simultaneous estimation of glimepiride and linagliptin in a synthetic mixture by HPTLC",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability indicating HPTLC method development and validation of ezetimibe and bempedoic acid in their combined dosage form",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Stability indicating analytical method development and validation of cilnidipine and bisoprolol fumarate using HPTLC",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical Method Development and Validation for Simultaneous Estimation of Dapagliflozin, Sacubitril and Valsartan in Synthetic Mixture",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of an HPTLC method for the simultaneous estimation of Phytoconstitutents (Curcumin, Lupeol, Abietic acid and Diosgenin) in Rajanyadi Churna",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical Method Development and Validation for Simultaneous Estimation of Acebrophylline and Erdosteine in Synthetic Mixture",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of stability indicating method for simultaneous estimation of Voglibose and repaglinidine in tablet dosage form",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and validation of analytical methods for simultaneous estimation of Sitagliptin phosphate monohydrate and dapagliflozin Propanediol monohydrate",
+    "year": 2025,
+    "department": "Pharm. Quality Assurance",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of HPTLC method for the estimation of Glimepiride and Sitagliptin Phosphate Monohydrate in bulk and in synthetic mixture using QbD approach",
+    "year": 2025,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Validation of Stability Indicating HPTLC Method for Simultaneous Estimation of Benidipine Hydrochloride and Chlorthalidone in Pharmaceutical Dosage Form",
+    "year": 2025,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "HPLC Method Development and Validation for Simultaneous Estimation of Glycopyrrolate and Vilanterol Trifenatate using DOE Approach",
+    "year": 2025,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical Method Development and Validation for the Estimation of Azelnidipine and Metoprolol Succinate by HPTLC using QbD Approach in Pharmacecutical Dosage Form",
+    "year": 2025,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "Analytical Method Development and Validation for Simultaneous Estimation of Dapagliflozin, Linagliptin and Metformin Hydrochloride in Pharmaceutical Dosage Form",
+    "year": 2025,
+    "department": "Pharm. Analysis",
+    "status": "approved"
+  },
+  {
+    "title": "COMPARATIVE STUDY OF GMP AUDIT PROCESS FOR INDIA AND USA AND ANALYZING COMPLIANCE WITH REGULATION AND QUALITY CONTROL",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "DRAFT A MEDICAL DEVICE LICENSE APPLICATION FOR TRANSCATHETER EDGE TO EDGE REPAIR AS PER CDSCO",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "PHARMACEUTICAL MARKET ACCESS FOR EMERGING ECONOMIES. CHALLENGES , STRATEGIES AND OPPORTUNITIES",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "DATA ANALYSIS OF RADIOPHARMACEUTICALS APPROVAL PROCESS IN INDIA: REGULATORY PROCEDURE, CHALLENGES AND PATHWAYS",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "THEIMPACT OF ARTIFICIAL INTELLIGENCE (AI) ERRORS ON PATIENT SAFETY: A CASE STUDY ANALYSIS OF MEDICAL DEVIUCE RECALLS",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "DRAFTING A NEW DRUG APPLICATION OF CAPIVARSERTIB TABLET FOR INDIA",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "NAVIGATING REGULATORY FRAMEWORKS FOR DRUG REPURPOSING: CHALLENGES, STRATEGIC INSIGHTS AND NDA DOSSIER PREPARATION FOR REPURPOSED IBRUTINIB TABLET AS PER CDSCO REGULATIONS",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "CHALLENGES AND OPPORTUNITIES IN PAEDIATRIC MEDICAL DEVICE REGULATION: A CASE STUDIES & HARMONIZATION OF POLICY RECOMMENDATION IN USA, JAPAN & INDIA",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "EVALUATING THE EFFECTIVENESS OF RISK BASED MONITORING (RBM) PROCESS FOR THE DRUG WITH BLACK BOX WARNINGS/ SAFETY WARNINGS",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "DESIGN AND IMPLEMENTATION OF STANDARDIZED ECRF USING EDC SYSTEM FOR ENHANCING DATA QUALITY AND COMPLIANCE IN CLINICAL RESEARCH IN INDIA",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "A COMPARISON OF UNITED STATES (USFDA’S) AND BRICS DRUG RECALL PROCEDURES",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "DRAFTING ABBRIVIATED NEW DRUG APPLICATION FOR RIFAXIMIN FOR USA",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "PREPARATION AND E-CTD SUBMISSION OF DRAFT DOSSIER OF BEPOTASTINE EYE DROP AS PER USA AND CANADA",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "DRAFT DOSSIER OF NDA FOR BERDAZIMER AS PER EMA REGULATIONS",
+    "year": 2025,
+    "department": "Regulatory Affairs",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Characterization of Raloxifene Cocrystal for Augemantion of Pharmaceutical Performance",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of topical hydrogel containing voriconazole loaded cubosome",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of topical anti-fungal spray of eberconazole nitrate",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Baricitinib Niosomal gel for treatment of atopic dermatitis",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Optimization of Amphotericin-B liposomal intra-vaginal in-situ gel spray",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of Baricitinib Micelles for treatment of the Sjogren's syndrome",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and evaluation of pharmaceutical foam formulation containing fluoxetine for diabetic foot ulcer",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "In-situ gel forming spray of betamethasone sodium phosphate for the treatment of aphthous ulcer",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Developmental studies of hesperidin nanoformulation for management of radiation induced skin injury",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of posaconazole loaded biodegradable vaginal cap for the treatment of vulvovaginal candidiasis",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and assessment of a nail lacquer containing aegle marmelose and luliconazole",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Investigations in topical delivery of bifonazole",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and characterization of lenvatinib loaded solid lipid nanoparticles for thyroid cancer treatment",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and optimization of gefitinib -loaded topical sprayable gel for breast cancer",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Natural anti-oxidant integrated self assemble system for delivery of chemotherapeutic agent",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "Development and characterization of lyotropic liquid crystals of Doxorubicin as a drug delivery vehicle",
+    "year": 2025,
+    "department": "Pharmaceutics",
+    "status": "approved"
+  },
+  {
+    "title": "NANOEMULSION BASED INTRANASAL DELIVERY OF LURASIDONE FOR NOSE-TO-BRAIN TARGETING FOR SCHIZOPHRENIA",
+    "year": 2025,
+    "department": "Industrial Pharmacy",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Optimization of Transdermal Patch of Methimazole for the Treatment of Hyperthyroidism",
+    "year": 2025,
+    "department": "Industrial Pharmacy",
+    "status": "approved"
+  },
+  {
+    "title": "Design and Development of mixed micelles of an antipsychotic agent for intranasal delivery",
+    "year": 2025,
+    "department": "Industrial Pharmacy",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of letrozole loaded Hexosome incorporated in-situ gel for the treatment of breast cancer",
+    "year": 2025,
+    "department": "Industrial Pharmacy",
+    "status": "approved"
+  },
+  {
+    "title": "FORMULATION AND EVALUATION OF NANOEMULSION FOR ATENOLOL",
+    "year": 2025,
+    "department": "Industrial Pharmacy",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Optimization of Orally Disintegrating Tablet of Clobazam for the Treatment of Epilepsy",
+    "year": 2025,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and evaluation of drug loaded carbon nanotube for topical drug delivery",
+    "year": 2025,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development and Characterization of Inulin-Based Nanofomulation for the delivery of Mesalamine",
+    "year": 2025,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Formulation and Evaluation of a Bilayer Tablet Combining Gallic Acid and Famotidine for Enhanced Management of NSAIDs-Induced Peptic Ulcers",
+    "year": 2025,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Development of leflunomide loaded Chitosan nanoparticles based hydrogel for Psoriatic Arthritis",
+    "year": 2025,
+    "department": "Pharm. Tech.",
+    "status": "approved"
+  },
+  {
+    "title": "Design, Synthesis and Evaluation of heterocycylic analogues as Antimicrobal Agents",
+    "year": 2025,
+    "department": "Pharm. Chemistry",
+    "status": "approved"
+  },
+  {
+    "title": "Design, Synthesis and Biological Evaluation of Quinazoline derivatives as Anti-Cancer agents",
+    "year": 2025,
+    "department": "Pharm. Chemistry",
+    "status": "approved"
+  },
+  {
+    "title": "Design, Synthesis and Biological Evaluation of Oxadiazole Derivatives as Anti-Cancer Agents",
+    "year": 2025,
+    "department": "Pharm. Chemistry",
+    "status": "approved"
+  },
+  {
+    "title": "Design, Synthesis and Biological Evaluation of Newer Oxadiazole Analouges as Potential Anti-Cancer Agent",
+    "year": 2025,
+    "department": "Pharm. Chemistry",
+    "status": "approved"
+  },
+  {
+    "title": "Design, Synthesis and Biological Evaluation of Quinoline Derivatives as Anti-Tubercular Agents",
+    "year": 2025,
+    "department": "Pharm. Chemistry",
+    "status": "approved"
+  },
+  {
+    "title": "Design, Synthesis and Evaluation of Heterocyclic analouges as Anti-Tubercular Agents",
+    "year": 2025,
+    "department": "Pharm. Chemistry",
+    "status": "approved"
+  },
+  {
+    "title": "Pharmacognostic, Phytochemical and Microbial Evaluation of Mandevilla splendens",
+    "year": 2025,
+    "department": "Pharmacognosy",
+    "status": "approved"
+  },
+  {
+    "title": "Effect of Cocculus indicus on experimentally - induced Non- Alcoholic Fatty Liver Disese in Rats",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of Antihyperglycemic Effect of Vericiguat Drug in Experimentally Induced Type 2 Diabetes Mellitus in Rats",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Effet of Astragalus Membranaceus on Experimentally - Induced premature Ovarian Insufficiency in Female Rats",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of Perilla Frutescens seeds on Experimentally induced Oligospermia in Male wistar Rats",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of the effect of Buxus sempervirence on ethanol induce alcoholic fatty liver disease in rats",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Effect of Polyhebal Formulation Against High Fat Diet Induced Metabolic Syndrome",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evaluation of a Herbal Formulation for the Treatment of Ulcerative colitis in the Experimental Animals",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Evalution of Curative effect of Solasodin on Experimental hemorrhoids in Rats",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Effect of Curio rowleyanus on Experimentally - induced Acute Kindney Injury in Rats",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  },
+  {
+    "title": "Assessment of Herbal Formulation for the Treatment of Psoriasis - like Dermatitis in Experimental Rat Model",
+    "year": 2025,
+    "department": "Pharmacology",
+    "status": "approved"
+  }
 ]
