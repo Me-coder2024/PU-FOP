@@ -130,9 +130,18 @@ export async function POST(request: Request) {
 
     const securePassword = generateSecurePassword(email);
 
+    // Helper to ensure Supabase Auth user's password matches securePassword
+    const syncAuthPassword = async (uid: string) => {
+      try {
+        await supabaseAdmin.auth.admin.updateUserById(uid, { password: securePassword });
+      } catch (err) {
+        console.warn(`[Auth Sync] Password update warning for ${uid}:`, err);
+      }
+    };
+
     // ── 2. Fast Path: existing user ──────────────────────────────────────────
     // If the emailHint matched AND it matches the verified token email, return
-    // immediately without any more DB calls.
+    // immediately without any more DB calls, after ensuring auth password sync.
     if (
       profileResult.status === 'fulfilled' &&
       profileResult.value &&
@@ -140,6 +149,7 @@ export async function POST(request: Request) {
       profileResult.value.data &&
       normalizedHint === email
     ) {
+      await syncAuthPassword(profileResult.value.data.id);
       return NextResponse.json({ email, securePassword });
     }
 
@@ -151,6 +161,7 @@ export async function POST(request: Request) {
       .maybeSingle();
 
     if (existingProfile) {
+      await syncAuthPassword(existingProfile.id);
       return NextResponse.json({ email, securePassword });
     }
 
