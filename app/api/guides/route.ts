@@ -19,13 +19,22 @@ export async function GET(req: Request) {
       .eq('role', 'guide')
       .eq('institute_id', instituteId);
 
-    // 2. Fetch existing profiles for guides in this institute
-    const { data: existingProfiles } = await supabaseAdmin
+    const grantEmails = (grants || []).map((g) => g.email.toLowerCase());
+
+    // 2. Fetch existing profiles for guides in this institute (matching granted guide emails OR having role = 'guide')
+    let query = supabaseAdmin
       .from('profiles')
-      .select('id, full_name, email')
-      .eq('role', 'guide')
-      .eq('institute_id', instituteId)
-      .order('full_name');
+      .select('id, full_name, email, role')
+      .eq('institute_id', instituteId);
+
+    if (grantEmails.length > 0) {
+      // Query profiles by role = 'guide' OR email in grantEmails
+      query = query.or(`role.eq.guide,email.in.(${grantEmails.join(',')})`);
+    } else {
+      query = query.eq('role', 'guide');
+    }
+
+    const { data: existingProfiles } = await query.order('full_name');
 
     const profileEmails = new Set(
       (existingProfiles || []).map((p) => p.email.toLowerCase())
@@ -92,8 +101,8 @@ export async function GET(req: Request) {
       const { data: updatedProfiles } = await supabaseAdmin
         .from('profiles')
         .select('id, full_name, email')
-        .eq('role', 'guide')
         .eq('institute_id', instituteId)
+        .or(`role.eq.guide,email.in.(${grantEmails.length > 0 ? grantEmails.join(',') : 'none'})`)
         .order('full_name');
 
       return NextResponse.json({ guides: updatedProfiles || [] });

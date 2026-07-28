@@ -105,7 +105,7 @@ export function useRole() {
         // 1. Fetch user profile and all granted roles in parallel
         const [profileRes, grantsRes] = await Promise.all([
           supabase.from('profiles').select('*').eq('id', user!.id).single(),
-          supabase.from('role_grants').select('role').eq('email', userEmail),
+          supabase.from('role_grants').select('role, institute_id, department_id').eq('email', userEmail),
         ]);
 
         if (cancelled) return;
@@ -121,17 +121,48 @@ export function useRole() {
         const grantedRoles = (grantsRes.data || []).map((g) => g.role as AppRole);
 
         // Deduplicate all available roles
-        const roleSet = new Set<AppRole>([profileRole, ...grantedRoles]);
-        if (userEmail === 'me.coder.in@gmail.com') {
-          roleSet.add('super_admin');
-        }
-        const availableRoles = Array.from(roleSet);
+        let availableRoles: AppRole[];
+        const hasStaffGrants = grantedRoles.some((r) => r !== 'student');
 
-        // Determine active role: prefer stored choice if valid, else profile.role
+        if (hasStaffGrants) {
+          // User has explicit faculty/staff grants (e.g. guide, hod, pg_director, dean)
+          // Filter out 'student' so faculty members are not treated as students
+          const roleSet = new Set<AppRole>(grantedRoles.filter((r) => r !== 'student'));
+          if (userEmail === 'me.coder.in@gmail.com') {
+            roleSet.add('super_admin');
+          }
+          availableRoles = Array.from(roleSet);
+        } else {
+          // No staff grants — use profileRole or grantedRoles
+          const roleSet = new Set<AppRole>([profileRole, ...grantedRoles]);
+          if (userEmail === 'me.coder.in@gmail.com') {
+            roleSet.add('super_admin');
+          }
+          availableRoles = Array.from(roleSet);
+        }
+
+        // Determine active role: prefer stored choice if valid, else first available role
         const storedRole = getStoredActiveRole();
         const activeRole = (storedRole && availableRoles.includes(storedRole))
           ? storedRole
-          : profileRole;
+          : availableRoles[0];
+
+        // If profile.role in DB was 'student' but user has staff grants, sync DB profile.role to activeRole
+        if (profileRole === 'student' && activeRole !== 'student') {
+          const matchedGrant = (grantsRes.data || []).find((g) => g.role === activeRole);
+          const updatePayload: Partial<ProfileRow> = { role: activeRole };
+          if (matchedGrant?.institute_id && !profile.institute_id) {
+            updatePayload.institute_id = matchedGrant.institute_id;
+          }
+          if (matchedGrant?.department_id && !profile.department_id) {
+            updatePayload.department_id = matchedGrant.department_id;
+          }
+
+          supabase.from('profiles').update(updatePayload).eq('id', profile.id).then();
+          profile.role = activeRole;
+          if (updatePayload.institute_id) profile.institute_id = updatePayload.institute_id;
+          if (updatePayload.department_id) profile.department_id = updatePayload.department_id;
+        }
 
         setCachedRole(activeRole, availableRoles, profile);
         setState({
