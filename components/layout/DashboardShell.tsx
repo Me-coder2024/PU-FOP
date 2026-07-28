@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
@@ -78,13 +78,13 @@ const OTHER_NAV: Record<Exclude<AppRole, 'student'>, NavItem[]> = {
   ],
 };
 
-const ROLE_LABELS: Record<AppRole, string> = {
-  student: 'Student',
-  guide: 'Guide',
-  hod: 'HOD',
-  pg_director: 'PG Director',
-  dean: 'Dean',
-  super_admin: 'Super Admin',
+const ROLE_CONFIG: Record<AppRole, { label: string; icon: string; bg: string; text: string }> = {
+  student: { label: 'Student', icon: 'solar:user-bold-duotone', bg: 'bg-emerald-50', text: 'text-emerald-700' },
+  guide: { label: 'Guide', icon: 'solar:user-speak-bold-duotone', bg: 'bg-blue-50', text: 'text-blue-700' },
+  hod: { label: 'HOD', icon: 'solar:shield-user-bold-duotone', bg: 'bg-amber-50', text: 'text-amber-700' },
+  pg_director: { label: 'PG Director', icon: 'solar:test-tube-bold-duotone', bg: 'bg-indigo-50', text: 'text-indigo-700' },
+  dean: { label: 'Dean', icon: 'solar:crown-bold-duotone', bg: 'bg-purple-50', text: 'text-purple-700' },
+  super_admin: { label: 'Super Admin', icon: 'solar:shield-bold-duotone', bg: 'bg-rose-50', text: 'text-rose-700' },
 };
 
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
@@ -115,11 +115,23 @@ function getOverallProgress(status: string | undefined): number {
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const { user, signOut } = useAuth();
-  const { role, profile, loading } = useRole();
+  const { role, availableRoles, profile, loading, switchRole } = useRole();
   const { unreadCount } = useNotifications();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [submissionStatus, setSubmissionStatus] = useState<string | undefined>(undefined);
+  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const roleMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (roleMenuRef.current && !roleMenuRef.current.contains(e.target as Node)) {
+        setRoleMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (role !== 'student' || !profile) return;
@@ -153,6 +165,8 @@ export default function DashboardShell({ children }: { children: React.ReactNode
     await signOut();
     window.location.href = '/login';
   };
+
+  const currentRoleConfig = role ? ROLE_CONFIG[role] : ROLE_CONFIG.student;
 
   return (
     <div className="min-h-screen bg-[#F0F2F8] flex">
@@ -303,6 +317,63 @@ export default function DashboardShell({ children }: { children: React.ReactNode
               )}
             </button>
 
+            {/* Role Switcher Dropdown (when user has multiple assigned roles) */}
+            {availableRoles.length > 1 && (
+              <div ref={roleMenuRef} className="relative">
+                <button
+                  onClick={() => setRoleMenuOpen(!roleMenuOpen)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all active:scale-95 shadow-sm ${currentRoleConfig.bg} ${currentRoleConfig.text} border-slate-200 hover:border-[#4361EE]`}
+                  style={authorFont}
+                  title="Switch Active Dashboard Role"
+                >
+                  <Icon icon={currentRoleConfig.icon} className="w-4 h-4 flex-shrink-0" />
+                  <span>{currentRoleConfig.label}</span>
+                  <Icon icon="solar:alt-arrow-down-bold" className={`w-3 h-3 transition-transform ${roleMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {roleMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest" style={poppinsFont}>
+                        Assigned Roles ({availableRoles.length})
+                      </p>
+                      <p className="text-xs text-slate-600 font-medium" style={authorFont}>
+                        Switch active dashboard context
+                      </p>
+                    </div>
+
+                    <div className="space-y-0.5 px-1.5">
+                      {availableRoles.map((r) => {
+                        const cfg = ROLE_CONFIG[r];
+                        const isSelected = r === role;
+                        return (
+                          <button
+                            key={r}
+                            onClick={() => {
+                              setRoleMenuOpen(false);
+                              if (!isSelected) switchRole(r);
+                            }}
+                            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                              isSelected
+                                ? `${cfg.bg} ${cfg.text}`
+                                : 'text-slate-700 hover:bg-slate-50'
+                            }`}
+                            style={authorFont}
+                          >
+                            <div className="flex items-center gap-2">
+                              <Icon icon={cfg.icon} className={`w-4 h-4 ${isSelected ? cfg.text : 'text-slate-400'}`} />
+                              <span>{cfg.label}</span>
+                            </div>
+                            {isSelected && <Icon icon="solar:check-circle-bold" className="w-4 h-4 text-[#4361EE]" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* User info */}
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#4361EE] flex items-center justify-center text-white text-sm font-bold shadow-md shadow-[#4361EE]/20 flex-shrink-0">
@@ -313,7 +384,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                   {profile?.full_name || 'User'}
                 </p>
                 <p className="text-[10px] text-slate-400 truncate max-w-[120px] lg:max-w-[180px]" style={poppinsFont}>
-                  {role ? ROLE_LABELS[role] : ''}
+                  {role ? ROLE_CONFIG[role]?.label || role : ''}
                 </p>
               </div>
             </div>

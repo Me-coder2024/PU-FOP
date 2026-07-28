@@ -98,6 +98,20 @@ export default function DeanRoleGrantsPage() {
       const dbInstId = instId || null;
       const dbDeptId = deptId || null;
 
+      // Check if this specific email + role grant already exists
+      const { data: existingGrant } = await supabase
+        .from('role_grants')
+        .select('id')
+        .eq('email', trimmedEmail)
+        .eq('role', selectedRole)
+        .maybeSingle();
+
+      if (existingGrant) {
+        showError(`Role "${selectedRole}" is already granted to ${trimmedEmail}.`, 'Warning');
+        setSaving(false);
+        return;
+      }
+
       const { error: grantErr } = await supabase.from('role_grants').insert({
         email: trimmedEmail,
         role: selectedRole,
@@ -170,16 +184,26 @@ export default function DeanRoleGrantsPage() {
         .maybeSingle();
 
       if (existingUser) {
+        // Find remaining grants for this email
+        const { data: remainingGrants } = await supabase
+          .from('role_grants')
+          .select('role, institute_id, department_id')
+          .eq('email', grant.email);
+
+        const nextRole = remainingGrants && remainingGrants.length > 0 ? (remainingGrants[0].role as AppRole) : 'student';
+        const nextInstId = remainingGrants && remainingGrants.length > 0 ? remainingGrants[0].institute_id : null;
+        const nextDeptId = remainingGrants && remainingGrants.length > 0 ? remainingGrants[0].department_id : null;
+
         const { error: profileResetErr } = await supabase
           .from('profiles')
           .update({
-            role: 'student',
-            institute_id: null,
-            department_id: null,
+            role: nextRole,
+            institute_id: nextInstId,
+            department_id: nextDeptId,
           })
           .eq('id', existingUser.id);
 
-        if (profileResetErr) console.error('Error resetting user profile role', profileResetErr);
+        if (profileResetErr) console.error('Error updating profile after role revocation', profileResetErr);
       }
 
       await supabase.from('audit_logs').insert({

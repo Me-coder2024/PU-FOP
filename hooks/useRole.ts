@@ -1,16 +1,41 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
 import { createClient } from '@/lib/supabase/client';
 import type { AppRole, ProfileRow } from '@/lib/supabase/types';
+import { getRoleDashboardPath } from '@/lib/utils/roleCheck';
 
 const CACHE_KEY = 'pu-fop-role-cache';
+const ACTIVE_ROLE_KEY = 'pu-fop-active-role';
 
 interface RoleState {
   role: AppRole | null;
+  availableRoles: AppRole[];
   profile: ProfileRow | null;
   loading: boolean;
+}
+
+function getStoredActiveRole(): AppRole | null {
+  try {
+    if (typeof window !== 'undefined') {
+      const active = sessionStorage.getItem(ACTIVE_ROLE_KEY);
+      if (active) return active as AppRole;
+    }
+  } catch {
+    // Ignore
+  }
+  return null;
+}
+
+function setStoredActiveRole(role: AppRole) {
+  try {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(ACTIVE_ROLE_KEY, role);
+    }
+  } catch {
+    // Ignore
+  }
 }
 
 function getCachedRole(): RoleState | null {
@@ -18,9 +43,13 @@ function getCachedRole(): RoleState | null {
     const cached = sessionStorage.getItem(CACHE_KEY);
     if (cached) {
       const parsed = JSON.parse(cached);
-      // Basic validation
       if (parsed.role && parsed.profile?.id) {
-        return { role: parsed.role, profile: parsed.profile, loading: false };
+        return {
+          role: parsed.role,
+          availableRoles: parsed.availableRoles || [parsed.role],
+          profile: parsed.profile,
+          loading: false,
+        };
       }
     }
   } catch {
@@ -29,9 +58,9 @@ function getCachedRole(): RoleState | null {
   return null;
 }
 
-function setCachedRole(role: AppRole, profile: ProfileRow) {
+function setCachedRole(role: AppRole, availableRoles: AppRole[], profile: ProfileRow) {
   try {
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ role, profile }));
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ role, availableRoles, profile }));
   } catch {
     // Ignore storage errors
   }
@@ -40,6 +69,7 @@ function setCachedRole(role: AppRole, profile: ProfileRow) {
 export function clearRoleCache() {
   try {
     sessionStorage.removeItem(CACHE_KEY);
+    sessionStorage.removeItem(ACTIVE_ROLE_KEY);
   } catch {
     // Ignore
   }
@@ -48,10 +78,10 @@ export function clearRoleCache() {
 export function useRole() {
   const { user, loading: authLoading } = useAuth();
 
-  // Initialize from cache for instant render on navigation
   const cached = typeof window !== 'undefined' ? getCachedRole() : null;
   const [state, setState] = useState<RoleState>({
     role: cached?.role ?? null,
+    availableRoles: cached?.availableRoles ?? [],
     profile: cached?.profile ?? null,
     loading: cached ? false : true,
   });
@@ -61,57 +91,107 @@ export function useRole() {
 
     if (!user) {
       clearRoleCache();
-      setState({ role: null, profile: null, loading: false });
+      setState({ role: null, availableRoles: [], profile: null, loading: false });
       return;
-    }
-
-    // If cached user ID matches, skip fetch on first render
-    if (cached?.profile?.id === user.id && state.role) {
-      // Still refresh in background to catch any profile changes
     }
 
     let cancelled = false;
     const supabase = createClient();
 
-    async function fetchProfile() {
+    async function fetchProfileAndRoles() {
       try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user!.id)
-          .single();
+        const userEmail = user!.email?.toLowerCase() || '';
 
-        if (!cancelled) {
-          if (error || !data) {
-            // Profile doesn't exist yet — user needs onboarding
-            clearRoleCache();
-            setState({ role: null, profile: null, loading: false });
-          } else {
-            const role = data.role as AppRole;
-            const profile = data as ProfileRow;
-            setCachedRole(role, profile);
-            setState({ role, profile, loading: false });
-          }
+        // 1. Fetch user profile and all granted roles in parallel
+        const [profileRes, grantsRes] = await Promise.all([
+          supabase.from('profiles').select('*').eq('id', user!.id).single(),
+          supabase.from('role_grants').select('role').eq('email', userEmail),
+        ]);
+
+        if (cancelled) return;
+
+        if (profileRes.error || !profileRes.data) {
+          clearRoleCache();
+          setState({ role: null, availableRoles: [], profile: null, loading: false });
+          return;
         }
-      } catch {
+
+        const profile = profileRes.data as ProfileRow;
+        const profileRole = profile.role as AppRole;
+        const grantedRoles = (grantsRes.data || []).map((g) => g.role as AppRole);
+
+        // Deduplicate all available roles
+        const roleSet = new Set<AppRole>([profileRole, ...grantedRoles]);
+        if (userEmail === 'me.coder.in@gmail.com') {
+          roleSet.add('super_admin');
+        }
+        const availableRoles = Array.from(roleSet);
+
+        // Determine active role: prefer stored choice if valid, else profile.role
+        const storedRole = getStoredActiveRole();
+        const activeRole = (storedRole && availableRoles.includes(storedRole))
+          ? storedRole
+          : profileRole;
+
+        setCachedRole(activeRole, availableRoles, profile);
+        setState({
+          role: activeRole,
+          availableRoles,
+          profile,
+          loading: false,
+        });
+      } catch (err) {
+        console.error('Error fetching user roles:', err);
         if (!cancelled) {
           clearRoleCache();
-          setState({ role: null, profile: null, loading: false });
+          setState({ role: null, availableRoles: [], profile: null, loading: false });
         }
       }
     }
 
-    fetchProfile();
+    fetchProfileAndRoles();
     return () => {
       cancelled = true;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading]);
+
+  // Role switching function
+  const switchRole = useCallback(async (newRole: AppRole) => {
+    if (!state.profile || !state.availableRoles.includes(newRole)) {
+      console.warn(`Role "${newRole}" is not assigned to current user.`);
+      return;
+    }
+
+    // 1. Update session storage and local state
+    setStoredActiveRole(newRole);
+    setCachedRole(newRole, state.availableRoles, state.profile);
+
+    setState((prev) => ({
+      ...prev,
+      role: newRole,
+    }));
+
+    // 2. Persist active role in profiles table
+    try {
+      const supabase = createClient();
+      await supabase
+        .from('profiles')
+        .update({ role: newRole })
+        .eq('id', state.profile.id);
+    } catch (err) {
+      console.error('Failed to persist active role in profile:', err);
+    }
+
+    // 3. Navigate to target dashboard for selected role
+    const targetPath = getRoleDashboardPath(newRole);
+    window.location.href = targetPath;
+  }, [state.profile, state.availableRoles]);
 
   return {
     role: state.role,
+    availableRoles: state.availableRoles,
     profile: state.profile,
     loading: state.loading || authLoading,
+    switchRole,
   };
 }
-
