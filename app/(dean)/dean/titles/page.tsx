@@ -318,7 +318,7 @@ export default function DeanTitlesPage() {
 
       {/* ===== Full Form Modal ===== */}
       {modalSub && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setModalSub(null)}>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={() => setModalSub(null)}>
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
               <h2 className="text-lg font-black text-slate-900" style={authorFont}>Submission Details</h2>

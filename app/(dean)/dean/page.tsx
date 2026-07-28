@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useRole } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
 import {
@@ -49,6 +50,7 @@ export default function DeanDashboard() {
   const { profile } = useRole();
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState({
     totalStudents: 0,
     totalSubmissions: 0,
@@ -71,6 +73,21 @@ export default function DeanDashboard() {
   const [modalStatusFilter, setModalStatusFilter] = useState('all');
   const [modalPage, setModalPage] = useState(1);
   const modalPerPage = 8;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (modalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [modalOpen]);
 
   useEffect(() => {
     async function fetchStats() {
@@ -372,10 +389,10 @@ export default function DeanDashboard() {
         </div>
       </div>
 
-      {/* ===== POP-IN SECTION / MODAL: All Submission Activity ===== */}
-      {modalOpen && (
+      {/* ===== POP-IN SECTION / MODAL: All Submission Activity (Portalled to document.body for 100% full-screen dark backdrop) ===== */}
+      {modalOpen && mounted && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
           onClick={() => setModalOpen(false)}
         >
           <div
@@ -541,7 +558,8 @@ export default function DeanDashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
