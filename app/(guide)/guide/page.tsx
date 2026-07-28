@@ -41,20 +41,24 @@ export default function GuidePage() {
   const fetchSubmissions = useCallback(async () => {
     if (!profile) return;
     try {
+      // 1. Fetch submissions assigned directly to this guide OR assigned to students linked to this guide
       const { data, error } = await supabase
         .from('submissions')
         .select(`
           *,
-          student:profiles!submissions_student_id_fkey(full_name, email, university_id, department_id)
+          student:profiles!submissions_student_id_fkey(full_name, email, university_id, department_id, guide_id)
         `)
-        .eq('guide_id', profile.id)
-        .in('status', ['submitted', 'revision_requested', 'guide_accepted'])
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       if (data) {
-        setSubmissions(data as SubmissionWithStudent[]);
-        setActiveCount(data.filter((s: SubmissionWithStudent) => s.status === 'submitted').length);
+        // Filter submissions assigned to this guide by profile.id OR student's assigned guide_id
+        const mySubmissions = data.filter(
+          (s: any) => s.guide_id === profile.id || s.student?.guide_id === profile.id
+        ) as SubmissionWithStudent[];
+
+        setSubmissions(mySubmissions);
+        setActiveCount(mySubmissions.filter((s) => s.status === 'submitted').length);
       }
     } catch (err) {
       console.error('Error fetching guide submissions', err);
