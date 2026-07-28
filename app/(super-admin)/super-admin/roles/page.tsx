@@ -227,8 +227,8 @@ export default function RoleGrantsPage() {
     }
   };
 
-  // Filter departments by selected institute
-  const filteredDepts = departments.filter((d) => !instId || d.institute_id === instId);
+  // Filter departments strictly by selected institute
+  const filteredDepts = instId ? departments.filter((d) => d.institute_id === instId) : [];
 
   if (loading) {
     return (

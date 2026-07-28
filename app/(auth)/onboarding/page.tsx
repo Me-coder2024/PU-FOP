@@ -1,15 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { clearRoleCache } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
-import { Loader2, CheckCircle2, Play } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { clearRoleCache } from '@/hooks/useRole';
 
 export default function OnboardingPage() {
   const { user, loading: authLoading } = useAuth();
-  const router = useRouter();
   const supabase = createClient();
 
   const [fullName, setFullName] = useState('');
@@ -19,7 +17,7 @@ export default function OnboardingPage() {
   const [selectedGuide, setSelectedGuide] = useState('');
 
   const [institutes, setInstitutes] = useState<{ id: string; name: string }[]>([]);
-  const [departments, setDepartments] = useState<{ id: string; name: string }[]>([]);
+  const [departments, setDepartments] = useState<{ id: string; name: string; institute_id: string }[]>([]);
   const [guides, setGuides] = useState<{ id: string; full_name: string | null; email: string }[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
@@ -29,10 +27,11 @@ export default function OnboardingPage() {
   // Redirect if not logged in
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login');
+      window.location.href = '/login';
     }
-  }, [authLoading, user, router]);
+  }, [user, authLoading]);
 
+  // Pre-fill name and email prefix on load
   useEffect(() => {
     if (user) {
       if (user.displayName) {
@@ -51,20 +50,30 @@ export default function OnboardingPage() {
       const { data: instData } = await supabase.from('institutes').select('id, name').order('name');
       if (instData) setInstitutes(instData);
 
-      const { data: deptData } = await supabase.from('departments').select('id, name').order('name');
-      if (deptData) setDepartments(deptData);
+      const { data: deptData } = await supabase.from('departments').select('id, name, institute_id').order('name');
+      if (deptData) setDepartments(deptData as { id: string; name: string; institute_id: string }[]);
     }
     loadOptions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Filter departments by selected institute
+  const filteredDepartments = useMemo(() => {
+    if (!selectedInstitute) return [];
+    return departments.filter((d) => d.institute_id === selectedInstitute);
+  }, [departments, selectedInstitute]);
 
   // Load guides filtered by selected institute
   useEffect(() => {
     if (!selectedInstitute) {
       setGuides([]);
       setSelectedGuide('');
+      setSelectedDepartment('');
       return;
     }
+
+    // Reset selected department when institute changes if current selected department doesn't belong to it
+    setSelectedDepartment('');
 
     async function loadGuides() {
       try {
@@ -143,176 +152,166 @@ export default function OnboardingPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center relative">
+      <div className="min-h-screen flex items-center justify-center relative p-4">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/login-bg-pu.png')" }} />
         <div className="absolute inset-0 bg-white/70 backdrop-blur-sm" />
-        <div className="text-center relative z-10">
-          <div className="w-20 h-20 rounded-full bg-green-100 border-2 border-green-200 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/15">
-            <CheckCircle2 className="w-10 h-10 text-green-500" />
-          </div>
-          <h2 className="text-2xl font-black text-slate-900 mb-2">Profile Created!</h2>
-          <p className="text-green-600 text-sm font-medium">Redirecting to your dashboard...</p>
+        <div className="relative z-10 bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl border border-white/20">
+          <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-4 animate-bounce" />
+          <h2 className="text-2xl font-black text-[#1E3A8A]">Profile Configured!</h2>
+          <p className="text-sm text-gray-600 mt-2">Redirecting to your student dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/login-bg-pu.png')" }} />
-      <div className="absolute inset-0 bg-white/70 backdrop-blur-sm" />
+    <div className="min-h-screen flex items-center justify-center relative p-4 bg-gray-50">
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/login-bg-pu.png')" }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#1E3A8A]/90 via-[#1E3A8A]/75 to-blue-900/80 backdrop-blur-sm" />
 
-      <div className="w-full max-w-md relative z-10">
-        <div className="bg-[#4361EE] rounded-2xl p-8 shadow-2xl shadow-blue-900/20">
-          {/* Logo */}
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-8 h-8 rounded-md bg-white/20 flex items-center justify-center">
-              <img src="/images/pu_logo.png" alt="PU" className="w-6 h-6 object-contain" />
-            </div>
-            <span className="text-white font-bold text-sm">PU-FOP</span>
-          </div>
-
-          <h1 className="text-2xl font-bold text-white text-center mb-2">New User Details</h1>
-          <p className="text-white/70 text-sm text-center mb-8">
-            Please fill in the information below to complete the registration.
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Full Name */}
-            <div>
-              <label className="text-sm font-bold text-white mb-2 block">Full Name</label>
-              <input
-                id="profile-name"
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. Johnathan Doe"
-                className="w-full px-4 py-3 bg-white rounded-xl text-gray-800 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
-              />
-            </div>
-
-            {/* University ID */}
-            <div>
-              <label className="text-sm font-bold text-white mb-2 block">Enrollment Number</label>
-              <input
-                id="profile-university-id"
-                type="text"
-                value={universityId}
-                onChange={(e) => setUniversityId(e.target.value)}
-                placeholder="e.g. ENR-2023-0045"
-                className="w-full px-4 py-3 bg-white rounded-xl text-gray-800 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
-              />
-            </div>
-
-            {/* Institute */}
-            <div>
-              <label className="text-sm font-bold text-white mb-2 block">Institute</label>
-              <div className="relative">
-                <select
-                  id="profile-institute"
-                  value={selectedInstitute}
-                  onChange={(e) => setSelectedInstitute(e.target.value)}
-                  className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">Select Institute</option>
-                  {institutes.map((inst) => (
-                    <option key={inst.id} value={inst.id}>{inst.name}</option>
-                  ))}
-                </select>
-                <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Department */}
-            <div>
-              <label className="text-sm font-bold text-white mb-2 block">Department</label>
-              <div className="relative">
-                <select
-                  id="profile-department"
-                  value={selectedDepartment}
-                  onChange={(e) => setSelectedDepartment(e.target.value)}
-                  className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">Select Department</option>
-                  {departments.map((dept) => (
-                    <option key={dept.id} value={dept.id}>{dept.name}</option>
-                  ))}
-                </select>
-                <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Select Guide */}
-            <div>
-              <label className="text-sm font-bold text-white mb-2 block">Select Guide</label>
-              <div className="relative">
-                <select
-                  id="profile-guide"
-                  value={selectedGuide}
-                  onChange={(e) => setSelectedGuide(e.target.value)}
-                  disabled={!selectedInstitute}
-                  className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <option value="">
-                    {!selectedInstitute
-                      ? '← Select Institute first'
-                      : guides.length === 0
-                        ? 'No guides available for this institute'
-                        : 'Select Guide'}
-                  </option>
-                  {guides.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.full_name ? `${g.full_name} (${g.email})` : g.email}
-                    </option>
-                  ))}
-                </select>
-                <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-              {selectedInstitute && guides.length === 0 && (
-                <p className="text-[10px] text-amber-300 mt-1.5 font-medium">
-                  No guides found for this institute. Contact HOD to add guides.
-                </p>
-              )}
-            </div>
-
-            {error && (
-              <div className="p-3 bg-red-500/20 border border-red-400/30 rounded-lg text-white text-xs font-bold flex items-start">
-                <span className="mr-2 mt-0.5">⚠</span>
-                {error}
-              </div>
-            )}
-
-            <button
-              id="profile-submit"
-              type="submit"
-              disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 bg-white text-[#4361EE] font-bold text-sm rounded-xl hover:bg-white/90 transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Creating Profile...
-                </>
-              ) : (
-                <>
-                  <Play className="w-4 h-4 fill-current" />
-                  Submit Details
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="my-6 border-t border-white/20" />
-          <p className="text-center text-sm text-white/60 font-medium">
-            Need help with registration?
+      {/* Main card */}
+      <div className="relative z-10 w-full max-w-lg bg-white/10 border border-white/20 backdrop-blur-md rounded-3xl p-8 shadow-2xl text-white my-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-black tracking-tight">Complete Your Profile</h1>
+          <p className="text-sm text-blue-100 mt-2">
+            Please enter your academic details to access the PU-FOP Thesis Portal.
           </p>
         </div>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/20 border border-red-400/30 rounded-xl text-red-200 text-sm flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Full Name */}
+          <div>
+            <label className="text-sm font-bold text-white mb-2 block">Full Name</label>
+            <input
+              id="profile-fullname"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="e.g. Dr. Rajesh Patel"
+              className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all placeholder:text-gray-400"
+            />
+          </div>
+
+          {/* University ID / Enrollment No */}
+          <div>
+            <label className="text-sm font-bold text-white mb-2 block">
+              University ID / Enrollment No.
+            </label>
+            <input
+              id="profile-university-id"
+              type="text"
+              value={universityId}
+              onChange={(e) => setUniversityId(e.target.value)}
+              placeholder="e.g. 210601230001"
+              className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all placeholder:text-gray-400 font-mono"
+            />
+          </div>
+
+          {/* Select Institute */}
+          <div>
+            <label className="text-sm font-bold text-white mb-2 block">Institute</label>
+            <div className="relative">
+              <select
+                id="profile-institute"
+                value={selectedInstitute}
+                onChange={(e) => setSelectedInstitute(e.target.value)}
+                className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer"
+              >
+                <option value="">Select Institute</option>
+                {institutes.map((inst) => (
+                  <option key={inst.id} value={inst.id}>{inst.name}</option>
+                ))}
+              </select>
+              <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Select Department (Filtered by selected institute) */}
+          <div>
+            <label className="text-sm font-bold text-white mb-2 block">Department</label>
+            <div className="relative">
+              <select
+                id="profile-department"
+                value={selectedDepartment}
+                onChange={(e) => setSelectedDepartment(e.target.value)}
+                disabled={!selectedInstitute}
+                className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <option value="">
+                  {!selectedInstitute
+                    ? '← Select Institute first'
+                    : filteredDepartments.length === 0
+                      ? 'No departments available for this institute'
+                      : 'Select Department'}
+                </option>
+                {filteredDepartments.map((dept) => (
+                  <option key={dept.id} value={dept.id}>{dept.name}</option>
+                ))}
+              </select>
+              <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Select Guide */}
+          <div>
+            <label className="text-sm font-bold text-white mb-2 block">Select Guide</label>
+            <div className="relative">
+              <select
+                id="profile-guide"
+                value={selectedGuide}
+                onChange={(e) => setSelectedGuide(e.target.value)}
+                disabled={!selectedInstitute}
+                className="w-full px-4 py-3 bg-white rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition-all appearance-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <option value="">
+                  {!selectedInstitute
+                    ? '← Select Institute first'
+                    : guides.length === 0
+                      ? 'No guides available for this institute'
+                      : 'Select Guide'}
+                </option>
+                {guides.map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.full_name ? `${g.full_name} (${g.email})` : g.email}
+                  </option>
+                ))}
+              </select>
+              <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full py-3.5 mt-4 bg-white text-[#1E3A8A] font-black rounded-lg text-sm hover:bg-blue-50 transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {submitting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-[#1E3A8A]" />
+                <span>Saving Profile...</span>
+              </>
+            ) : (
+              <span>Save & Continue →</span>
+            )}
+          </button>
+        </form>
       </div>
     </div>
   );
