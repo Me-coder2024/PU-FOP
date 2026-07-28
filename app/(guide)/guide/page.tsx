@@ -41,21 +41,31 @@ export default function GuidePage() {
   const fetchSubmissions = useCallback(async () => {
     if (!profile) return;
     try {
-      // 1. Fetch submissions assigned directly to this guide OR assigned to students linked to this guide
+      // 1. Fetch submissions with guide & student_guide email relations for robust matching
       const { data, error } = await supabase
         .from('submissions')
         .select(`
           *,
-          student:profiles!submissions_student_id_fkey(full_name, email, university_id, department_id, guide_id)
+          guide:profiles!submissions_guide_id_fkey(id, email, full_name),
+          student:profiles!submissions_student_id_fkey(
+            id, full_name, email, university_id, department_id, guide_id,
+            student_guide:profiles!profiles_guide_id_fkey(id, email, full_name)
+          )
         `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       if (data) {
-        // Filter submissions assigned to this guide by profile.id OR student's assigned guide_id
-        const mySubmissions = data.filter(
-          (s: any) => s.guide_id === profile.id || s.student?.guide_id === profile.id
-        ) as SubmissionWithStudent[];
+        const userEmail = profile.email?.toLowerCase();
+
+        // Filter submissions matching guide by profile.id OR by email (deep.pooja35070@paruluniversity.ac.in)
+        const mySubmissions = data.filter((s: any) => {
+          const guideIdMatch = s.guide_id === profile.id || s.student?.guide_id === profile.id;
+          const guideEmailMatch =
+            (userEmail && s.guide?.email?.toLowerCase() === userEmail) ||
+            (userEmail && s.student?.student_guide?.email?.toLowerCase() === userEmail);
+          return guideIdMatch || guideEmailMatch;
+        }) as SubmissionWithStudent[];
 
         setSubmissions(mySubmissions);
         setActiveCount(mySubmissions.filter((s) => s.status === 'submitted').length);
