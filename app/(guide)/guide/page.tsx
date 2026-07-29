@@ -164,6 +164,17 @@ export default function GuidePage() {
         link: '/dashboard',
       });
 
+      // Trigger workflow Resend email notifications
+      fetch('/api/notify-workflow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: `guide_${action}`,
+          submissionId,
+          remarks: remarks[submissionId]?.trim() || rejectionReason[submissionId]?.trim() || '',
+        }),
+      }).catch(console.error);
+
       // Audit log
       await supabase.from('audit_logs').insert({
         user_id: profile!.id,

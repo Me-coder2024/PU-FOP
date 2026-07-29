@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRole } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
 import type { SubmissionRow } from '@/lib/supabase/types';
@@ -12,11 +12,18 @@ const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
 
 interface SubmissionWithDetails extends SubmissionRow {
-  student?: { full_name: string | null; university_id: string | null; department_id: string | null };
-  guide?: { full_name: string | null };
+  student?: {
+    full_name: string | null;
+    email: string | null;
+    university_id: string | null;
+    institute_id: string | null;
+    department_id: string | null;
+  };
+  guide?: { full_name: string | null; email?: string | null };
 }
 
-interface Department { id: string; name: string; }
+interface Institute { id: string; name: string; }
+interface Department { id: string; name: string; institute_id: string; }
 
 export default function DeanTitlesPage() {
   const { profile } = useRole();
@@ -25,10 +32,15 @@ export default function DeanTitlesPage() {
 
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState<SubmissionWithDetails[]>([]);
+  const [institutes, setInstitutes] = useState<Institute[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
+
+  // Filters
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [instFilter, setInstFilter] = useState<string>('all');
   const [deptFilter, setDeptFilter] = useState<string>('all');
+
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Record<string, string>>({});
 
@@ -41,26 +53,34 @@ export default function DeanTitlesPage() {
   const fetchData = useCallback(async () => {
     if (!profile) return;
     try {
+      // 1. Fetch ALL submissions across all statuses
       const { data: subsData, error: subsErr } = await supabase
         .from('submissions')
         .select(`
           *,
-          student:profiles!submissions_student_id_fkey(full_name, university_id, department_id),
-          guide:profiles!submissions_guide_id_fkey(full_name)
+          student:profiles!submissions_student_id_fkey(full_name, email, university_id, institute_id, department_id),
+          guide:profiles!submissions_guide_id_fkey(full_name, email)
         `)
-        .in('status', ['hod_accepted', 'finalized'])
         .order('created_at', { ascending: false });
+
       if (subsErr) throw subsErr;
       if (subsData) setSubmissions(subsData as SubmissionWithDetails[]);
 
-      const { data: deptData, error: deptErr } = await supabase
-        .from('departments')
+      // 2. Fetch Institutes
+      const { data: instData } = await supabase
+        .from('institutes')
         .select('id, name')
         .order('name', { ascending: true });
-      if (deptErr) throw deptErr;
-      if (deptData) setDepartments(deptData);
+      if (instData) setInstitutes(instData);
+
+      // 3. Fetch Departments
+      const { data: deptData } = await supabase
+        .from('departments')
+        .select('id, name, institute_id')
+        .order('name', { ascending: true });
+      if (deptData) setDepartments(deptData as Department[]);
     } catch (err) {
-      console.error('Error fetching title data', err);
+      console.error('Error fetching title browser data:', err);
     } finally {
       setLoading(false);
     }
@@ -69,6 +89,23 @@ export default function DeanTitlesPage() {
   useEffect(() => {
     if (profile) fetchData();
   }, [profile, fetchData]);
+
+  // Filter departments by selected institute
+  const filteredDepartments = useMemo(() => {
+    if (instFilter === 'all') return departments;
+    return departments.filter((d) => d.institute_id === instFilter);
+  }, [departments, instFilter]);
+
+  // Reset department filter when institute filter changes if selected department is not in institute
+  const handleInstituteChange = (instId: string) => {
+    setInstFilter(instId);
+    if (instId !== 'all') {
+      const validDepts = departments.filter((d) => d.institute_id === instId).map((d) => d.id);
+      if (!validDepts.includes(deptFilter)) {
+        setDeptFilter('all');
+      }
+    }
+  };
 
   const handleEditTitle = async (submissionId: string) => {
     if (!editTitle.trim()) return;
@@ -81,8 +118,12 @@ export default function DeanTitlesPage() {
         .eq('id', submissionId);
       if (error) throw error;
       await supabase.from('audit_logs').insert({
-        user_id: profile!.id, action: 'edit_title', table_name: 'submissions',
-        record_id: submissionId, old_data: { title: old?.title }, new_data: { title: editTitle.trim() },
+        user_id: profile!.id,
+        action: 'edit_title',
+        table_name: 'submissions',
+        record_id: submissionId,
+        old_data: { title: old?.title },
+        new_data: { title: editTitle.trim() },
       });
       setEditingId(null);
       success('Title saved successfully!', 'Success');
@@ -130,30 +171,35 @@ export default function DeanTitlesPage() {
         .eq('id', submissionId);
       if (error) throw error;
       await supabase.from('notifications').insert({
-        user_id: sub.student_id, title: 'Revisions Requested by Dean',
+        user_id: sub.student_id,
+        title: 'Revisions Requested by Dean',
         message: `The Dean has requested changes to your title "${sub.title}". Remarks: ${remarks[submissionId]}`,
-        type: 'warning', link: '/dashboard/submit',
+        type: 'warning',
+        link: '/dashboard/submit',
       });
+      fetch('/api/notify-workflow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'dean_revision', submissionId, remarks: remarks[submissionId]?.trim() || '' }),
+      }).catch(console.error);
       setModalSub(null);
       success('Title sent back for revisions.', 'Success');
       await fetchData();
-    } catch (err) { console.error('Error sending back', err); showError('Failed to send back.', 'Error'); }
-    finally { setActionLoading(null); }
+    } catch (err) {
+      console.error('Error sending back', err);
+      showError('Failed to send back.', 'Error');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const handleFinalize = async (submissionId: string) => {
     setActionLoading(submissionId);
     try {
-      const sub = submissions.find(s => s.id === submissionId);
-      if (!sub) return;
-
       const res = await fetch('/api/finalize-submission', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          submissionId,
-          userId: profile?.id,
-        }),
+        body: JSON.stringify({ submissionId, userId: profile?.id }),
       });
 
       if (!res.ok) {
@@ -164,23 +210,29 @@ export default function DeanTitlesPage() {
       setModalSub(null);
       success('Submission finalized successfully!', 'Success');
       await fetchData();
-    } catch (err: any) {
-      console.error('Error finalizing', err);
-      showError(err.message || 'Failed to finalize.', 'Error');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to finalize.';
+      showError(msg, 'Error');
     } finally {
       setActionLoading(null);
     }
   };
 
-  const filtered = submissions.filter((s) => {
-    const matchesSearch = !searchQuery.trim()
-      || s.title.toLowerCase().includes(searchQuery.toLowerCase())
-      || s.student?.full_name?.toLowerCase().includes(searchQuery.toLowerCase())
-      || s.student?.university_id?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || s.status === statusFilter;
-    const matchesDept = deptFilter === 'all' || s.student?.department_id === deptFilter;
-    return matchesSearch && matchesStatus && matchesDept;
-  });
+  const filtered = useMemo(() => {
+    return submissions.filter((s) => {
+      const matchesSearch = !searchQuery.trim()
+        || s.title.toLowerCase().includes(searchQuery.toLowerCase())
+        || s.student?.full_name?.toLowerCase().includes(searchQuery.toLowerCase())
+        || s.student?.email?.toLowerCase().includes(searchQuery.toLowerCase())
+        || s.student?.university_id?.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchesStatus = statusFilter === 'all' || s.status === statusFilter;
+      const matchesInst = instFilter === 'all' || s.student?.institute_id === instFilter;
+      const matchesDept = deptFilter === 'all' || s.student?.department_id === deptFilter;
+
+      return matchesSearch && matchesStatus && matchesInst && matchesDept;
+    });
+  }, [submissions, searchQuery, statusFilter, instFilter, deptFilter]);
 
   if (loading) {
     return (
@@ -193,130 +245,224 @@ export default function DeanTitlesPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight" style={authorFont}>Dean — Title Browser</h1>
-        <p className="text-sm text-slate-500 mt-1" style={authorFont}>Review, finalize, edit, or send back titles for revisions.</p>
+        <h1 className="text-2xl font-black text-slate-900 tracking-tight" style={authorFont}>
+          Title Browser
+        </h1>
+        <p className="text-sm text-slate-500 mt-1" style={authorFont}>
+          Browse, review, filter, and finalize submitted dissertation titles across institutes and departments.
+        </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Stats overview */}
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div className="bg-[#4361EE] rounded-2xl p-5 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-white/70" style={poppinsFont}>Pending Review</p>
-              <p className="text-3xl font-black mt-1" style={authorFont}>{submissions.filter(s => s.status === 'hod_accepted').length}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/70" style={poppinsFont}>Total Submissions</p>
+              <p className="text-3xl font-black mt-1" style={authorFont}>{submissions.length}</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-              <Icon icon="solar:clock-circle-bold-duotone" className="w-5 h-5 text-white/80" />
+              <Icon icon="solar:document-bold-duotone" className="w-5 h-5 text-white/80" />
             </div>
           </div>
         </div>
+
+        <div className="bg-white rounded-2xl p-5 border border-slate-200">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-500" style={poppinsFont}>Pending Dean Review</p>
+          <p className="text-3xl font-black text-amber-600 mt-1" style={authorFont}>
+            {submissions.filter(s => s.status === 'hod_accepted').length}
+          </p>
+        </div>
+
         <div className="bg-white rounded-2xl p-5 border border-slate-200">
           <p className="text-[10px] font-black uppercase tracking-widest text-slate-500" style={poppinsFont}>Finalized</p>
-          <p className="text-3xl font-black text-emerald-600 mt-1" style={authorFont}>{submissions.filter(s => s.status === 'finalized').length}</p>
+          <p className="text-3xl font-black text-emerald-600 mt-1" style={authorFont}>
+            {submissions.filter(s => s.status === 'finalized').length}
+          </p>
         </div>
+
         <div className="bg-white rounded-2xl p-5 border border-slate-200">
           <p className="text-[10px] font-black uppercase tracking-widest text-slate-500" style={poppinsFont}>Edit Granted</p>
-          <p className="text-3xl font-black text-amber-600 mt-1" style={authorFont}>{submissions.filter(s => s.edit_unlocked).length}</p>
+          <p className="text-3xl font-black text-indigo-600 mt-1" style={authorFont}>
+            {submissions.filter(s => s.edit_unlocked).length}
+          </p>
         </div>
       </div>
 
-      {/* Filter */}
-      <div className="flex flex-col md:flex-row gap-3">
+      {/* Filter Bar with Institute and Institute Departments */}
+      <div className="flex flex-col lg:flex-row gap-3">
+        {/* Search */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by title, student, enrollment..."
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by title, student name, enrollment..."
             className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE] transition-all"
-            style={authorFont} />
+            style={authorFont}
+          />
         </div>
-        <div className="flex gap-2">
+
+        {/* Dropdown Filters */}
+        <div className="flex flex-wrap gap-2">
+          {/* Institute Filter */}
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-              className="pl-10 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE]" style={authorFont}>
-              <option value="all">All Statuses</option>
-              <option value="hod_accepted">HOD Accepted</option>
-              <option value="finalized">Finalized</option>
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <select
+              value={instFilter}
+              onChange={(e) => handleInstituteChange(e.target.value)}
+              className="pl-10 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE]"
+              style={authorFont}
+            >
+              <option value="all">All Institutes</option>
+              {institutes.map((inst) => (
+                <option key={inst.id} value={inst.id}>{inst.name}</option>
+              ))}
             </select>
           </div>
+
+          {/* Department Filter (Filtered by selected institute) */}
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <select value={deptFilter} onChange={(e) => setDeptFilter(e.target.value)}
-              className="pl-10 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE]" style={authorFont}>
-              <option value="all">All Departments</option>
-              {departments.map((d) => (<option key={d.id} value={d.id}>{d.name}</option>))}
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <select
+              value={deptFilter}
+              onChange={(e) => setDeptFilter(e.target.value)}
+              className="pl-10 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE]"
+              style={authorFont}
+            >
+              <option value="all">
+                {instFilter === 'all' ? 'All Departments' : 'All Institute Departments'}
+              </option>
+              {filteredDepartments.map((d) => (
+                <option key={d.id} value={d.id}>{d.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Status Filter */}
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="pl-10 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE]"
+              style={authorFont}
+            >
+              <option value="all">All Statuses</option>
+              <option value="submitted">Submitted (Pending Guide)</option>
+              <option value="guide_accepted">Guide Accepted (Pending HOD)</option>
+              <option value="hod_accepted">HOD Accepted (Pending Dean)</option>
+              <option value="finalized">Finalized</option>
+              <option value="revision_requested">Revision Requested</option>
+              <option value="guide_rejected">Guide Rejected</option>
+              <option value="hod_rejected">HOD Rejected</option>
             </select>
           </div>
         </div>
       </div>
 
-      {/* List */}
+      {/* Submissions List */}
       {filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center">
-          <Icon icon="solar:eye-bold-duotone" className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-sm font-bold text-slate-900" style={authorFont}>No titles found</p>
-          <p className="text-xs text-slate-400 mt-1" style={authorFont}>No matching accepted/finalized titles found.</p>
+          <Icon icon="solar:document-bold-duotone" className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+          <p className="text-sm font-bold text-slate-900" style={authorFont}>No submitted titles match your filters</p>
+          <p className="text-xs text-slate-400 mt-1" style={authorFont}>Try adjusting your search query, institute, or department filters.</p>
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map((sub) => {
-            const isEditing = editingId === sub.id;
-            return (
-              <div key={sub.id} className="bg-white rounded-2xl border border-slate-200 p-5 hover:border-[#4361EE]/30 transition-all">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    {isEditing ? (
-                      <div className="flex items-center gap-2">
-                        <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)}
-                          className="flex-1 px-3 py-2 bg-white border border-[#4361EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30"
-                          style={authorFont} autoFocus />
-                        <button onClick={() => handleEditTitle(sub.id)} disabled={saving}
-                          className="p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50">
-                          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Icon icon="solar:diskette-bold" className="w-4 h-4" />}
-                        </button>
-                        <button onClick={() => setEditingId(null)} className="p-2 bg-slate-200 text-slate-600 rounded-lg hover:bg-slate-300">
-                          <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ) : (
-                      <p className="text-sm font-bold text-slate-900" style={authorFont}>{sub.title}</p>
-                    )}
-                    <div className="flex items-center gap-3 mt-1.5 text-[11px] text-slate-500" style={poppinsFont}>
-                      <span>{sub.student?.full_name || 'Student'}</span>
-                      <span>•</span>
-                      <span>{sub.student?.university_id || 'N/A'}</span>
-                      <span>•</span>
-                      <span>Guide: {sub.guide?.full_name || 'N/A'}</span>
-                    </div>
+          {filtered.map((sub) => (
+            <div key={sub.id} className="bg-white rounded-2xl border border-slate-200 p-5 hover:border-slate-300 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                {editingId === sub.id ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      className="flex-1 px-3 py-1.5 border border-slate-300 rounded-lg text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#4361EE]"
+                      style={authorFont}
+                    />
+                    <button
+                      onClick={() => handleEditTitle(sub.id)}
+                      disabled={saving}
+                      className="px-3 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700"
+                      style={authorFont}
+                    >
+                      {saving ? 'Saving...' : 'Save'}
+                    </button>
+                    <button
+                      onClick={() => setEditingId(null)}
+                      className="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg hover:bg-slate-200"
+                      style={authorFont}
+                    >
+                      Cancel
+                    </button>
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {!isEditing && (
-                      <button onClick={() => { setEditingId(sub.id); setEditTitle(sub.title); }}
-                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#4361EE] hover:bg-[#4361EE]/5 transition-all" title="Edit title">
-                        <Icon icon="solar:pen-2-bold-duotone" className="w-4 h-4" />
-                      </button>
-                    )}
-                    <button onClick={() => handleToggleEditUnlock(sub.id, sub.edit_unlocked)}
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${sub.edit_unlocked ? 'text-amber-600 bg-amber-50 hover:bg-amber-100' : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50'}`}
-                      title={sub.edit_unlocked ? 'Revoke edit' : 'Grant edit'}>
-                      <Icon icon={sub.edit_unlocked ? 'solar:lock-unlocked-bold-duotone' : 'solar:lock-bold-duotone'} className="w-4 h-4" />
-                    </button>
-                    <button onClick={() => setModalSub(sub)}
-                      className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#4361EE] hover:bg-[#4361EE]/5 transition-all" title="View full form">
-                      <Icon icon="solar:eye-bold-duotone" className="w-5 h-5" />
-                    </button>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${sub.status === 'finalized' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-blue-50 border-blue-200 text-blue-700'}`} style={poppinsFont}>
-                      {sub.status === 'hod_accepted' ? 'HOD Accepted' : 'Finalized'}
+                ) : (
+                  <h3 className="text-sm font-extrabold text-slate-900 leading-snug" style={authorFont}>
+                    {sub.title}
+                  </h3>
+                )}
+
+                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mt-1.5" style={poppinsFont}>
+                  <span><strong>{sub.student?.full_name || 'Student'}</strong></span>
+                  {sub.student?.university_id && <span>• ID: {sub.student.university_id}</span>}
+                  {sub.guide?.full_name && <span>• Guide: {sub.guide.full_name}</span>}
+                  {sub.created_at && (
+                    <span className="text-slate-400">
+                      • {new Date(sub.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
-                  </div>
+                  )}
                 </div>
               </div>
-            );
-          })}
+
+              {/* Action Buttons & Status Badge */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={() => { setEditingId(sub.id); setEditTitle(sub.title); }}
+                  className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                  title="Edit Title"
+                >
+                  <Icon icon="solar:pen-bold" className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={() => handleToggleEditUnlock(sub.id, sub.edit_unlocked)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    sub.edit_unlocked ? 'text-amber-600 bg-amber-50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
+                  }`}
+                  title={sub.edit_unlocked ? 'Lock Title Edit Access' : 'Unlock Title Edit Access for Student'}
+                >
+                  <Icon icon={sub.edit_unlocked ? 'solar:lock-keyhole-minimalistic-unlocked-bold' : 'solar:lock-keyhole-minimalistic-bold'} className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={() => setModalSub(sub)}
+                  className="p-2 text-[#4361EE] hover:bg-[#4361EE]/10 rounded-lg transition-colors"
+                  title="View Details"
+                >
+                  <Icon icon="solar:eye-bold" className="w-4 h-4" />
+                </button>
+
+                <span className={`px-3 py-1 rounded-full text-[10px] font-bold border ${
+                  sub.status === 'finalized'
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                    : sub.status === 'hod_accepted'
+                    ? 'bg-blue-50 text-blue-700 border-blue-200'
+                    : sub.status === 'submitted'
+                    ? 'bg-amber-50 text-amber-700 border-amber-200'
+                    : 'bg-slate-50 text-slate-700 border-slate-200'
+                }`} style={poppinsFont}>
+                  {sub.status.replace('_', ' ').toUpperCase()}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* ===== Full Form Modal ===== */}
+      {/* Detail Modal */}
       {modalSub && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={() => setModalSub(null)}>
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
@@ -326,91 +472,30 @@ export default function DeanTitlesPage() {
                 <Icon icon="solar:close-circle-bold-duotone" className="w-5 h-5" />
               </button>
             </div>
-            <div className="px-6 py-5 space-y-5">
-              <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest" style={poppinsFont}>Title</p>
-                <p className="text-sm font-bold text-slate-900 mt-1" style={authorFont}>&quot;{modalSub.title}&quot;</p>
+            <div className="px-6 py-5 space-y-4">
+              <div className="bg-slate-50 p-4 rounded-xl">
+                <p className="text-[10px] font-bold text-slate-400 uppercase" style={poppinsFont}>Title</p>
+                <p className="text-base font-bold text-slate-900 mt-1" style={authorFont}>{modalSub.title}</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#F0F2F8] rounded-xl p-3">
-                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Student</p>
-                  <p className="text-xs font-semibold text-slate-800 mt-0.5" style={authorFont}>{modalSub.student?.full_name || 'N/A'}</p>
-                  <p className="text-[10px] text-slate-500" style={poppinsFont}>{modalSub.student?.university_id || 'N/A'}</p>
-                </div>
-                <div className="bg-[#F0F2F8] rounded-xl p-3">
-                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Guide</p>
-                  <p className="text-xs font-semibold text-slate-800 mt-0.5" style={authorFont}>{modalSub.guide?.full_name || 'N/A'}</p>
-                </div>
-              </div>
-              {modalSub.description && (
-                <div className="bg-[#F0F2F8] rounded-xl p-4">
-                  <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Statement of Novelty</p>
-                  <p className="text-xs text-slate-700 mt-1" style={authorFont}>{modalSub.description}</p>
-                </div>
-              )}
-              {(() => {
-                const details = (modalSub.criteria_details as Record<string, unknown>) || {};
-                const fields = [
-                  { key: 'drugName', label: 'Drug Name' }, { key: 'dosageForm', label: 'Dosage Form' },
-                  { key: 'primarySubject', label: 'Primary Subject' }, { key: 'coreDomain', label: 'Core Domain' },
-                  { key: 'methodology', label: 'Methodology' }, { key: 'toolsInstruments', label: 'Tools & Instruments' },
-                  { key: 'workLocation', label: 'Work Location' }, { key: 'excipients', label: 'Excipients' },
-                  { key: 'keywords', label: 'Keywords' }, { key: 'novelty', label: 'Novelty' },
-                ];
-                const vis = fields.filter(f => details[f.key]);
-                if (vis.length === 0) return null;
-                return (
-                  <div className="grid grid-cols-2 gap-3">
-                    {vis.map(f => (
-                      <div key={f.key} className="bg-[#F0F2F8] rounded-xl p-3">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>{f.label}</p>
-                        <p className="text-xs font-semibold text-slate-800 mt-0.5 line-clamp-3" style={authorFont}>{String(details[f.key])}</p>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })()}
-              {modalSub.hod_remarks && (
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl">
-                  <p className="text-[9px] font-bold text-blue-600 uppercase" style={poppinsFont}>HOD Remarks</p>
-                  <p className="text-xs text-blue-800 mt-0.5" style={authorFont}>{modalSub.hod_remarks}</p>
-                </div>
-              )}
+
               {modalSub.status === 'hod_accepted' && (
-                <div className="border-t border-slate-100 pt-5 space-y-4">
-                  <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest" style={poppinsFont}>Dean Actions</h4>
-                  <div>
-                    <label className="text-xs font-bold text-slate-700 block mb-1" style={authorFont}>
-                      Remarks <span className="text-slate-400 font-normal">(required for sending back)</span>
-                    </label>
-                    <textarea value={remarks[modalSub.id] || ''}
-                      onChange={(e) => setRemarks(prev => ({ ...prev, [modalSub.id]: e.target.value }))}
-                      placeholder="Add remarks if sending back for revisions..."
-                      rows={2}
-                      className="w-full px-3 py-2.5 bg-[#F0F2F8] border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE] transition-all resize-none"
-                      style={authorFont} />
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button onClick={() => handleFinalize(modalSub.id)} disabled={actionLoading === modalSub.id}
-                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700 transition-all disabled:opacity-50" style={authorFont}>
-                      {actionLoading === modalSub.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Icon icon="solar:cup-star-bold" className="w-3.5 h-3.5" />}
-                      Finalize Title
-                    </button>
-                    <button onClick={() => handleSendBack(modalSub.id)} disabled={actionLoading === modalSub.id}
-                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-amber-500 text-white text-xs font-bold rounded-xl hover:bg-amber-600 transition-all disabled:opacity-50" style={authorFont}>
-                      {actionLoading === modalSub.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Icon icon="solar:undo-left-bold" className="w-3.5 h-3.5" />}
-                      Send Back for Edits
-                    </button>
-                  </div>
-                </div>
-              )}
-              {modalSub.status === 'finalized' && (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2">
-                  <Icon icon="solar:cup-star-bold-duotone" className="w-4 h-4 text-emerald-600 mt-0.5" />
-                  <div>
-                    <p className="text-xs font-bold text-emerald-800" style={authorFont}>Finalized</p>
-                    <p className="text-[11px] text-emerald-700 mt-0.5" style={authorFont}>This title has been finalized and approved.</p>
-                  </div>
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                  <button
+                    onClick={() => handleSendBack(modalSub.id)}
+                    disabled={actionLoading === modalSub.id}
+                    className="px-4 py-2 bg-amber-500 text-white text-xs font-bold rounded-xl hover:bg-amber-600 transition-all disabled:opacity-50"
+                    style={authorFont}
+                  >
+                    Request Revision
+                  </button>
+                  <button
+                    onClick={() => handleFinalize(modalSub.id)}
+                    disabled={actionLoading === modalSub.id}
+                    className="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700 transition-all disabled:opacity-50"
+                    style={authorFont}
+                  >
+                    {actionLoading === modalSub.id ? 'Finalizing...' : 'Finalize Title'}
+                  </button>
                 </div>
               )}
             </div>

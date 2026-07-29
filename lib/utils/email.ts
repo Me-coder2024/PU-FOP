@@ -1,6 +1,14 @@
+import { Resend } from 'resend';
 import nodemailer from 'nodemailer';
 
-// SMTP transporter — configure via environment variables
+const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_Tz4nAh5M_M5a6ofRC369u4KZP1ATy4A68';
+const resend = new Resend(RESEND_API_KEY);
+
+const FROM_NAME = process.env.SMTP_FROM_NAME || 'PU-FOP System';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+const DEFAULT_PG_DIRECTOR_EMAIL = process.env.PG_DIRECTOR_EMAIL || 'pgdirector.fop@paruluniversity.ac.in';
+
+// SMTP transporter fallback
 function createTransporter() {
   const host = process.env.SMTP_HOST;
   const port = parseInt(process.env.SMTP_PORT || '587', 10);
@@ -8,7 +16,6 @@ function createTransporter() {
   const pass = process.env.SMTP_PASS;
 
   if (!host || !user || !pass) {
-    console.warn('[Email] SMTP not configured. Emails will be logged but not sent.');
     return null;
   }
 
@@ -20,21 +27,8 @@ function createTransporter() {
   });
 }
 
-const FROM_NAME = process.env.SMTP_FROM_NAME || 'PU-FOP System';
-const FROM_EMAIL = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'noreply@paruluniversity.ac.in';
-
-/**
- * Sends a styled HTML notification email.
- * Fails silently — never blocks the main flow.
- */
-export async function sendNotificationEmail(
-  to: string,
-  subject: string,
-  bodyHtml: string,
-) {
-  const transporter = createTransporter();
-
-  const html = `
+function getStyledEmailHtml(subject: string, bodyHtml: string): string {
+  return `
     <!DOCTYPE html>
     <html>
     <head>
@@ -53,7 +47,7 @@ export async function sendNotificationEmail(
                     PU-FOP
                   </h1>
                   <p style="margin:4px 0 0; color:rgba(255,255,255,0.7); font-size:11px; text-transform:uppercase; letter-spacing:2px;">
-                    Faculty of Pharmacy
+                    Faculty of Pharmacy — Parul University
                   </p>
                 </td>
               </tr>
@@ -72,7 +66,7 @@ export async function sendNotificationEmail(
               <tr>
                 <td style="padding:20px 32px; background:#f8fafc; border-top:1px solid #e2e8f0; text-align:center;">
                   <p style="margin:0; color:#94a3b8; font-size:11px;">
-                    This is an automated notification from PU-FOP. Please do not reply to this email.
+                    This is an automated notification from PU-FOP System. Contact: <a href="mailto:${DEFAULT_PG_DIRECTOR_EMAIL}" style="color:#4361EE;">${DEFAULT_PG_DIRECTOR_EMAIL}</a>
                   </p>
                   <p style="margin:6px 0 0; color:#cbd5e1; font-size:10px;">
                     © ${new Date().getFullYear()} Parul University — Faculty of Pharmacy
@@ -86,38 +80,64 @@ export async function sendNotificationEmail(
     </body>
     </html>
   `;
+}
 
-  if (!transporter) {
-    console.log(`[Email] Would send to ${to}: "${subject}"`);
-    console.log(`[Email] Body: ${bodyHtml.substring(0, 200)}...`);
-    return { sent: false, reason: 'SMTP not configured' };
-  }
+/**
+ * Sends a styled HTML notification email via Resend (with SMTP fallback).
+ * All outgoing emails set replyTo: pgdirector.fop@paruluniversity.ac.in
+ */
+export async function sendNotificationEmail(
+  to: string,
+  subject: string,
+  bodyHtml: string,
+  fromAddress?: string
+) {
+  const html = getStyledEmailHtml(subject, bodyHtml);
+  const sender = fromAddress || `${FROM_NAME} <${FROM_EMAIL}>`;
 
+  // 1. Try Resend API
   try {
-    const info = await transporter.sendMail({
-      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+    const data = await resend.emails.send({
+      from: sender,
+      replyTo: DEFAULT_PG_DIRECTOR_EMAIL,
       to,
       subject: `[PU-FOP] ${subject}`,
       html,
     });
-    console.log(`[Email] Sent to ${to}: ${info.messageId}`);
-    return { sent: true, messageId: info.messageId };
-  } catch (err) {
-    console.error(`[Email] Failed to send to ${to}:`, err);
-    return { sent: false, reason: String(err) };
+    console.log(`[Resend Email] Successfully sent to ${to}:`, data);
+    return { sent: true, data };
+  } catch (resendErr) {
+    console.warn(`[Resend Email Warning] Resend failed for ${to}, checking SMTP fallback:`, resendErr);
   }
+
+  // 2. SMTP Fallback if Resend fails or domain needs verification
+  const transporter = createTransporter();
+  if (transporter) {
+    try {
+      const info = await transporter.sendMail({
+        from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+        replyTo: DEFAULT_PG_DIRECTOR_EMAIL,
+        to,
+        subject: `[PU-FOP] ${subject}`,
+        html,
+      });
+      console.log(`[SMTP Email] Sent to ${to}: ${info.messageId}`);
+      return { sent: true, messageId: info.messageId };
+    } catch (smtpErr) {
+      console.error(`[SMTP Email Error] Failed to send to ${to}:`, smtpErr);
+      return { sent: false, reason: String(smtpErr) };
+    }
+  }
+
+  return { sent: false, reason: 'Resend API and SMTP fallback failed' };
 }
 
 /**
- * Sends notification email to all users with a specific role.
- * Useful for notifying all deans or PG directors about a new drug request.
+ * Sends a notification directly to the PG Director (pgdirector.fop@paruluniversity.ac.in).
  */
-export async function sendRoleNotificationEmail(
-  role: string,
+export async function sendPgDirectorNotification(
   subject: string,
-  bodyHtml: string,
+  bodyHtml: string
 ) {
-  // This function is called from API routes that already have the service client.
-  // The caller should pass the emails directly or use the helper below.
-  console.log(`[Email] Role notification queued for role: ${role}, subject: ${subject}`);
+  return sendNotificationEmail(DEFAULT_PG_DIRECTOR_EMAIL, subject, bodyHtml);
 }

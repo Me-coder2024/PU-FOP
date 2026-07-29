@@ -88,6 +88,18 @@ export async function POST(request: Request) {
       });
     }
 
+    // 7. Send Resend workflow emails to Student & Guide
+    try {
+      const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      await fetch(`${origin}/api/notify-workflow`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'dean_finalize', submissionId }),
+      });
+    } catch (e) {
+      console.error('Error triggering notify-workflow on finalize:', e);
+    }
+
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Failed to finalize submission';

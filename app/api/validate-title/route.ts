@@ -86,64 +86,67 @@ function calculateSimilarity(str1: string, str2: string): number {
 function checkDrugInTitle(drugName: string, title: string): { score: number; percentage: number } {
   if (!drugName.trim() || !title.trim()) return { score: 0, percentage: 0 };
   
-  const normalizedDrug = drugName.toLowerCase().trim();
   const normalizedTitle = title.toLowerCase().trim();
+  const items = drugName.split(',').map(d => d.trim().toLowerCase()).filter(Boolean);
   
-  // Direct match
-  if (normalizedTitle.includes(normalizedDrug)) {
-    return { score: 30, percentage: 100 };
+  let bestPercentage = 0;
+  
+  for (const item of items) {
+    if (normalizedTitle.includes(item)) {
+      bestPercentage = Math.max(bestPercentage, 100);
+      continue;
+    }
+    const drugWords = item.split(/\s+/).filter(w => w.length > 2);
+    const titleWords = normalizedTitle.split(/\s+/);
+    
+    let matchCount = 0;
+    drugWords.forEach(dw => {
+      if (titleWords.some(tw => tw.includes(dw) || dw.includes(tw))) {
+        matchCount++;
+      }
+    });
+    const percentage = drugWords.length > 0 ? (matchCount / drugWords.length) * 100 : 0;
+    bestPercentage = Math.max(bestPercentage, percentage);
   }
   
-  // Word-level matching for multi-word drug names
-  const drugWords = normalizedDrug.split(/\s+/).filter(w => w.length > 2);
-  const titleWords = normalizedTitle.split(/\s+/);
-  
-  let matchCount = 0;
-  drugWords.forEach(dw => {
-    if (titleWords.some(tw => tw.includes(dw) || dw.includes(tw))) {
-      matchCount++;
-    }
-  });
-  
-  const percentage = drugWords.length > 0 ? (matchCount / drugWords.length) * 100 : 0;
-  
-  // 90% threshold for scoring
-  if (percentage >= 90) return { score: 30, percentage };
-  if (percentage >= 70) return { score: 22, percentage };
-  if (percentage >= 50) return { score: 15, percentage };
-  if (percentage >= 30) return { score: 8, percentage };
-  return { score: 0, percentage };
+  if (bestPercentage >= 90) return { score: 30, percentage: bestPercentage };
+  if (bestPercentage >= 70) return { score: 22, percentage: bestPercentage };
+  if (bestPercentage >= 50) return { score: 15, percentage: bestPercentage };
+  if (bestPercentage >= 30) return { score: 8, percentage: bestPercentage };
+  return { score: 0, percentage: bestPercentage };
 }
 
 function checkDosageFormInTitle(dosageForm: string, title: string): { score: number; percentage: number } {
   if (!dosageForm.trim() || !title.trim()) return { score: 0, percentage: 0 };
   
-  const normalizedForm = dosageForm.toLowerCase().trim();
   const normalizedTitle = title.toLowerCase().trim();
+  const items = dosageForm.split(',').map(d => d.trim().toLowerCase()).filter(Boolean);
   
-  // Direct match
-  if (normalizedTitle.includes(normalizedForm)) {
-    return { score: 35, percentage: 100 };
+  let bestPercentage = 0;
+  
+  for (const item of items) {
+    if (normalizedTitle.includes(item)) {
+      bestPercentage = Math.max(bestPercentage, 100);
+      continue;
+    }
+    const formWords = item.split(/[\s-]+/).filter(w => w.length > 2);
+    const titleWords = normalizedTitle.split(/[\s-]+/);
+    
+    let matchCount = 0;
+    formWords.forEach(fw => {
+      if (titleWords.some(tw => tw.includes(fw) || fw.includes(tw))) {
+        matchCount++;
+      }
+    });
+    const percentage = formWords.length > 0 ? (matchCount / formWords.length) * 100 : 0;
+    bestPercentage = Math.max(bestPercentage, percentage);
   }
   
-  // Word-level matching
-  const formWords = normalizedForm.split(/[\s-]+/).filter(w => w.length > 2);
-  const titleWords = normalizedTitle.split(/[\s-]+/);
-  
-  let matchCount = 0;
-  formWords.forEach(fw => {
-    if (titleWords.some(tw => tw.includes(fw) || fw.includes(tw))) {
-      matchCount++;
-    }
-  });
-  
-  const percentage = formWords.length > 0 ? (matchCount / formWords.length) * 100 : 0;
-  
-  if (percentage >= 90) return { score: 35, percentage };
-  if (percentage >= 70) return { score: 25, percentage };
-  if (percentage >= 50) return { score: 18, percentage };
-  if (percentage >= 30) return { score: 9, percentage };
-  return { score: 0, percentage };
+  if (bestPercentage >= 90) return { score: 35, percentage: bestPercentage };
+  if (bestPercentage >= 70) return { score: 25, percentage: bestPercentage };
+  if (bestPercentage >= 50) return { score: 18, percentage: bestPercentage };
+  if (bestPercentage >= 30) return { score: 9, percentage: bestPercentage };
+  return { score: 0, percentage: bestPercentage };
 }
 
 export async function POST(request: Request) {

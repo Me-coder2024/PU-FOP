@@ -138,6 +138,17 @@ export default function HodPage() {
         });
       }
 
+      // Trigger workflow Resend email notifications
+      fetch('/api/notify-workflow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: action === 'forward' ? 'hod_accept' : 'hod_revision',
+          submissionId,
+          remarks: hodRemarks[submissionId]?.trim() || '',
+        }),
+      }).catch(console.error);
+
       success(action === 'forward' ? 'Title forwarded to PG Director!' : 'Revisions requested successfully.', 'Success');
       setModalSub(null);
       await fetchSubmissions();

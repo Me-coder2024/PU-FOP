@@ -55,7 +55,7 @@ const OTHER_NAV: Record<Exclude<AppRole, 'student'>, NavItem[]> = {
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
   ],
   pg_director: [
-    { label: 'Title Browser', href: '/pg-director', lucideIcon: Eye },
+    { label: 'Title Browser', href: '/dean/titles', lucideIcon: Eye },
     { label: 'Drug Requests', href: '/pg-director/drug-requests', lucideIcon: Pill },
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
   ],
@@ -70,6 +70,7 @@ const OTHER_NAV: Record<Exclude<AppRole, 'student'>, NavItem[]> = {
   ],
   super_admin: [
     { label: 'Dashboard', href: '/super-admin', iconifyIcon: 'solar:widget-bold-duotone' },
+    { label: 'Title Browser', href: '/dean/titles', lucideIcon: Eye },
     { label: 'Role Grants', href: '/super-admin/roles', lucideIcon: Shield },
     { label: 'Institutes', href: '/super-admin/institutes', lucideIcon: Building2 },
     { label: 'Audit Logs', href: '/super-admin/audit', lucideIcon: BarChart3 },

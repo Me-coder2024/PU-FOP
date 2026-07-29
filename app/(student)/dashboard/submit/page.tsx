@@ -348,8 +348,13 @@ export default function SubmitTitlePage() {
           .eq('id', existingSubmission.id);
 
         if (updateError) throw new Error(updateError.message);
+        fetch('/api/notify-workflow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'student_submit', submissionId: existingSubmission.id }),
+        }).catch(console.error);
       } else {
-        const { error: insertError } = await supabase
+        const { data: insertedData, error: insertError } = await supabase
           .from('submissions')
           .insert({
             student_id: profile.id,
@@ -358,13 +363,23 @@ export default function SubmitTitlePage() {
             description: novelty.trim(),
             criteria_details: criteriaDetails,
             status: 'submitted',
-          });
+          })
+          .select('id')
+          .single();
 
         if (insertError) {
           if (insertError.message.includes('idx_one_active_submission_per_student')) {
             throw new Error('You already have an active submission. You can only submit one title at a time.');
           }
           throw new Error(insertError.message);
+        }
+
+        if (insertedData?.id) {
+          fetch('/api/notify-workflow', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'student_submit', submissionId: insertedData.id }),
+          }).catch(console.error);
         }
       }
 
