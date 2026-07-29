@@ -418,7 +418,7 @@ export default function GuidePage() {
                   <p className="text-xs font-black text-slate-500 uppercase tracking-widest" style={poppinsFont}>Application Details</p>
 
                   {/* Statement of Novelty */}
-                  {cd.novelty && (
+                  {Boolean(cd.novelty) && (
                     <div className="bg-[#F0F2F8] rounded-xl p-4">
                       <div className="flex items-center gap-2 mb-1.5">
                         <Icon icon="solar:lightbulb-bold-duotone" className="w-4 h-4 text-amber-500" />
@@ -430,14 +430,14 @@ export default function GuidePage() {
 
                   {/* Drug & Dosage Info */}
                   <div className="grid grid-cols-2 gap-3">
-                    {cd.drugName && (
+                    {Boolean(cd.drugName) && (
                       <div className="bg-[#F0F2F8] rounded-xl p-3">
                         <div className="flex items-center gap-1.5 mb-1">
                           <Icon icon="solar:pill-bold-duotone" className="w-3.5 h-3.5 text-blue-500" />
                           <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Primary Drug</p>
                         </div>
                         <p className="text-sm font-semibold text-slate-900" style={authorFont}>{cd.drugName as string}</p>
-                        {cd.drugNames && Array.isArray(cd.drugNames) && (cd.drugNames as string[]).length > 1 && (
+                        {Boolean(cd.drugNames && Array.isArray(cd.drugNames) && (cd.drugNames as string[]).length > 1) && (
                           <div className="flex flex-wrap gap-1 mt-1.5">
                             {(cd.drugNames as string[]).slice(1).map((d, i) => (
                               <span key={i} className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[9px] font-bold rounded-full" style={poppinsFont}>{d}</span>
@@ -446,14 +446,14 @@ export default function GuidePage() {
                         )}
                       </div>
                     )}
-                    {cd.dosageForm && (
+                    {Boolean(cd.dosageForm) && (
                       <div className="bg-[#F0F2F8] rounded-xl p-3">
                         <div className="flex items-center gap-1.5 mb-1">
                           <Icon icon="solar:test-tube-bold-duotone" className="w-3.5 h-3.5 text-purple-500" />
                           <p className="text-[9px] font-bold text-slate-400 uppercase" style={poppinsFont}>Primary Dosage Form</p>
                         </div>
                         <p className="text-sm font-semibold text-slate-900" style={authorFont}>{cd.dosageForm as string}</p>
-                        {cd.dosageForms && Array.isArray(cd.dosageForms) && (cd.dosageForms as string[]).length > 1 && (
+                        {Boolean(cd.dosageForms && Array.isArray(cd.dosageForms) && (cd.dosageForms as string[]).length > 1) && (
                           <div className="flex flex-wrap gap-1 mt-1.5">
                             {(cd.dosageForms as string[]).slice(1).map((d, i) => (
                               <span key={i} className="px-2 py-0.5 bg-purple-50 text-purple-600 text-[9px] font-bold rounded-full" style={poppinsFont}>{d}</span>
@@ -466,7 +466,7 @@ export default function GuidePage() {
 
                   {/* Subject & Domain */}
                   <div className="grid grid-cols-2 gap-3">
-                    {cd.primarySubject && (
+                    {Boolean(cd.primarySubject) && (
                       <div className="bg-[#F0F2F8] rounded-xl p-3">
                         <div className="flex items-center gap-1.5 mb-1">
                           <Icon icon="solar:target-bold-duotone" className="w-3.5 h-3.5 text-emerald-500" />
@@ -475,7 +475,7 @@ export default function GuidePage() {
                         <p className="text-sm font-semibold text-slate-800" style={authorFont}>{cd.primarySubject as string}</p>
                       </div>
                     )}
-                    {cd.coreDomain && (
+                    {Boolean(cd.coreDomain) && (
                       <div className="bg-[#F0F2F8] rounded-xl p-3">
                         <div className="flex items-center gap-1.5 mb-1">
                           <Icon icon="solar:book-bold-duotone" className="w-3.5 h-3.5 text-indigo-500" />
@@ -487,7 +487,7 @@ export default function GuidePage() {
                   </div>
 
                   {/* Excipients */}
-                  {cd.excipients && (
+                  {Boolean(cd.excipients) && (
                     <div className="bg-[#F0F2F8] rounded-xl p-3">
                       <div className="flex items-center gap-1.5 mb-1">
                         <Icon icon="solar:atom-bold-duotone" className="w-3.5 h-3.5 text-teal-500" />
@@ -498,7 +498,7 @@ export default function GuidePage() {
                   )}
 
                   {/* Keywords */}
-                  {cd.keywords && (
+                  {Boolean(cd.keywords) && (
                     <div className="bg-[#F0F2F8] rounded-xl p-3">
                       <div className="flex items-center gap-1.5 mb-1.5">
                         <Icon icon="solar:tag-bold-duotone" className="w-3.5 h-3.5 text-orange-500" />
@@ -513,7 +513,7 @@ export default function GuidePage() {
                   )}
 
                   {/* Methodology */}
-                  {cd.methodology && (cd.methodology as string).trim() && (
+                  {Boolean(cd.methodology && (cd.methodology as string).trim()) && (
                     <div className="bg-[#F0F2F8] rounded-xl p-4">
                       <div className="flex items-center gap-1.5 mb-1.5">
                         <Icon icon="solar:clipboard-list-bold-duotone" className="w-3.5 h-3.5 text-sky-500" />
@@ -525,7 +525,7 @@ export default function GuidePage() {
 
                   {/* Tools & Work Location */}
                   <div className="grid grid-cols-2 gap-3">
-                    {cd.toolsInstruments && (
+                    {Boolean(cd.toolsInstruments) && (
                       <div className="bg-[#F0F2F8] rounded-xl p-3">
                         <div className="flex items-center gap-1.5 mb-1">
                           <Icon icon="solar:settings-bold-duotone" className="w-3.5 h-3.5 text-slate-500" />
@@ -534,7 +534,7 @@ export default function GuidePage() {
                         <p className="text-sm text-slate-800" style={authorFont}>{cd.toolsInstruments as string}</p>
                       </div>
                     )}
-                    {cd.workLocation && (
+                    {Boolean(cd.workLocation) && (
                       <div className="bg-[#F0F2F8] rounded-xl p-3">
                         <div className="flex items-center gap-1.5 mb-1">
                           <Icon icon="solar:map-point-bold-duotone" className="w-3.5 h-3.5 text-rose-500" />
