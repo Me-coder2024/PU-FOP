@@ -18,11 +18,6 @@ interface SubmissionWithStudent extends SubmissionRow {
     university_id: string | null;
     department_id: string | null;
     guide_id: string | null;
-    student_guide?: {
-      id: string;
-      email: string;
-      full_name: string | null;
-    };
   };
   guide?: {
     id: string;
@@ -62,15 +57,14 @@ export default function GuidePage() {
       const myProfileIds = new Set((siblingProfiles || []).map((p) => p.id));
       if (profile.id) myProfileIds.add(profile.id);
 
-      // Fetch submissions with guide & student_guide relations
+      // Fetch submissions with guide & student relations
       const { data, error } = await supabase
         .from('submissions')
         .select(`
           *,
           guide:profiles!submissions_guide_id_fkey(id, email, full_name),
           student:profiles!submissions_student_id_fkey(
-            id, full_name, email, university_id, department_id, guide_id,
-            student_guide:profiles!profiles_guide_id_fkey(id, email, full_name)
+            id, full_name, email, university_id, department_id, guide_id
           )
         `)
         .order('created_at', { ascending: false });
@@ -83,8 +77,7 @@ export default function GuidePage() {
             myProfileIds.has(s.guide_id) ||
             (s.student?.guide_id && myProfileIds.has(s.student.guide_id));
           const guideEmailMatch =
-            (userEmail && s.guide?.email?.toLowerCase() === userEmail) ||
-            (userEmail && s.student?.student_guide?.email?.toLowerCase() === userEmail);
+            userEmail && s.guide?.email?.toLowerCase() === userEmail;
           return guideIdMatch || guideEmailMatch;
         }) as unknown as SubmissionWithStudent[];
 
