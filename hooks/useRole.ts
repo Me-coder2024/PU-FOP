@@ -105,7 +105,7 @@ export function useRole() {
         // 1. Fetch user profile and all granted roles in parallel
         const [profileRes, grantsRes] = await Promise.all([
           supabase.from('profiles').select('*').eq('id', user!.id).single(),
-          supabase.from('role_grants').select('role, institute_id, department_id').eq('email', userEmail),
+          supabase.from('role_grants').select('role, institute_id, department_id').ilike('email', userEmail),
         ]);
 
         if (cancelled) return;

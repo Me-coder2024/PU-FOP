@@ -1,7 +1,7 @@
 import { createServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import type { AppRole } from '@/lib/supabase/types';
+import type { AppRole, ProfileRow } from '@/lib/supabase/types';
 
 // ─── Google Public Key Cache (persists across warm Vercel invocations) ────────
 // Firebase ID tokens are RS256 JWTs signed with Google's keys.
@@ -157,10 +157,24 @@ export async function POST(request: Request) {
     const { data: existingProfile } = await supabaseAdmin
       .from('profiles')
       .select('id, email, role')
-      .eq('email', email)
+      .ilike('email', email)
       .maybeSingle();
 
     if (existingProfile) {
+      // Check if user has a staff role grant that needs to be synced to profiles.role
+      const { data: grant } = await supabaseAdmin
+        .from('role_grants')
+        .select('role, institute_id, department_id')
+        .ilike('email', email)
+        .maybeSingle();
+
+      if (grant?.role && existingProfile.role === 'student' && grant.role !== 'student') {
+        const updateObj: Partial<ProfileRow> = { role: grant.role as AppRole };
+        if (grant.institute_id) updateObj.institute_id = grant.institute_id;
+        if (grant.department_id) updateObj.department_id = grant.department_id;
+        await supabaseAdmin.from('profiles').update(updateObj).eq('id', existingProfile.id);
+      }
+
       await syncAuthPassword(existingProfile.id);
       return NextResponse.json({ email, securePassword });
     }
