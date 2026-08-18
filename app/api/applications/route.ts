@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
+import { createLegacyServiceClient } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
   try {
+    const supabase = createLegacyServiceClient();
     const { searchParams } = new URL(req.url);
     const role = searchParams.get('role');
     const userId = searchParams.get('userId');
@@ -36,6 +37,7 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
+    const supabase = createLegacyServiceClient();
     const { topicId, actorRole, newStatus, remarks } = await req.json();
 
     if (!topicId || !actorRole || !newStatus) {

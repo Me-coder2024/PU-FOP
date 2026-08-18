@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
+import { createServiceClient, createLegacyServiceClient } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
   try {
+    const supabase = createLegacyServiceClient();
+    const supabaseTyped = createServiceClient();
     const { action, name, email, role, departmentId, enrollmentNo } = await req.json();
 
     if (action === 'create_user') {
@@ -37,8 +39,7 @@ export async function POST(req: Request) {
     }
 
     if (action === 'clear_students') {
-      const { createServiceClient } = await import('@/lib/supabase/server');
-      const supabaseAdmin = createServiceClient();
+      const supabaseAdmin = supabaseTyped;
 
       // 1. Get all student IDs
       const { data: studentProfiles } = await supabaseAdmin

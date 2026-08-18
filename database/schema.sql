@@ -108,16 +108,17 @@ CREATE TABLE IF NOT EXISTS public.drugs (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 3. Disable RLS (Row Level Security) on all tables for easy client-side operations
-ALTER TABLE public.institutes DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.departments DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.users DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.topics DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.approvals DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.similarities DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.progress DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.repository DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.drugs DISABLE ROW LEVEL SECURITY;
+-- 3. Enable RLS (Row Level Security) on all tables
+-- Policies are defined in migration_fix_legacy_rls.sql and migration_rls_security.sql
+ALTER TABLE public.institutes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.departments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.topics ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.approvals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.similarities ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.repository ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.drugs ENABLE ROW LEVEL SECURITY;
 
 -- Scoring results table
 CREATE TABLE IF NOT EXISTS public.scoring_results (
@@ -134,7 +135,7 @@ CREATE TABLE IF NOT EXISTS public.scoring_results (
     CONSTRAINT unique_topic_scoring UNIQUE (topic_id)
 );
 
-ALTER TABLE public.scoring_results DISABLE ROW LEVEL SECURITY;
+ALTER TABLE public.scoring_results ENABLE ROW LEVEL SECURITY;
 
 -- 4. Create updated_at trigger function
 CREATE OR REPLACE FUNCTION public.handle_updated_at()

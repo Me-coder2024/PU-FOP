@@ -101,88 +101,38 @@ export default function GuidePage() {
   ) => {
     setActionLoading(submissionId);
     try {
-      const submission = submissions.find((s) => s.id === submissionId);
-      if (!submission) return;
-
-      let newStatus: SubmissionStatus;
-      let notifTitle: string;
-      let notifMessage: string;
-      let notifType: 'success' | 'warning' | 'error' | 'info' = 'info';
-
-      if (action === 'accept') {
-        newStatus = 'guide_accepted';
-        notifTitle = 'Title Accepted by Guide';
-        notifMessage = `Your dissertation title "${submission.title}" has been accepted by your guide and forwarded to the HOD for review.`;
-        notifType = 'success';
-      } else if (action === 'reject') {
-        if (!rejectionReason[submissionId]?.trim()) {
-          warning('Please provide a rejection reason.', 'Warning');
-          setActionLoading(null);
-          return;
-        }
-        newStatus = 'guide_rejected';
-        notifTitle = 'Title Rejected by Guide';
-        notifMessage = `Your dissertation title "${submission.title}" has been rejected. Reason: ${rejectionReason[submissionId]}`;
-        notifType = 'error';
-      } else {
-        if (!remarks[submissionId]?.trim()) {
-          warning('Please provide remarks/feedback for revision.', 'Warning');
-          setActionLoading(null);
-          return;
-        }
-        newStatus = 'revision_requested';
-        notifTitle = 'Revision Requested by Guide';
-        notifMessage = `Your guide has requested revisions for your dissertation title "${submission.title}". Feedback: ${remarks[submissionId]}`;
-        notifType = 'warning';
+      if (action === 'reject' && !rejectionReason[submissionId]?.trim()) {
+        warning('Please provide a rejection reason.', 'Warning');
+        setActionLoading(null);
+        return;
+      }
+      if (action === 'revision' && !remarks[submissionId]?.trim()) {
+        warning('Please provide remarks/feedback for revision.', 'Warning');
+        setActionLoading(null);
+        return;
       }
 
-      // Update submission in Supabase
-      const { error: updateError } = await supabase
-        .from('submissions')
-        .update({
-          status: newStatus,
-          guide_remarks: remarks[submissionId]?.trim() || (action === 'reject' ? rejectionReason[submissionId] : null),
-          guide_reviewed_at: new Date().toISOString(),
-        })
-        .eq('id', submissionId);
-
-      if (updateError) throw updateError;
-
-      // Send in-app notification to student
-      await supabase.from('notifications').insert({
-        user_id: submission.student_id,
-        title: notifTitle,
-        message: notifMessage,
-        type: notifType,
-        link: '/dashboard',
-      });
-
-      // Trigger workflow Resend email notifications
-      fetch('/api/notify-workflow', {
+      const res = await fetch('/api/guide/review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: `guide_${action}`,
+          action,
           submissionId,
-          remarks: remarks[submissionId]?.trim() || rejectionReason[submissionId]?.trim() || '',
+          userId: profile!.id,
+          remarks: remarks[submissionId]?.trim() || '',
+          rejectionReason: rejectionReason[submissionId]?.trim() || '',
         }),
-      }).catch(console.error);
-
-      // Audit log
-      await supabase.from('audit_logs').insert({
-        user_id: profile!.id,
-        action: `guide_${action}_submission`,
-        table_name: 'submissions',
-        record_id: submissionId,
-        new_data: { status: newStatus, remarks: remarks[submissionId] },
       });
 
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Action failed');
+
       success(
-        action === 'accept'
+        data.message || (action === 'accept'
           ? 'Title accepted and sent to HOD!'
           : action === 'reject'
           ? 'Submission rejected.'
-          : 'Revision feedback sent to student.',
+          : 'Revision feedback sent to student.'),
         'Success'
       );
 

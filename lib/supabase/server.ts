@@ -50,3 +50,23 @@ export function createServiceClient() {
     }
   );
 }
+
+/**
+ * Creates an untyped Supabase service client for legacy v1 tables
+ * (users, topics, approvals, similarities, progress, repository, scoring_results).
+ * These tables are not in the Database type definition.
+ * Bypasses RLS — use only in server-side code.
+ */
+export function createLegacyServiceClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    }
+  );
+}
+

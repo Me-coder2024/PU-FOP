@@ -95,61 +95,24 @@ export default function DeanRoleGrantsPage() {
 
     setSaving(true);
     try {
-      const dbInstId = instId || null;
-      const dbDeptId = deptId || null;
-
-      // Check if this specific email + role grant already exists
-      const { data: existingGrant } = await supabase
-        .from('role_grants')
-        .select('id')
-        .eq('email', trimmedEmail)
-        .eq('role', selectedRole)
-        .maybeSingle();
-
-      if (existingGrant) {
-        showError(`Role "${selectedRole}" is already granted to ${trimmedEmail}.`, 'Warning');
-        setSaving(false);
-        return;
-      }
-
-      const { error: grantErr } = await supabase.from('role_grants').insert({
-        email: trimmedEmail,
-        role: selectedRole,
-        institute_id: dbInstId,
-        department_id: dbDeptId,
-        can_edit: canEdit,
-        granted_by: profile!.id,
+      const res = await fetch('/api/dean/role-grants', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-id': profile!.id,
+        },
+        body: JSON.stringify({
+          action: 'create',
+          email: trimmedEmail,
+          role: selectedRole,
+          institute_id: instId || null,
+          department_id: deptId || null,
+          can_edit: canEdit,
+        }),
       });
 
-      if (grantErr) throw grantErr;
-
-      // Check if user already exists in profiles
-      const { data: existingUser } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', trimmedEmail)
-        .maybeSingle();
-
-      if (existingUser) {
-        const { error: updateProfileErr } = await supabase
-          .from('profiles')
-          .update({
-            role: selectedRole,
-            institute_id: dbInstId,
-            department_id: dbDeptId,
-          })
-          .eq('id', existingUser.id);
-
-        if (updateProfileErr) console.error('Error updating existing user profile role', updateProfileErr);
-      }
-
-      // Log audit
-      await supabase.from('audit_logs').insert({
-        user_id: profile!.id,
-        action: 'dean_create_role_grant',
-        table_name: 'role_grants',
-        new_data: { email: trimmedEmail, role: selectedRole, institute_id: dbInstId, department_id: dbDeptId },
-      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to create role grant.');
 
       setEmail('');
       setInstId('');
@@ -174,45 +137,21 @@ export default function DeanRoleGrantsPage() {
     const grant = revokeTarget;
     setRevokeTarget(null);
     try {
-      const { error } = await supabase.from('role_grants').delete().eq('id', grant.id);
-      if (error) throw error;
-
-      const { data: existingUser } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', grant.email)
-        .maybeSingle();
-
-      if (existingUser) {
-        // Find remaining grants for this email
-        const { data: remainingGrants } = await supabase
-          .from('role_grants')
-          .select('role, institute_id, department_id')
-          .eq('email', grant.email);
-
-        const nextRole = remainingGrants && remainingGrants.length > 0 ? (remainingGrants[0].role as AppRole) : 'student';
-        const nextInstId = remainingGrants && remainingGrants.length > 0 ? remainingGrants[0].institute_id : null;
-        const nextDeptId = remainingGrants && remainingGrants.length > 0 ? remainingGrants[0].department_id : null;
-
-        const { error: profileResetErr } = await supabase
-          .from('profiles')
-          .update({
-            role: nextRole,
-            institute_id: nextInstId,
-            department_id: nextDeptId,
-          })
-          .eq('id', existingUser.id);
-
-        if (profileResetErr) console.error('Error updating profile after role revocation', profileResetErr);
-      }
-
-      await supabase.from('audit_logs').insert({
-        user_id: profile!.id,
-        action: 'dean_delete_role_grant',
-        table_name: 'role_grants',
-        record_id: grant.id,
-        old_data: grant as any,
+      const res = await fetch('/api/dean/role-grants', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-id': profile!.id,
+        },
+        body: JSON.stringify({
+          action: 'revoke',
+          grantId: grant.id,
+          grantEmail: grant.email,
+        }),
       });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to revoke role grant.');
 
       success('Role access revoked successfully.', 'Success');
       await fetchData();

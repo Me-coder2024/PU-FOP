@@ -111,26 +111,19 @@ export default function DeanTitlesPage() {
     if (!editTitle.trim()) return;
     setSaving(true);
     try {
-      const old = submissions.find((s) => s.id === submissionId);
-      const { error } = await supabase
-        .from('submissions')
-        .update({ title: editTitle.trim() })
-        .eq('id', submissionId);
-      if (error) throw error;
-      await supabase.from('audit_logs').insert({
-        user_id: profile!.id,
-        action: 'edit_title',
-        table_name: 'submissions',
-        record_id: submissionId,
-        old_data: { title: old?.title },
-        new_data: { title: editTitle.trim() },
+      const res = await fetch('/api/dean/titles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'edit_title', submissionId, userId: profile!.id, newTitle: editTitle.trim() }),
       });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to save title.');
       setEditingId(null);
       success('Title saved successfully!', 'Success');
       await fetchData();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error saving title', err);
-      showError('Failed to save title.', 'Error');
+      showError(err.message || 'Failed to save title.', 'Error');
     } finally {
       setSaving(false);
     }
@@ -138,25 +131,18 @@ export default function DeanTitlesPage() {
 
   const handleToggleEditUnlock = async (submissionId: string, currentValue: boolean) => {
     try {
-      const { error } = await supabase.from('submissions').update({ edit_unlocked: !currentValue }).eq('id', submissionId);
-      if (error) throw error;
-      const sub = submissions.find((s) => s.id === submissionId);
-      if (sub) {
-        await supabase.from('notifications').insert({
-          user_id: sub.student_id,
-          title: !currentValue ? 'Edit Access Granted' : 'Edit Access Revoked',
-          message: !currentValue
-            ? `The Dean has unlocked your title "${sub.title}" for editing.`
-            : `Edit access for your title "${sub.title}" has been revoked.`,
-          type: !currentValue ? 'success' : 'warning',
-          link: '/dashboard/submit',
-        });
-      }
-      success(!currentValue ? 'Edit access granted.' : 'Edit access revoked.', 'Access Changed');
+      const res = await fetch('/api/dean/titles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'toggle_edit_unlock', submissionId, userId: profile!.id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update edit access.');
+      success(data.message || 'Edit access updated.', 'Access Changed');
       await fetchData();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error toggling edit unlock', err);
-      showError('Failed to update edit access.', 'Error');
+      showError(err.message || 'Failed to update edit access.', 'Error');
     }
   };
 
@@ -164,30 +150,19 @@ export default function DeanTitlesPage() {
     if (!remarks[submissionId]?.trim()) { warning('Please provide remarks.', 'Warning'); return; }
     setActionLoading(submissionId);
     try {
-      const sub = submissions.find(s => s.id === submissionId);
-      if (!sub) return;
-      const { error } = await supabase.from('submissions')
-        .update({ status: 'revision_requested' as SubmissionRow['status'], edit_unlocked: true })
-        .eq('id', submissionId);
-      if (error) throw error;
-      await supabase.from('notifications').insert({
-        user_id: sub.student_id,
-        title: 'Revisions Requested by Dean',
-        message: `The Dean has requested changes to your title "${sub.title}". Remarks: ${remarks[submissionId]}`,
-        type: 'warning',
-        link: '/dashboard/submit',
-      });
-      fetch('/api/notify-workflow', {
+      const res = await fetch('/api/dean/titles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'dean_revision', submissionId, remarks: remarks[submissionId]?.trim() || '' }),
-      }).catch(console.error);
+        body: JSON.stringify({ action: 'send_back', submissionId, userId: profile!.id, remarks: remarks[submissionId]?.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send back.');
       setModalSub(null);
       success('Title sent back for revisions.', 'Success');
       await fetchData();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error sending back', err);
-      showError('Failed to send back.', 'Error');
+      showError(err.message || 'Failed to send back.', 'Error');
     } finally {
       setActionLoading(null);
     }

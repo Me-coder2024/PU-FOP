@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
+import { createLegacyServiceClient } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
   try {
+    const supabase = createLegacyServiceClient();
     const { studentId, title, department, formData } = await req.json();
 
     if (!studentId || !title || !department) {
