@@ -8,6 +8,12 @@ import type { SubmissionRow } from '@/lib/supabase/types';
 import { Icon } from '@iconify/react';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
+import SubmitTitleForm from '@/components/forms/SubmitTitleForm';
+import {
+  isLegacyFormDepartment,
+  isDynamicFormDepartment,
+  isComingSoonDepartment,
+} from '@/lib/config/scoring-criteria';
 
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
@@ -99,6 +105,19 @@ export default function SubmitTitlePage() {
     dataset: false,
   });
 
+  // Department-based dynamic form state
+  const [departmentName, setDepartmentName] = useState<string | null>(null);
+  const [dynamicFormData, setDynamicFormData] = useState<Record<string, unknown>>({});
+  const isLegacy = isLegacyFormDepartment(departmentName);
+  const isDynamic = isDynamicFormDepartment(departmentName);
+  const isComingSoon = isComingSoonDepartment(departmentName);
+  const isQAPA = !!departmentName && [
+    'QUALITY ASSURANCE',
+    'PHARMACEUTICAL ANALYSIS',
+    'QA',
+    'PA',
+  ].some((d) => departmentName.toUpperCase().includes(d));
+
   // Drug dropdown state
   const [drugs, setDrugs] = useState<Drug[]>([]);
   const [drugSearch, setDrugSearch] = useState('');
@@ -123,6 +142,25 @@ export default function SubmitTitlePage() {
   // Primary drug/dosage for validation (first selected)
   const primaryDrug = selectedDrugs[0] || '';
   const primaryDosageForm = selectedDosageForms[0] || '';
+
+  // Effective values across legacy and dynamic forms
+  const effectiveTitle = (title || (dynamicFormData.title as string) || '').trim();
+  const effectiveNovelty = (
+    novelty ||
+    (dynamicFormData.novelty as string) ||
+    (dynamicFormData.noveltyStatement as string) ||
+    ''
+  ).trim();
+
+  const effectiveDrugName = isLegacy
+    ? primaryDrug
+    : Array.isArray(dynamicFormData.drugName)
+    ? (dynamicFormData.drugName as string[]).join(', ')
+    : (dynamicFormData.drugName as string) || '';
+
+  const effectiveDosageForm = isLegacy
+    ? primaryDosageForm
+    : (dynamicFormData.dosageForm as string) || '';
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -158,6 +196,18 @@ export default function SubmitTitlePage() {
     async function loadData() {
       if (!profile) return;
       try {
+        // Resolve department name from profile.department_id
+        if (profile.department_id) {
+          const { data: deptData } = await supabase
+            .from('departments')
+            .select('name')
+            .eq('id', profile.department_id)
+            .maybeSingle();
+          if (deptData?.name) {
+            setDepartmentName(deptData.name);
+          }
+        }
+
         const { data: winData } = await supabase.rpc('is_submission_open', {
           p_institute_id: profile.institute_id || undefined,
         });
@@ -175,6 +225,11 @@ export default function SubmitTitlePage() {
           setTitle(subData.title);
           const details = (subData.criteria_details as Record<string, unknown>) || {};
           setNovelty((details.novelty as string) || '');
+
+          // If this is a v2 (dynamic form) submission, load into dynamicFormData
+          if (details.schema_version === 2) {
+            setDynamicFormData(details);
+          }
 
           // Backward compat: load old string format or new array format
           if (Array.isArray(details.drugNames) && (details.drugNames as string[]).length > 0) {
@@ -210,9 +265,16 @@ export default function SubmitTitlePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
-  // Run validation (using primary drug + dosage form)
+  // Run validation (using primary drug + dosage form for legacy, or dynamicFormData for QA/PA)
   const runValidation = useCallback(async () => {
-    if (!title.trim() || !primaryDrug.trim() || !primaryDosageForm.trim()) return;
+    const currentTitle = isLegacy ? title.trim() : (effectiveTitle || title.trim());
+    const currentDrug = isLegacy ? primaryDrug.trim() : effectiveDrugName.trim();
+    const currentDosage = isLegacy ? primaryDosageForm.trim() : effectiveDosageForm.trim();
+    const currentNovelty = isLegacy ? novelty.trim() : (effectiveNovelty || novelty.trim());
+
+    if (!currentTitle || currentTitle.length <= 5) return;
+    if (isLegacy && (!currentDrug || !currentDosage)) return;
+    if (isQAPA && !currentDrug) return;
 
     setValidating(true);
     setValidationResult(null);
@@ -223,12 +285,13 @@ export default function SubmitTitlePage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: title.trim(),
-          drugName: primaryDrug.trim(),
-          dosageForm: primaryDosageForm.trim(),
-          keywords: keywords.trim(),
-          excipients: excipients.trim(),
-          novelty: novelty.trim(),
+          title: currentTitle,
+          drugName: currentDrug,
+          dosageForm: currentDosage,
+          keywords: isLegacy ? keywords.trim() : ((dynamicFormData.keywords as string) || ''),
+          excipients: isLegacy ? excipients.trim() : '',
+          novelty: currentNovelty,
+          department: departmentName || undefined,
           excludeSubmissionId: existingSubmission?.id,
         }),
       });
@@ -246,17 +309,45 @@ export default function SubmitTitlePage() {
     } finally {
       setValidating(false);
     }
-  }, [title, primaryDrug, primaryDosageForm, keywords, excipients, novelty, existingSubmission]);
+  }, [
+    isLegacy,
+    isQAPA,
+    title,
+    effectiveTitle,
+    primaryDrug,
+    effectiveDrugName,
+    primaryDosageForm,
+    effectiveDosageForm,
+    keywords,
+    excipients,
+    novelty,
+    effectiveNovelty,
+    dynamicFormData,
+    departmentName,
+    existingSubmission,
+  ]);
 
   // Live Validation with debounce
   useEffect(() => {
-    if (!title.trim() || !primaryDrug.trim() || !primaryDosageForm.trim()) {
+    const currentTitle = isLegacy ? title.trim() : (effectiveTitle || title.trim());
+    const currentDrug = isLegacy ? primaryDrug.trim() : effectiveDrugName.trim();
+    const currentDosage = isLegacy ? primaryDosageForm.trim() : effectiveDosageForm.trim();
+
+    if (!currentTitle || currentTitle.length <= 10) {
       setValidationResult(null);
       setValidationRun(false);
       return;
     }
 
-    if (title.trim().length <= 10) {
+    if (isLegacy && (!currentDrug || !currentDosage)) {
+      setValidationResult(null);
+      setValidationRun(false);
+      return;
+    }
+
+    if (isQAPA && !currentDrug) {
+      setValidationResult(null);
+      setValidationRun(false);
       return;
     }
 
@@ -265,21 +356,46 @@ export default function SubmitTitlePage() {
     }, 1000);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [title, primaryDrug, primaryDosageForm, keywords, excipients, novelty, runValidation]);
+  }, [
+    isLegacy,
+    isQAPA,
+    title,
+    effectiveTitle,
+    primaryDrug,
+    effectiveDrugName,
+    primaryDosageForm,
+    effectiveDosageForm,
+    effectiveNovelty,
+    runValidation,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (!title.trim()) { setError('Dissertation Title is required.'); return; }
-    if (!novelty.trim()) { setError('Statement of Novelty is required.'); return; }
-    if (selectedDrugs.length === 0) { setError('At least one Drug Name is required.'); return; }
-    if (selectedDosageForms.length === 0) { setError('At least one Dosage Form is required.'); return; }
-    if (!primarySubject.trim()) { setError('Primary Subject / Target Active Ingredient is required.'); return; }
-    if (!coreDomain.trim()) { setError('Core Project Domain is required.'); return; }
+    const activeTitle = isLegacy ? title.trim() : (effectiveTitle || title.trim());
+    const activeNovelty = isLegacy ? novelty.trim() : (effectiveNovelty || novelty.trim());
 
-    if (!validationResult?.canSubmit) {
+    if (!activeTitle) { setError('Dissertation Title is required.'); return; }
+    if (!activeNovelty) { setError('Statement of Novelty is required.'); return; }
+
+    // Legacy form validation (Pharmaceutics / Industrial / Techno)
+    if (isLegacy) {
+      if (selectedDrugs.length === 0) { setError('At least one Drug Name is required.'); return; }
+      if (selectedDosageForms.length === 0) { setError('At least one Dosage Form is required.'); return; }
+      if (!primarySubject.trim()) { setError('Primary Subject / Target Active Ingredient is required.'); return; }
+      if (!coreDomain.trim()) { setError('Core Project Domain is required.'); return; }
+    }
+
+    // Legacy departments require the old 3-layer validation to pass
+    if (isLegacy && !validationResult?.canSubmit) {
       setError('Please run validation and ensure all 3 layers pass before submitting.');
+      return;
+    }
+
+    // QA and PA require the 3-layer validation to pass (>= 60% drug similarity in title)
+    if (isQAPA && !validationResult?.canSubmit) {
+      setError('Selected Drug Name must appear in the dissertation title with at least 60% similarity match to allow submission.');
       return;
     }
 
@@ -287,6 +403,7 @@ export default function SubmitTitlePage() {
 
     setSubmitting(true);
 
+    // Duplicate title check
     try {
       const { data: dupTitle } = await supabase
         .from('submissions')
@@ -317,30 +434,48 @@ export default function SubmitTitlePage() {
       console.error('Duplicate submission check error:', dupCheckErr);
     }
 
-    const criteriaDetails = {
-      novelty: novelty.trim(),
-      drugName: primaryDrug.trim(),
-      dosageForm: primaryDosageForm.trim(),
-      drugNames: selectedDrugs,
-      dosageForms: selectedDosageForms,
-      primarySubject: primarySubject.trim(),
-      coreDomain: coreDomain.trim(),
-      methodology: methodology.trim(),
-      toolsInstruments: toolsInstruments.trim(),
-      workLocation: workLocation.trim(),
-      excipients: excipients.trim(),
-      keywords: keywords.trim(),
-      deliverables,
-      validationScores: validationResult.scores,
-    };
+    // Final resolved title and novelty for both legacy and dynamic forms
+    const finalTitle = isLegacy ? title.trim() : (effectiveTitle || title.trim());
+    const finalNovelty = isLegacy ? novelty.trim() : (effectiveNovelty || novelty.trim());
+
+    // Build criteria_details based on form type
+    let criteriaDetails: Record<string, unknown>;
+
+    if (isLegacy) {
+      // Legacy form — old flat structure (no schema_version)
+      criteriaDetails = {
+        novelty: novelty.trim(),
+        drugName: primaryDrug.trim(),
+        dosageForm: primaryDosageForm.trim(),
+        drugNames: selectedDrugs,
+        dosageForms: selectedDosageForms,
+        primarySubject: primarySubject.trim(),
+        coreDomain: coreDomain.trim(),
+        methodology: methodology.trim(),
+        toolsInstruments: toolsInstruments.trim(),
+        workLocation: workLocation.trim(),
+        excipients: excipients.trim(),
+        keywords: keywords.trim(),
+        deliverables,
+        validationScores: validationResult?.scores,
+      };
+    } else {
+      // Dynamic form — v2 structure with department info
+      criteriaDetails = {
+        ...dynamicFormData,
+        schema_version: 2,
+        department: departmentName,
+        novelty: finalNovelty,
+      };
+    }
 
     try {
       if (isEditMode && existingSubmission) {
         const { error: updateError } = await supabase
           .from('submissions')
           .update({
-            title: title.trim(),
-            description: novelty.trim(),
+            title: finalTitle,
+            description: finalNovelty,
             criteria_details: criteriaDetails,
             status: 'submitted',
             edit_unlocked: false,
@@ -359,8 +494,8 @@ export default function SubmitTitlePage() {
           .insert({
             student_id: profile.id,
             guide_id: profile.guide_id || null,
-            title: title.trim(),
-            description: novelty.trim(),
+            title: finalTitle,
+            description: finalNovelty,
             criteria_details: criteriaDetails,
             status: 'submitted',
           })
@@ -405,8 +540,16 @@ export default function SubmitTitlePage() {
     !selectedDosageForms.includes(f)
   );
 
-  const canValidate = title.trim().length > 10 && primaryDrug.trim() && primaryDosageForm.trim();
-  const canSubmit = validationResult?.canSubmit && !submitting && (windowOpen || !!isEditMode);
+  const canValidate = isLegacy
+    ? effectiveTitle.length > 10 && primaryDrug.trim() && primaryDosageForm.trim()
+    : isQAPA
+    ? effectiveTitle.length > 10 && effectiveDrugName.trim()
+    : false;
+
+  const canSubmitLegacy = !!validationResult?.canSubmit && !submitting && (windowOpen || !!isEditMode);
+  const canSubmitQAPA = !!validationResult?.canSubmit && !submitting && (windowOpen || !!isEditMode);
+  const canSubmitOtherDynamic = effectiveTitle.length > 10 && effectiveNovelty.length > 10 && !submitting && (windowOpen || !!isEditMode);
+  const canSubmit = isLegacy ? canSubmitLegacy : isQAPA ? canSubmitQAPA : isDynamic ? canSubmitOtherDynamic : false;
 
   if (loading) {
     return (
@@ -509,201 +652,294 @@ export default function SubmitTitlePage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} id="submit-form" className="space-y-6">
-            <FormField id="title" label="Dissertation Title" required value={title} onChange={setTitle} placeholder="e.g., Formulation and Evaluation of Curcumin Nanoparticles..." />
-
-            <FormTextArea id="novelty" label="Statement of Novelty" required value={novelty} onChange={setNovelty} placeholder="Describe what makes your research novel and how it differs from existing work..." rows={4} />
-
-            {/* ===== Drug Name Multi-Select ===== */}
-            <div ref={drugRef} className="relative">
-              <label className="text-[11px] font-black text-slate-700 uppercase tracking-widest block mb-2" style={authorFont}>
-                Drug Name(s) <span className="text-red-500">*</span>
-                <span className="text-slate-400 font-normal normal-case ml-1">(select one or more)</span>
-              </label>
-
-              {selectedDrugs.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {selectedDrugs.map((drug, idx) => (
-                    <span
-                      key={drug}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
-                        idx === 0
-                          ? 'bg-[#4361EE]/10 text-[#4361EE] border-[#4361EE]/30'
-                          : 'bg-slate-100 text-slate-700 border-slate-200'
-                      }`}
-                    >
-                      <Icon icon="solar:pill-bold-duotone" className="w-3 h-3" />
-                      {drug}
-                      {idx === 0 && <span className="text-[8px] opacity-60 uppercase ml-0.5">Primary</span>}
-                      <button
-                        type="button"
-                        onClick={() => setSelectedDrugs(prev => prev.filter(d => d !== drug))}
-                        className="ml-0.5 hover:text-red-500 transition-colors"
-                      >
-                        <Icon icon="solar:close-circle-bold" className="w-3.5 h-3.5" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <div className="relative">
-                <Icon icon="solar:pill-bold-duotone" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4361EE]" />
-                <input
-                  type="text"
-                  value={drugSearch}
-                  onChange={(e) => {
-                    setDrugSearch(e.target.value);
-                    setShowDrugDropdown(true);
-                  }}
-                  onFocus={() => setShowDrugDropdown(true)}
-                  placeholder={selectedDrugs.length > 0 ? "Add another drug..." : "Search drugs..."}
-                  className="w-full pl-10 pr-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/20 focus:border-[#4361EE] transition-all"
-                  style={authorFont}
-                />
-                {selectedDrugs.length > 0 && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{selectedDrugs.length} selected</span>
-                  </div>
+            {/* ===== Department Badge ===== */}
+            {departmentName && (
+              <div className="flex items-center gap-2 mb-2">
+                <Icon icon="solar:buildings-bold-duotone" className="w-4 h-4 text-[#4361EE]" />
+                <span className="text-[10px] font-bold text-[#4361EE] bg-[#4361EE]/10 px-3 py-1 rounded-full uppercase tracking-wider" style={poppinsFont}>
+                  {departmentName}
+                </span>
+                {isLegacy && (
+                  <span className="text-[9px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full" style={poppinsFont}>Standard Form</span>
+                )}
+                {isDynamic && (
+                  <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full" style={poppinsFont}>Dynamic Form</span>
+                )}
+                {isComingSoon && (
+                  <span className="text-[9px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full" style={poppinsFont}>Coming Soon</span>
                 )}
               </div>
-              {showDrugDropdown && filteredDrugs.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto">
-                  {filteredDrugs.map((drug) => (
-                    <button
-                      key={drug.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedDrugs(prev => [...prev, drug.name]);
-                        setDrugSearch('');
-                        setShowDrugDropdown(false);
-                      }}
-                      className="w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900" style={authorFont}>{drug.name}</p>
-                        <p className="text-[10px] text-slate-500" style={authorFont}>{drug.category} • {drug.therapeutic}</p>
-                      </div>
-                    </button>
-                  ))}
+            )}
+
+            {isComingSoon ? (
+              /* ===== Category C: COMING SOON ===== */
+              <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm my-4">
+                <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto text-[#4361EE] border border-blue-100">
+                  <Icon icon="solar:clock-circle-bold-duotone" className="w-8 h-8" />
                 </div>
-              )}
-            </div>
-
-            {/* ===== Dosage Form Multi-Select ===== */}
-            <div ref={dosageRef} className="relative">
-              <label className="text-[11px] font-black text-slate-700 uppercase tracking-widest block mb-2" style={authorFont}>
-                Dosage Form(s) <span className="text-red-500">*</span>
-                <span className="text-slate-400 font-normal normal-case ml-1">(select one or more)</span>
-              </label>
-
-              {selectedDosageForms.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {selectedDosageForms.map((form, idx) => (
-                    <span
-                      key={form}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
-                        idx === 0
-                          ? 'bg-[#4361EE]/10 text-[#4361EE] border-[#4361EE]/30'
-                          : 'bg-slate-100 text-slate-700 border-slate-200'
-                      }`}
-                    >
-                      <Icon icon="solar:medical-kit-bold-duotone" className="w-3 h-3" />
-                      {form}
-                      {idx === 0 && <span className="text-[8px] opacity-60 uppercase ml-0.5">Primary</span>}
-                      <button
-                        type="button"
-                        onClick={() => setSelectedDosageForms(prev => prev.filter(f => f !== form))}
-                        className="ml-0.5 hover:text-red-500 transition-colors"
-                      >
-                        <Icon icon="solar:close-circle-bold" className="w-3.5 h-3.5" />
-                      </button>
-                    </span>
-                  ))}
+                <div className="max-w-md mx-auto space-y-2">
+                  <h2 className="text-xl font-black text-slate-900" style={authorFont}>
+                    Coming Soon in Your Department
+                  </h2>
+                  <p className="text-sm text-slate-500 leading-relaxed" style={authorFont}>
+                    The dissertation submission portal for <strong>{departmentName || 'your department'}</strong> is currently being configured with department-specific guidelines. Please check back soon or consult your guide.
+                  </p>
                 </div>
-              )}
-
-              <div className="relative">
-                <Icon icon="solar:medical-kit-bold-duotone" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4361EE]" />
-                <input
-                  type="text"
-                  value={dosageSearch}
-                  onChange={(e) => {
-                    setDosageSearch(e.target.value);
-                    setShowDosageDropdown(true);
-                  }}
-                  onFocus={() => setShowDosageDropdown(true)}
-                  placeholder={selectedDosageForms.length > 0 ? "Add another dosage form..." : "Search dosage forms..."}
-                  className="w-full pl-10 pr-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/20 focus:border-[#4361EE] transition-all"
-                  style={authorFont}
-                />
-                {selectedDosageForms.length > 0 && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{selectedDosageForms.length} selected</span>
-                  </div>
-                )}
-              </div>
-              {showDosageDropdown && filteredDosageForms.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-48 overflow-y-auto">
-                  {filteredDosageForms.map((form) => (
-                    <button
-                      key={form}
-                      type="button"
-                      onClick={() => {
-                        setSelectedDosageForms(prev => [...prev, form]);
-                        setDosageSearch('');
-                        setShowDosageDropdown(false);
-                      }}
-                      className="w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors text-sm font-semibold text-slate-900"
-                      style={authorFont}
-                    >
-                      {form}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <FormField id="primarySubject" label="Primary Subject / Target Active Ingredient" required value={primarySubject} onChange={setPrimarySubject} placeholder="e.g., Curcumin, Ibuprofen, Metformin..." />
-
-            <FormField id="coreDomain" label="Core Project Domain" required value={coreDomain} onChange={setCoreDomain} placeholder="e.g., Nanotechnology, Drug Delivery, Formulation Development..." />
-
-            <FormField id="excipients" label="Excipients" value={excipients} onChange={setExcipients} placeholder="e.g., HPMC, PVA, Eudragit, Chitosan..." />
-
-            <FormField id="keywords" label="Keywords" value={keywords} onChange={setKeywords} placeholder="e.g., nanoparticles, sustained release, bioavailability..." />
-
-            <FormField id="toolsInstruments" label="Required Tools & Instruments" required value={toolsInstruments} onChange={setToolsInstruments} placeholder="e.g., FTIR, DSC, XRD, SEM, UV Spectrophotometer..." />
-
-            <FormField id="workLocation" label="Primary Work Location" required value={workLocation} onChange={setWorkLocation} placeholder="e.g., Pharmaceutics Lab, Central Instrumentation Lab..." />
-
-            <FormTextArea id="methodology" label="Methodology Details & Protocol" value={methodology} onChange={setMethodology} placeholder="Describe your research methodology..." rows={3} />
-
-            {/* Expected Deliverables */}
-            <div>
-              <label className="text-[11px] font-black text-slate-700 uppercase tracking-widest block mb-3" style={authorFont}>
-                Expected Deliverables
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { key: 'publication', label: 'Publication' },
-                  { key: 'patent', label: 'Patent' },
-                  { key: 'prototype', label: 'Prototype' },
-                  { key: 'dataset', label: 'Dataset' },
-                ].map((item) => (
-                  <label
-                    key={item.key}
-                    className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-[#4361EE]/30 transition-all"
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => router.push('/dashboard')}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4361EE] text-white text-xs font-bold rounded-xl hover:bg-[#4361EE]/90 transition-all shadow-sm"
+                    style={authorFont}
                   >
-                    <input
-                      type="checkbox"
-                      checked={deliverables[item.key as keyof typeof deliverables]}
-                      onChange={(e) => setDeliverables(prev => ({ ...prev, [item.key]: e.target.checked }))}
-                      className="w-4 h-4 text-[#4361EE] border-slate-300 rounded focus:ring-[#4361EE]/20"
-                    />
-                    <span className="text-sm font-semibold text-slate-700" style={authorFont}>{item.label}</span>
-                  </label>
-                ))}
+                    <Icon icon="solar:arrow-left-linear" className="w-4 h-4" />
+                    Back to Dashboard
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : isLegacy ? (
+              /* ===== LEGACY FORM — Old flat form for Pharmaceutics / Industrial / Techno ===== */
+              <>
+                <FormField id="title" label="Dissertation Title" required value={title} onChange={setTitle} placeholder="e.g., Formulation and Evaluation of Curcumin Nanoparticles..." />
+
+                <FormTextArea id="novelty" label="Statement of Novelty" required value={novelty} onChange={setNovelty} placeholder="Describe what makes your research novel and how it differs from existing work..." rows={4} />
+
+                {/* ===== Drug Name Multi-Select ===== */}
+                <div ref={drugRef} className="relative">
+                  <label className="text-[11px] font-black text-slate-700 uppercase tracking-widest block mb-2" style={authorFont}>
+                    Drug Name(s) <span className="text-red-500">*</span>
+                    <span className="text-slate-400 font-normal normal-case ml-1">(select one or more)</span>
+                  </label>
+
+                  {selectedDrugs.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {selectedDrugs.map((drug, idx) => (
+                        <span
+                          key={drug}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+                            idx === 0
+                              ? 'bg-[#4361EE]/10 text-[#4361EE] border-[#4361EE]/30'
+                              : 'bg-slate-100 text-slate-700 border-slate-200'
+                          }`}
+                        >
+                          <Icon icon="solar:pill-bold-duotone" className="w-3 h-3" />
+                          {drug}
+                          {idx === 0 && <span className="text-[8px] opacity-60 uppercase ml-0.5">Primary</span>}
+                          <button
+                            type="button"
+                            onClick={() => setSelectedDrugs(prev => prev.filter(d => d !== drug))}
+                            className="ml-0.5 hover:text-red-500 transition-colors"
+                          >
+                            <Icon icon="solar:close-circle-bold" className="w-3.5 h-3.5" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="relative">
+                    <Icon icon="solar:pill-bold-duotone" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4361EE]" />
+                    <input
+                      type="text"
+                      value={drugSearch}
+                      onChange={(e) => {
+                        setDrugSearch(e.target.value);
+                        setShowDrugDropdown(true);
+                      }}
+                      onFocus={() => setShowDrugDropdown(true)}
+                      placeholder={selectedDrugs.length > 0 ? "Add another drug..." : "Search drugs..."}
+                      className="w-full pl-10 pr-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/20 focus:border-[#4361EE] transition-all"
+                      style={authorFont}
+                    />
+                    {selectedDrugs.length > 0 && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{selectedDrugs.length} selected</span>
+                      </div>
+                    )}
+                  </div>
+                  {showDrugDropdown && filteredDrugs.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto">
+                      {filteredDrugs.map((drug, index) => (
+                        <button
+                          key={`${drug.id || drug.name}-${index}`}
+                          type="button"
+                          onClick={() => {
+                            setSelectedDrugs(prev => [...prev, drug.name]);
+                            setDrugSearch('');
+                            setShowDrugDropdown(false);
+                          }}
+                          className="w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors flex items-center justify-between"
+                        >
+                          <div>
+                            <p className="text-sm font-semibold text-slate-900" style={authorFont}>{drug.name}</p>
+                            <p className="text-[10px] text-slate-500" style={authorFont}>{drug.category} • {drug.therapeutic}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* ===== Dosage Form Multi-Select ===== */}
+                <div ref={dosageRef} className="relative">
+                  <label className="text-[11px] font-black text-slate-700 uppercase tracking-widest block mb-2" style={authorFont}>
+                    Dosage Form(s) <span className="text-red-500">*</span>
+                    <span className="text-slate-400 font-normal normal-case ml-1">(select one or more)</span>
+                  </label>
+
+                  {selectedDosageForms.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {selectedDosageForms.map((form, idx) => (
+                        <span
+                          key={form}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+                            idx === 0
+                              ? 'bg-[#4361EE]/10 text-[#4361EE] border-[#4361EE]/30'
+                              : 'bg-slate-100 text-slate-700 border-slate-200'
+                          }`}
+                        >
+                          <Icon icon="solar:medical-kit-bold-duotone" className="w-3 h-3" />
+                          {form}
+                          {idx === 0 && <span className="text-[8px] opacity-60 uppercase ml-0.5">Primary</span>}
+                          <button
+                            type="button"
+                            onClick={() => setSelectedDosageForms(prev => prev.filter(f => f !== form))}
+                            className="ml-0.5 hover:text-red-500 transition-colors"
+                          >
+                            <Icon icon="solar:close-circle-bold" className="w-3.5 h-3.5" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="relative">
+                    <Icon icon="solar:medical-kit-bold-duotone" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4361EE]" />
+                    <input
+                      type="text"
+                      value={dosageSearch}
+                      onChange={(e) => {
+                        setDosageSearch(e.target.value);
+                        setShowDosageDropdown(true);
+                      }}
+                      onFocus={() => setShowDosageDropdown(true)}
+                      placeholder={selectedDosageForms.length > 0 ? "Add another dosage form..." : "Search dosage forms..."}
+                      className="w-full pl-10 pr-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4361EE]/20 focus:border-[#4361EE] transition-all"
+                      style={authorFont}
+                    />
+                    {selectedDosageForms.length > 0 && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{selectedDosageForms.length} selected</span>
+                      </div>
+                    )}
+                  </div>
+                  {showDosageDropdown && filteredDosageForms.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-48 overflow-y-auto">
+                      {filteredDosageForms.map((form, index) => (
+                        <button
+                          key={`${form}-${index}`}
+                          type="button"
+                          onClick={() => {
+                            setSelectedDosageForms(prev => [...prev, form]);
+                            setDosageSearch('');
+                            setShowDosageDropdown(false);
+                          }}
+                          className="w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors text-sm font-semibold text-slate-900"
+                          style={authorFont}
+                        >
+                          {form}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <FormField id="primarySubject" label="Primary Subject / Target Active Ingredient" required value={primarySubject} onChange={setPrimarySubject} placeholder="e.g., Curcumin, Ibuprofen, Metformin..." />
+
+                <FormField id="coreDomain" label="Core Project Domain" required value={coreDomain} onChange={setCoreDomain} placeholder="e.g., Nanotechnology, Drug Delivery, Formulation Development..." />
+
+                <FormField id="excipients" label="Excipients" value={excipients} onChange={setExcipients} placeholder="e.g., HPMC, PVA, Eudragit, Chitosan..." />
+
+                <FormField id="keywords" label="Keywords" value={keywords} onChange={setKeywords} placeholder="e.g., nanoparticles, sustained release, bioavailability..." />
+
+                <FormField id="toolsInstruments" label="Required Tools & Instruments" required value={toolsInstruments} onChange={setToolsInstruments} placeholder="e.g., FTIR, DSC, XRD, SEM, UV Spectrophotometer..." />
+
+                <FormField id="workLocation" label="Primary Work Location" required value={workLocation} onChange={setWorkLocation} placeholder="e.g., Pharmaceutics Lab, Central Instrumentation Lab..." />
+
+                <FormTextArea id="methodology" label="Methodology Details & Protocol" value={methodology} onChange={setMethodology} placeholder="Describe your research methodology..." rows={3} />
+
+                {/* Expected Deliverables */}
+                <div>
+                  <label className="text-[11px] font-black text-slate-700 uppercase tracking-widest block mb-3" style={authorFont}>
+                    Expected Deliverables
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { key: 'publication', label: 'Publication' },
+                      { key: 'patent', label: 'Patent' },
+                      { key: 'prototype', label: 'Prototype' },
+                      { key: 'dataset', label: 'Dataset' },
+                    ].map((item) => (
+                      <label
+                        key={item.key}
+                        className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-[#4361EE]/30 transition-all"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={deliverables[item.key as keyof typeof deliverables]}
+                          onChange={(e) => setDeliverables(prev => ({ ...prev, [item.key]: e.target.checked }))}
+                          className="w-4 h-4 text-[#4361EE] border-slate-300 rounded focus:ring-[#4361EE]/20"
+                        />
+                        <span className="text-sm font-semibold text-slate-700" style={authorFont}>{item.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              /* ===== DYNAMIC FORM — Department-specific schema-driven form ===== */
+              <>
+                <SubmitTitleForm
+                  department={departmentName || ''}
+                  data={dynamicFormData}
+                  onChange={(name: string, value: unknown) => {
+                    setDynamicFormData(prev => {
+                      const updated = { ...prev, [name]: value };
+                      // Sync title and novelty into parent state for display in header/footer
+                      if (name === 'title' && typeof value === 'string') setTitle(value);
+                      if (name === 'novelty' && typeof value === 'string') setNovelty(value);
+                      if (name === 'noveltyStatement' && typeof value === 'string') setNovelty(value);
+                      if (name === 'drugName') {
+                        if (Array.isArray(value)) setSelectedDrugs(value as string[]);
+                        else if (typeof value === 'string') setSelectedDrugs([value]);
+                      }
+                      return updated;
+                    });
+                  }}
+                  titleSuggestions={[]}
+                  titleMessage={
+                    validationResult
+                      ? {
+                          type: validationResult.layers.layer1.passed ? 'success' : 'error',
+                          text: validationResult.layers.layer1.message,
+                        }
+                      : null
+                  }
+                  noveltyMessage={
+                    validationResult
+                      ? {
+                          type: validationResult.layers.layer2.passed ? 'success' : 'warning',
+                          text: validationResult.layers.layer2.message,
+                        }
+                      : null
+                  }
+                  aiSuggestions={validationResult?.suggestions || []}
+                  aiLoading={validating}
+                  drugSuggestion={null}
+                  dosageSuggestion={null}
+                />
+              </>
+            )}
 
             {error && (
               <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
@@ -714,135 +950,420 @@ export default function SubmitTitlePage() {
           </form>
         </div>
 
-        {/* ===== Right Sidebar — Research Alignment Score ===== */}
-        <div className="hidden xl:block w-[280px] flex-shrink-0">
-          <div className="sticky top-24 space-y-4">
-            <div className="flex justify-end">
-              <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center">
-                <Icon icon="solar:info-circle-linear" className="w-4 h-4 text-slate-400" />
+        {/* ===== Right Sidebar ===== */}
+        {!isComingSoon && (
+          <div className="hidden xl:block w-[280px] flex-shrink-0">
+            <div className="sticky top-24 space-y-4">
+              <div className="flex justify-end">
+                <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center">
+                  <Icon icon="solar:info-circle-linear" className="w-4 h-4 text-slate-400" />
+                </div>
               </div>
+
+              {isQAPA ? (
+                /* ===== 3-Level Evaluation Card for QA & PA Departments ===== */
+                <>
+                  <div className="rounded-2xl border border-[#4361EE] overflow-hidden bg-[#4361EE]">
+                    <div className="bg-[#4361EE] px-5 py-4 flex items-center gap-2.5">
+                      <Icon icon="simple-icons:securityscorecard" className="w-6 h-6 text-white" />
+                      <div>
+                        <h3 className="text-sm font-bold text-white" style={authorFont}>3-Level Evaluation</h3>
+                        <p className="text-[10px] text-white/70" style={poppinsFont}>{departmentName || 'QA & PA Scoring'}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-[#4361EE] p-4 pt-0 space-y-3">
+                      {/* Drug Name Similarity Gauge */}
+                      <div className="bg-white/10 rounded-xl p-3 text-center">
+                        <p className="text-[10px] text-white/70 uppercase tracking-widest font-bold" style={authorFont}>Drug Match in Title</p>
+                        <div className="flex items-baseline justify-center gap-1 mt-1">
+                          <span className="text-3xl font-black text-white" style={poppinsFont}>
+                            {validationResult?.scores?.drugName?.score ?? 0}%
+                          </span>
+                          <span className="text-sm text-white/50 font-bold" style={poppinsFont}>/100%</span>
+                        </div>
+                        <div className="mt-2 w-full bg-white/20 rounded-full h-1.5">
+                          <div
+                            className={`h-1.5 rounded-full transition-all duration-500 ${
+                              (validationResult?.scores?.drugName?.score ?? 0) >= 60 ? 'bg-emerald-400' : 'bg-amber-400'
+                            }`}
+                            style={{ width: `${Math.min(100, validationResult?.scores?.drugName?.score ?? 0)}%` }}
+                          />
+                        </div>
+                        <p className="text-[9px] text-white/80 mt-1.5 font-medium" style={authorFont}>
+                          {(validationResult?.scores?.drugName?.score ?? 0) >= 60
+                            ? '✓ ≥60% drug match achieved — form unlocked'
+                            : '≥60% drug name similarity in title required'}
+                        </p>
+                      </div>
+
+                      {/* Level 1: Uniqueness */}
+                      <div className="bg-white/10 rounded-xl p-3 text-white">
+                        <div className="flex items-center justify-between text-xs font-bold mb-1">
+                          <div className="flex items-center gap-1.5">
+                            {validationResult && (
+                              <Icon
+                                icon={validationResult.layers.layer1.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"}
+                                className={`w-3.5 h-3.5 ${validationResult.layers.layer1.passed ? 'text-emerald-300' : 'text-red-300'}`}
+                              />
+                            )}
+                            <span>Level 1: Uniqueness</span>
+                          </div>
+                          <span
+                            className={`text-[9px] uppercase px-2 py-0.5 rounded-full font-mono ${
+                              validationResult
+                                ? validationResult.layers.layer1.passed
+                                  ? 'bg-emerald-400/20 text-emerald-300'
+                                  : 'bg-red-400/20 text-red-200'
+                                : 'bg-white/15 text-white/70'
+                            }`}
+                          >
+                            {validationResult ? (validationResult.layers.layer1.passed ? 'Passed' : 'Flagged') : 'Common'}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-white/70" style={authorFont}>
+                          {validationResult ? validationResult.layers.layer1.message : 'Duplicate & similarity check against university register.'}
+                        </p>
+                      </div>
+
+                      {/* Level 2: AI Novelty */}
+                      <div className="bg-white/10 rounded-xl p-3 text-white">
+                        <div className="flex items-center justify-between text-xs font-bold mb-1">
+                          <div className="flex items-center gap-1.5">
+                            {validationResult && (
+                              <Icon
+                                icon={validationResult.layers.layer2.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"}
+                                className={`w-3.5 h-3.5 ${validationResult.layers.layer2.passed ? 'text-emerald-300' : 'text-red-300'}`}
+                              />
+                            )}
+                            <span>Level 2: AI Novelty</span>
+                          </div>
+                          <span
+                            className={`text-[9px] uppercase px-2 py-0.5 rounded-full font-mono ${
+                              validationResult
+                                ? validationResult.layers.layer2.passed
+                                  ? 'bg-blue-400/20 text-blue-200'
+                                  : 'bg-red-400/20 text-red-200'
+                                : 'bg-white/15 text-white/70'
+                            }`}
+                          >
+                            {validationResult ? (validationResult.layers.layer2.passed ? 'Passed' : 'Flagged') : 'Common'}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-white/70" style={authorFont}>
+                          {validationResult ? validationResult.layers.layer2.message : 'AI analysis of research novelty & literature gap.'}
+                        </p>
+                      </div>
+
+                      {/* Level 3: Drug Match in Title */}
+                      <div className="bg-white/10 rounded-xl p-3 text-white">
+                        <div className="flex items-center justify-between text-xs font-bold mb-1">
+                          <div className="flex items-center gap-1.5">
+                            {validationResult && (
+                              <Icon
+                                icon={validationResult.layers.layer3.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"}
+                                className={`w-3.5 h-3.5 ${validationResult.layers.layer3.passed ? 'text-emerald-300' : 'text-amber-300'}`}
+                              />
+                            )}
+                            <span>Level 3: Drug Match</span>
+                          </div>
+                          <span
+                            className={`text-[9px] uppercase px-2 py-0.5 rounded-full font-mono ${
+                              validationResult
+                                ? validationResult.layers.layer3.passed
+                                  ? 'bg-emerald-400/20 text-emerald-300'
+                                  : 'bg-amber-400/20 text-amber-200'
+                                : 'bg-purple-400/20 text-purple-200'
+                            }`}
+                          >
+                            {validationResult
+                              ? validationResult.layers.layer3.passed
+                                ? 'Passed (≥60%)'
+                                : 'Failed (<60%)'
+                              : '≥60% Required'}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-white/70" style={authorFont}>
+                          {validationResult ? validationResult.layers.layer3.message : 'Drug name presence & similarity score in dissertation title.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {validationResult && (
+                    <div className="mt-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-3">
+                      <p className="text-[11px] font-bold text-slate-700 uppercase tracking-widest" style={authorFont}>Evaluation Details</p>
+                      <div className="text-[11px]" style={authorFont}>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                          <Icon icon={validationResult.layers.layer1.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer1.passed ? 'text-emerald-500' : 'text-red-500'}`} />
+                          <span>Layer 1: Uniqueness</span>
+                        </div>
+                        <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer1.message}</p>
+                        {validationResult.layers.layer1.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer1.details}</p>)}
+                      </div>
+                      <div className="text-[11px] border-t border-slate-100 pt-2" style={authorFont}>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                          <Icon icon={validationResult.layers.layer2.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer2.passed ? 'text-emerald-500' : 'text-red-500'}`} />
+                          <span>Layer 2: AI Novelty</span>
+                        </div>
+                        <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer2.message}</p>
+                        {validationResult.layers.layer2.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer2.details}</p>)}
+                      </div>
+                      <div className="text-[11px] border-t border-slate-100 pt-2" style={authorFont}>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                          <Icon icon={validationResult.layers.layer3.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer3.passed ? 'text-emerald-500' : 'text-amber-500'}`} />
+                          <span>Layer 3: Drug Name in Title</span>
+                        </div>
+                        <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer3.message}</p>
+                        {validationResult.layers.layer3.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer3.details}</p>)}
+                      </div>
+                    </div>
+                  )}
+
+                  {validationResult && validationResult.suggestions.length > 0 && !validationResult.canSubmit && (
+                    <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl shadow-sm">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Icon icon="solar:lightbulb-bolt-bold-duotone" className="w-4.5 h-4.5 text-amber-600" />
+                        <p className="text-[11px] font-bold text-amber-800 uppercase tracking-widest" style={authorFont}>AI Suggestions</p>
+                      </div>
+                      <ul className="space-y-2">
+                        {validationResult.suggestions.map((s, i) => (
+                          <li key={i} className="text-[11px] text-amber-700 flex items-start gap-1.5 leading-tight" style={authorFont}>
+                            <span className="text-amber-400 mt-0.5">•</span>
+                            {s}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
+              ) : isDynamic ? (
+                /* ===== 3-Level Evaluation Card for Dynamic Forms ===== */
+                <div className="rounded-2xl border border-[#4361EE] overflow-hidden bg-[#4361EE]">
+                  <div className="bg-[#4361EE] px-5 py-4 flex items-center gap-2.5">
+                    <Icon icon="simple-icons:securityscorecard" className="w-6 h-6 text-white" />
+                    <div>
+                      <h3 className="text-sm font-bold text-white" style={authorFont}>3-Level Evaluation</h3>
+                      <p className="text-[10px] text-white/70" style={poppinsFont}>{departmentName || 'Dynamic Form'}</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-[#4361EE] p-4 pt-0 space-y-2.5">
+                    <div className="bg-white/10 rounded-xl p-3 text-white">
+                      <div className="flex items-center justify-between text-xs font-bold mb-1">
+                        <span>Level 1: Uniqueness</span>
+                        <span className="text-[9px] uppercase bg-emerald-400/20 text-emerald-300 px-2 py-0.5 rounded-full font-mono">Common</span>
+                      </div>
+                      <p className="text-[10px] text-white/70" style={authorFont}>Duplicate & similarity check against university register.</p>
+                    </div>
+
+                    <div className="bg-white/10 rounded-xl p-3 text-white">
+                      <div className="flex items-center justify-between text-xs font-bold mb-1">
+                        <span>Level 2: AI Novelty</span>
+                        <span className="text-[9px] uppercase bg-blue-400/20 text-blue-200 px-2 py-0.5 rounded-full font-mono">Common</span>
+                      </div>
+                      <p className="text-[10px] text-white/70" style={authorFont}>AI analysis of research novelty & literature gap.</p>
+                    </div>
+
+                    <div className="bg-white/10 rounded-xl p-3 text-white">
+                      <div className="flex items-center justify-between text-xs font-bold mb-1">
+                        <span>Level 3: Dept. Rubric</span>
+                        <span className="text-[9px] uppercase bg-purple-400/20 text-purple-200 px-2 py-0.5 rounded-full font-mono">Specific</span>
+                      </div>
+                      <p className="text-[10px] text-white/70" style={authorFont}>Department evaluation parameters applied by guide & committee.</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* ===== Research Alignment Score for Legacy Form ===== */
+                <>
+                  <div className="rounded-2xl border border-[#4361EE] overflow-hidden bg-[#4361EE]">
+                    <div className="bg-[#4361EE] px-5 py-4 flex items-center gap-2.5">
+                      <Icon icon="simple-icons:securityscorecard" className="w-6 h-6 text-white" />
+                      <h3 className="text-sm font-bold text-white" style={authorFont}>Research Alignment Score</h3>
+                    </div>
+
+                    <div className="bg-[#4361EE] p-4 pt-0">
+                      <div className="grid grid-cols-2 gap-3">
+                        <ScoreCard icon="solar:pill-bold-duotone" label="Drug Name" score={validationResult?.scores?.drugName?.score ?? 0} max={30} sub="in title" />
+                        <ScoreCard icon="solar:medical-kit-bold-duotone" label="Dosage Form" score={validationResult?.scores?.dosageForm?.score ?? 0} max={35} sub="in title" />
+                        <ScoreCard icon="solar:widget-5-bold-duotone" label="Excipients" score={validationResult?.scores?.excipients?.score ?? 0} max={15} sub="AI Verification" />
+                        <ScoreCard icon="solar:key-minimalistic-bold-duotone" label="Keywords" score={validationResult?.scores?.keywords?.score ?? 0} max={15} sub="AI Verification" />
+                      </div>
+
+                      <div className="mt-3 bg-white/10 rounded-xl p-3 text-center">
+                        <p className="text-[10px] text-white/70 uppercase tracking-widest font-bold" style={authorFont}>Total Score</p>
+                        <div className="flex items-baseline justify-center gap-1 mt-1">
+                          <span className="text-3xl font-black text-white" style={poppinsFont}>{validationResult?.scores?.total ?? 0}</span>
+                          <span className="text-sm text-white/50 font-bold" style={poppinsFont}>/95</span>
+                        </div>
+                        <div className="mt-2 w-full bg-white/20 rounded-full h-1.5">
+                          <div
+                            className={`h-1.5 rounded-full transition-all duration-500 ${(validationResult?.scores?.total ?? 0) >= 40 ? 'bg-emerald-400' : 'bg-red-400'}`}
+                            style={{ width: `${Math.min(100, ((validationResult?.scores?.total ?? 0) / 95) * 100)}%` }}
+                          />
+                        </div>
+                        <p className="text-[9px] text-white/50 mt-1.5" style={authorFont}>Minimum 40 required to submit</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {validationResult && (
+                    <div className="mt-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-3">
+                      <p className="text-[11px] font-bold text-slate-700 uppercase tracking-widest" style={authorFont}>Layer Details</p>
+                      <div className="text-[11px]" style={authorFont}>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                          <Icon icon={validationResult.layers.layer1.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer1.passed ? 'text-emerald-500' : 'text-red-500'}`} />
+                          <span>Layer 1: Uniqueness</span>
+                        </div>
+                        <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer1.message}</p>
+                        {validationResult.layers.layer1.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer1.details}</p>)}
+                      </div>
+                      <div className="text-[11px] border-t border-slate-100 pt-2" style={authorFont}>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                          <Icon icon={validationResult.layers.layer2.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer2.passed ? 'text-emerald-500' : 'text-red-500'}`} />
+                          <span>Layer 2: AI Novelty</span>
+                        </div>
+                        <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer2.message}</p>
+                        {validationResult.layers.layer2.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer2.details}</p>)}
+                      </div>
+                      <div className="text-[11px] border-t border-slate-100 pt-2" style={authorFont}>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                          <Icon icon={validationResult.layers.layer3.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer3.passed ? 'text-emerald-500' : 'text-red-500'}`} />
+                          <span>Layer 3: Alignment Score</span>
+                        </div>
+                        <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer3.message}</p>
+                        {validationResult.layers.layer3.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer3.details}</p>)}
+                      </div>
+                    </div>
+                  )}
+
+                  {validationResult && validationResult.suggestions.length > 0 && !validationResult.canSubmit && (
+                    <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl shadow-sm">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Icon icon="solar:lightbulb-bolt-bold-duotone" className="w-4.5 h-4.5 text-amber-600" />
+                        <p className="text-[11px] font-bold text-amber-800 uppercase tracking-widest" style={authorFont}>AI Suggestions</p>
+                      </div>
+                      <ul className="space-y-2">
+                        {validationResult.suggestions.map((s, i) => (
+                          <li key={i} className="text-[11px] text-amber-700 flex items-start gap-1.5 leading-tight" style={authorFont}>
+                            <span className="text-amber-400 mt-0.5">•</span>
+                            {s}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-
-            <div className="rounded-2xl border border-[#4361EE] overflow-hidden bg-[#4361EE]">
-              <div className="bg-[#4361EE] px-5 py-4 flex items-center gap-2.5">
-                <Icon icon="simple-icons:securityscorecard" className="w-6 h-6 text-white" />
-                <h3 className="text-sm font-bold text-white" style={authorFont}>Research Alignment Score</h3>
-              </div>
-
-              <div className="bg-[#4361EE] p-4 pt-0">
-                <div className="grid grid-cols-2 gap-3">
-                  <ScoreCard icon="solar:pill-bold-duotone" label="Drug Name" score={validationResult?.scores?.drugName?.score ?? 0} max={30} sub="in title" />
-                  <ScoreCard icon="solar:medical-kit-bold-duotone" label="Dosage Form" score={validationResult?.scores?.dosageForm?.score ?? 0} max={35} sub="in title" />
-                  <ScoreCard icon="solar:widget-5-bold-duotone" label="Excipients" score={validationResult?.scores?.excipients?.score ?? 0} max={15} sub="AI Verification" />
-                  <ScoreCard icon="solar:key-minimalistic-bold-duotone" label="Keywords" score={validationResult?.scores?.keywords?.score ?? 0} max={15} sub="AI Verification" />
-                </div>
-
-                <div className="mt-3 bg-white/10 rounded-xl p-3 text-center">
-                  <p className="text-[10px] text-white/70 uppercase tracking-widest font-bold" style={authorFont}>Total Score</p>
-                  <div className="flex items-baseline justify-center gap-1 mt-1">
-                    <span className="text-3xl font-black text-white" style={poppinsFont}>{validationResult?.scores?.total ?? 0}</span>
-                    <span className="text-sm text-white/50 font-bold" style={poppinsFont}>/95</span>
-                  </div>
-                  <div className="mt-2 w-full bg-white/20 rounded-full h-1.5">
-                    <div
-                      className={`h-1.5 rounded-full transition-all duration-500 ${(validationResult?.scores?.total ?? 0) >= 40 ? 'bg-emerald-400' : 'bg-red-400'}`}
-                      style={{ width: `${Math.min(100, ((validationResult?.scores?.total ?? 0) / 95) * 100)}%` }}
-                    />
-                  </div>
-                  <p className="text-[9px] text-white/50 mt-1.5" style={authorFont}>Minimum 40 required to submit</p>
-                </div>
-              </div>
-            </div>
-
-            {validationResult && (
-              <div className="mt-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-3">
-                <p className="text-[11px] font-bold text-slate-700 uppercase tracking-widest" style={authorFont}>Layer Details</p>
-                <div className="text-[11px]" style={authorFont}>
-                  <div className="flex items-center gap-1.5 font-bold text-slate-800">
-                    <Icon icon={validationResult.layers.layer1.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer1.passed ? 'text-emerald-500' : 'text-red-500'}`} />
-                    <span>Layer 1: Uniqueness</span>
-                  </div>
-                  <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer1.message}</p>
-                  {validationResult.layers.layer1.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer1.details}</p>)}
-                </div>
-                <div className="text-[11px] border-t border-slate-100 pt-2" style={authorFont}>
-                  <div className="flex items-center gap-1.5 font-bold text-slate-800">
-                    <Icon icon={validationResult.layers.layer2.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer2.passed ? 'text-emerald-500' : 'text-red-500'}`} />
-                    <span>Layer 2: AI Novelty</span>
-                  </div>
-                  <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer2.message}</p>
-                  {validationResult.layers.layer2.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer2.details}</p>)}
-                </div>
-                <div className="text-[11px] border-t border-slate-100 pt-2" style={authorFont}>
-                  <div className="flex items-center gap-1.5 font-bold text-slate-800">
-                    <Icon icon={validationResult.layers.layer3.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"} className={`w-3.5 h-3.5 ${validationResult.layers.layer3.passed ? 'text-emerald-500' : 'text-red-500'}`} />
-                    <span>Layer 3: Alignment Score</span>
-                  </div>
-                  <p className="text-slate-500 ml-5 mt-0.5 leading-tight">{validationResult.layers.layer3.message}</p>
-                  {validationResult.layers.layer3.details && (<p className="text-slate-400 ml-5 text-[10px] italic leading-tight mt-0.5">{validationResult.layers.layer3.details}</p>)}
-                </div>
-              </div>
-            )}
-
-            {validationResult && validationResult.suggestions.length > 0 && !validationResult.canSubmit && (
-              <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl shadow-sm">
-                <div className="flex items-center gap-1.5 mb-2">
-                  <Icon icon="solar:lightbulb-bolt-bold-duotone" className="w-4.5 h-4.5 text-amber-600" />
-                  <p className="text-[11px] font-bold text-amber-800 uppercase tracking-widest" style={authorFont}>AI Suggestions</p>
-                </div>
-                <ul className="space-y-2">
-                  {validationResult.suggestions.map((s, i) => (
-                    <li key={i} className="text-[11px] text-amber-700 flex items-start gap-1.5 leading-tight" style={authorFont}>
-                      <span className="text-amber-400 mt-0.5">•</span>
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
-        </div>
+        )}
       </div>
 
       {/* ===== Fixed Bottom Blue Footer ===== */}
-      <div className="fixed bottom-0 left-0 right-0 lg:left-[250px] z-40 bg-[#4361EE] text-white py-3 px-4 md:py-4 md:px-8 border-t border-blue-500 shadow-2xl flex items-center justify-between gap-3">
-        <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-          <p className="text-[9px] font-black text-white/70 uppercase tracking-widest hidden sm:block" style={authorFont}>Submission Status</p>
-          <div className="flex items-center gap-2 min-w-0">
-            {validating ? (
-              <>
-                <Loader2 className="w-4 h-4 text-white animate-spin flex-shrink-0" />
-                <p className="text-xs text-white/90 font-medium truncate" style={authorFont}>Checking AI validation status...</p>
-              </>
-            ) : validationResult ? (
-              <>
-                <Icon icon={validationResult.canSubmit ? "solar:check-circle-bold" : "solar:danger-triangle-bold"} className={`w-4 h-4 flex-shrink-0 ${validationResult.canSubmit ? 'text-emerald-300' : 'text-amber-300'}`} />
-                <p className="text-xs text-white font-medium text-left truncate" style={authorFont}>
-                  {!validationResult.layers.layer1.passed ? (
-                    `Layer 1 Rejected: ${validationResult.layers.layer1.message}`
-                  ) : !validationResult.layers.layer2.passed ? (
-                    `Passed Layer 1. Layer 2 Rejected: ${validationResult.layers.layer2.message}`
-                  ) : !validationResult.layers.layer3.passed ? (
-                    `Score ${validationResult.scores.total}/95 below 40`
-                  ) : (
-                    `All 3 layers passed! Score: ${validationResult.scores.total}/95`
-                  )}
-                </p>
-              </>
+      {!isComingSoon && (
+        <div className="fixed bottom-0 left-0 right-0 lg:left-[250px] z-40 bg-[#4361EE] text-white py-3 px-4 md:py-4 md:px-8 border-t border-blue-500 shadow-2xl flex items-center justify-between gap-3">
+          <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+            <p className="text-[9px] font-black text-white/70 uppercase tracking-widest hidden sm:block" style={authorFont}>Submission Status</p>
+            {isLegacy ? (
+              <div className="flex items-center gap-2 min-w-0">
+                {validating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 text-white animate-spin flex-shrink-0" />
+                    <p className="text-xs text-white/90 font-medium truncate" style={authorFont}>Checking AI validation status...</p>
+                  </>
+                ) : validationResult ? (
+                  <>
+                    <Icon icon={validationResult.canSubmit ? "solar:check-circle-bold" : "solar:danger-triangle-bold"} className={`w-4 h-4 flex-shrink-0 ${validationResult.canSubmit ? 'text-emerald-300' : 'text-amber-300'}`} />
+                    <p className="text-xs text-white font-medium text-left truncate" style={authorFont}>
+                      {!validationResult.layers.layer1.passed ? (
+                        `Layer 1 Rejected: ${validationResult.layers.layer1.message}`
+                      ) : !validationResult.layers.layer2.passed ? (
+                        `Passed Layer 1. Layer 2 Rejected: ${validationResult.layers.layer2.message}`
+                      ) : !validationResult.layers.layer3.passed ? (
+                        `Score ${validationResult.scores.total}/95 below 40`
+                      ) : (
+                        `All 3 layers passed! Score: ${validationResult.scores.total}/95`
+                      )}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <Icon icon="solar:info-circle-bold" className="w-4 h-4 text-white/70 flex-shrink-0" />
+                    <p className="text-xs text-white/70 font-medium truncate" style={authorFont}>
+                      {selectedDrugs.length === 0 || selectedDosageForms.length === 0 || !title.trim()
+                        ? 'Fill all required fields'
+                        : title.trim().length <= 10
+                          ? 'Title too short'
+                          : 'Waiting for live check...'}
+                    </p>
+                  </>
+                )}
+              </div>
+            ) : isQAPA ? (
+              <div className="flex items-center gap-2 min-w-0">
+                {validating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 text-white animate-spin flex-shrink-0" />
+                    <p className="text-xs text-white/90 font-medium truncate" style={authorFont}>Validating title & drug similarity...</p>
+                  </>
+                ) : validationResult ? (
+                  <>
+                    <Icon icon={validationResult.canSubmit ? "solar:check-circle-bold" : "solar:danger-triangle-bold"} className={`w-4 h-4 flex-shrink-0 ${validationResult.canSubmit ? 'text-emerald-300' : 'text-amber-300'}`} />
+                    <p className="text-xs text-white font-medium text-left truncate" style={authorFont}>
+                      {!validationResult.layers.layer1.passed ? (
+                        `Layer 1 Rejected: ${validationResult.layers.layer1.message}`
+                      ) : !validationResult.layers.layer2.passed ? (
+                        `Layer 2 Rejected: ${validationResult.layers.layer2.message}`
+                      ) : !validationResult.layers.layer3.passed ? (
+                        `Drug match in title (${validationResult.scores?.drugName?.score ?? 0}%) is below 60% required`
+                      ) : (
+                        `All 3 layers passed! Drug title similarity: ${validationResult.scores?.drugName?.score ?? 0}% • Ready to submit`
+                      )}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <Icon icon="solar:info-circle-bold" className="w-4 h-4 text-white/70 flex-shrink-0" />
+                    <p className="text-xs text-white/70 font-medium truncate" style={authorFont}>
+                      {!effectiveTitle
+                        ? 'Enter dissertation title'
+                        : effectiveTitle.length <= 10
+                          ? 'Title must be more than 10 characters'
+                          : !effectiveDrugName
+                            ? 'Select at least one drug name'
+                            : 'Waiting for live validation...'}
+                    </p>
+                  </>
+                )}
+              </div>
             ) : (
-              <>
-                <Icon icon="solar:info-circle-bold" className="w-4 h-4 text-white/70 flex-shrink-0" />
-                <p className="text-xs text-white/70 font-medium truncate" style={authorFont}>
-                  {selectedDrugs.length === 0 || selectedDosageForms.length === 0 || !title.trim()
-                    ? 'Fill all required fields'
-                    : title.trim().length <= 10
-                      ? 'Title too short'
-                      : 'Waiting for live check...'}
-                </p>
-              </>
+              <div className="flex items-center gap-2 min-w-0">
+                {canSubmit ? (
+                  <>
+                    <Icon icon="solar:check-circle-bold" className="w-4 h-4 flex-shrink-0 text-emerald-300" />
+                    <p className="text-xs text-white font-medium text-left truncate" style={authorFont}>
+                      Required details completed • Ready to submit
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <Icon icon="solar:info-circle-bold" className="w-4 h-4 text-white/70 flex-shrink-0" />
+                    <p className="text-xs text-white/70 font-medium truncate" style={authorFont}>
+                      {!effectiveTitle
+                        ? 'Please enter dissertation title'
+                        : effectiveTitle.length <= 10
+                          ? 'Title must be more than 10 characters'
+                          : !effectiveNovelty
+                            ? 'Please provide statement of novelty'
+                            : 'Please complete all required fields'}
+                    </p>
+                  </>
+                )}
+              </div>
             )}
           </div>
-        </div>
 
         <button
           type="submit"
@@ -869,6 +1390,7 @@ export default function SubmitTitlePage() {
           )}
         </button>
       </div>
+    )}
     </div>
   );
 }

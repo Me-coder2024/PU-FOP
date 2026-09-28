@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -91,11 +92,33 @@ export async function proxy(request: NextRequest) {
   }
 
   // 5. Get user profile for role-based routing
-  const { data: profile } = await supabase
+  let { data: profile } = await supabase
     .from('profiles')
     .select('role, university_id')
     .eq('id', user.id)
-    .single();
+    .maybeSingle();
+
+  // Fallback to service role if anon query returned null to prevent false onboarding redirects
+  if ((!profile || (profile.role === 'student' && !profile.university_id)) && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const adminClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        { auth: { autoRefreshToken: false, persistSession: false } }
+      );
+      const { data: adminProfile } = await adminClient
+        .from('profiles')
+        .select('role, university_id')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (adminProfile) {
+        profile = adminProfile;
+      }
+    } catch (adminErr) {
+      console.error('[Proxy] Admin profile lookup error:', adminErr);
+    }
+  }
 
   // If no profile exists, redirect to onboarding
   if (!profile) {

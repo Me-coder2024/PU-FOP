@@ -7,6 +7,7 @@ import type { SubmissionRow, SubmissionStatus } from '@/lib/supabase/types';
 import { Icon } from '@iconify/react';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
+import SchemaDataViewer from '@/components/forms/SchemaDataViewer';
 
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
@@ -367,6 +368,13 @@ export default function GuidePage() {
                 <div className="space-y-4">
                   <p className="text-xs font-black text-slate-500 uppercase tracking-widest" style={poppinsFont}>Application Details</p>
 
+                  {/* v2 Dynamic Form: Use SchemaDataViewer */}
+                  {cd.schema_version === 2 && cd.department ? (
+                    <SchemaDataViewer department={cd.department as string} data={cd} />
+                  ) : (
+                    /* Legacy form display (original hardcoded layout) */
+                    <>
+
                   {/* Statement of Novelty */}
                   {Boolean(cd.novelty) && (
                     <div className="bg-[#F0F2F8] rounded-xl p-4">
@@ -568,6 +576,8 @@ export default function GuidePage() {
                         ))}
                       </div>
                     </div>
+                  )}
+                  </>
                   )}
                 </div>
               )}

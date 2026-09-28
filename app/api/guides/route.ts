@@ -7,7 +7,13 @@ export async function GET(req: Request) {
     const instituteId = searchParams.get('institute_id');
 
     if (!instituteId) {
-      return NextResponse.json({ guides: [] });
+      const supabaseAdmin = createServiceClient();
+      const { data: allGuides } = await supabaseAdmin
+        .from('profiles')
+        .select('id, full_name, email')
+        .eq('role', 'guide')
+        .order('full_name');
+      return NextResponse.json({ guides: allGuides || [] });
     }
 
     const supabaseAdmin = createServiceClient();

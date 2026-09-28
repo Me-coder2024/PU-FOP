@@ -90,21 +90,16 @@ export default function DeanTitlesPage() {
     if (profile) fetchData();
   }, [profile, fetchData]);
 
-  // Filter departments by selected institute
+  // Filter departments strictly by selected institute
   const filteredDepartments = useMemo(() => {
-    if (instFilter === 'all') return departments;
+    if (instFilter === 'all') return [];
     return departments.filter((d) => d.institute_id === instFilter);
   }, [departments, instFilter]);
 
-  // Reset department filter when institute filter changes if selected department is not in institute
+  // Reset department filter when institute filter changes
   const handleInstituteChange = (instId: string) => {
     setInstFilter(instId);
-    if (instId !== 'all') {
-      const validDepts = departments.filter((d) => d.institute_id === instId).map((d) => d.id);
-      if (!validDepts.includes(deptFilter)) {
-        setDeptFilter('all');
-      }
-    }
+    setDeptFilter('all');
   };
 
   const handleEditTitle = async (submissionId: string) => {
@@ -303,11 +298,16 @@ export default function DeanTitlesPage() {
             <select
               value={deptFilter}
               onChange={(e) => setDeptFilter(e.target.value)}
-              className="pl-10 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE]"
+              disabled={instFilter === 'all'}
+              className="pl-10 pr-8 py-2.5 bg-white border border-slate-200 rounded-xl text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4361EE]/30 focus:border-[#4361EE] disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-50 transition-all"
               style={authorFont}
             >
               <option value="all">
-                {instFilter === 'all' ? 'All Departments' : 'All Institute Departments'}
+                {instFilter === 'all'
+                  ? '← Select Institute first'
+                  : filteredDepartments.length === 0
+                    ? 'No departments in this institute'
+                    : 'All Departments'}
               </option>
               {filteredDepartments.map((d) => (
                 <option key={d.id} value={d.id}>{d.name}</option>

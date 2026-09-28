@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import Dropdown from '@/components/ui/Dropdown';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import { Icon } from '@iconify/react';
 import {
   Sparkles,
   AlertTriangle,
@@ -44,7 +45,7 @@ interface SubmitTitleFormProps {
 export interface FieldDef {
   name: string;
   label: string;
-  type: 'text' | 'textarea' | 'number' | 'dropdown' | 'checkbox_group' | 'radio' | 'file';
+  type: 'text' | 'textarea' | 'number' | 'dropdown' | 'checkbox_group' | 'radio' | 'file' | 'drug_multiselect';
   options?: string[];
   required?: boolean;
   condition?: (data: any) => boolean;
@@ -59,6 +60,18 @@ export interface SectionDef {
 const COMMON_DELIVERABLES = [
   'Publication',
   'Patent',
+  'Prototype',
+  'Database',
+  'Technology Transfer',
+  'Monograph',
+];
+
+/** QA-specific deliverables (from spec — includes additional items) */
+const QA_DELIVERABLES = [
+  'Publication',
+  'Patent',
+  'SOP',
+  'Method Transfer',
   'Prototype',
   'Database',
   'Technology Transfer',
@@ -80,18 +93,20 @@ export const DEPARTMENT_SCHEMAS: Record<string, SectionDef[]> = {
       ],
     },
     {
-      title: 'Compound Information',
+      title: 'Target Compound Info',
       fields: [
         {
           name: 'compoundName',
-          label: 'Target Compound Name(s)',
+          label: 'Compound / Lead Molecule Name',
           type: 'text',
+          required: true,
           placeholder: 'e.g., Novel Pyrazole Derivatives',
         },
         {
           name: 'category',
-          label: 'Compound Category',
+          label: 'Category',
           type: 'dropdown',
+          required: true,
           options: [
             'Synthetic',
             'Natural Product',
@@ -104,17 +119,18 @@ export const DEPARTMENT_SCHEMAS: Record<string, SectionDef[]> = {
       ],
     },
     {
-      title: 'Research Methodology Mode',
+      title: 'Research Mode',
       fields: [
         {
           name: 'workType',
-          label: 'Primary Work Type',
+          label: 'Work Type',
           type: 'dropdown',
+          required: true,
           options: ['Dry Lab', 'Wet Lab', 'Hybrid'],
         },
         {
           name: 'dryLabComponents',
-          label: 'In Silico (Dry Lab) Components',
+          label: 'Dry Lab Components',
           type: 'checkbox_group',
           options: [
             'Molecular Docking',
@@ -128,7 +144,7 @@ export const DEPARTMENT_SCHEMAS: Record<string, SectionDef[]> = {
         },
         {
           name: 'wetLabComponents',
-          label: 'Experimental (Wet Lab) Components',
+          label: 'Wet Lab Components',
           type: 'checkbox_group',
           options: [
             'Synthesis',
@@ -143,73 +159,87 @@ export const DEPARTMENT_SCHEMAS: Record<string, SectionDef[]> = {
       ],
     },
     {
-      title: 'Project Specifications',
+      title: 'Therapeutic Area',
       fields: [
         {
           name: 'therapeuticArea',
-          label: 'Target Therapeutic Area',
-          type: 'dropdown',
-          options: ['Oncology', 'Neurology', 'Cardiology', 'Infectious Diseases', 'Immunology', 'Other'],
-        },
-        {
-          name: 'coreScaffold',
-          label: 'Core Chemical Scaffold',
-          type: 'text',
-          placeholder: 'e.g., Thiazolidinedione',
-        },
-        {
-          name: 'numberOfCompounds',
-          label: 'Proposed Number of Compounds',
-          type: 'number',
-          placeholder: 'e.g., 10',
-        },
-      ],
-    },
-    {
-      title: 'Synthetic Strategy',
-      fields: [
-        {
-          name: 'syntheticRoute',
-          label: 'Proposed Synthetic Route',
-          type: 'textarea',
-          placeholder: 'Detail the anticipated reaction sequence...',
-        },
-        {
-          name: 'reactionType',
-          label: 'Primary Reaction Type',
-          type: 'dropdown',
+          label: 'Intended Use',
+          type: 'checkbox_group',
           options: [
-            'Substitution',
-            'Addition',
-            'Elimination',
-            'Rearrangement',
-            'Oxidation-Reduction',
+            'Anticancer',
+            'Antimicrobial',
+            'Antidiabetic',
+            'CNS',
+            'CVS',
+            'Anti-inflammatory',
+            'Antiviral',
             'Other',
           ],
         },
       ],
     },
     {
-      title: 'Characterization & Biological Evaluation',
+      title: 'Chemical Design',
       fields: [
         {
-          name: 'tests',
-          label: 'Analytical Tests for Characterization',
-          type: 'checkbox_group',
-          options: ['TLC', 'IR', 'NMR', 'Mass', 'HPLC', 'Elemental Analysis'],
+          name: 'coreScaffold',
+          label: 'Core Scaffold / Nucleus',
+          type: 'text',
+          placeholder: 'e.g., Thiazolidinedione',
         },
         {
-          name: 'studyModel',
-          label: 'Biological Study Model',
-          type: 'checkbox_group',
-          options: ['In vitro', 'In vivo', 'Not Applicable'],
+          name: 'numberOfCompounds',
+          label: 'Number of Proposed Compounds',
+          type: 'text',
+          placeholder: 'e.g., 10',
         },
       ],
     },
     {
-      title: 'Ethics, Novelty & Expected Outcomes',
+      title: 'Synthesis Details',
       fields: [
-        { name: 'iaecApproval', label: 'IAEC Approval Required', type: 'radio', options: ['Yes', 'No'] },
+        {
+          name: 'syntheticRoute',
+          label: 'Synthetic Route',
+          type: 'textarea',
+          placeholder: 'Detail the anticipated reaction sequence...',
+        },
+        {
+          name: 'syntheticRouteUpload',
+          label: 'Upload Scheme (optional)',
+          type: 'file',
+        },
+        {
+          name: 'reactionType',
+          label: 'Reaction Type',
+          type: 'dropdown',
+          options: [
+            'Condensation',
+            'Cyclization',
+            'Substitution',
+            'Reduction',
+            'Oxidation',
+            'Coupling',
+            'Multistep',
+            'Other',
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Characterization',
+      fields: [
+        {
+          name: 'tests',
+          label: 'Required Tests',
+          type: 'checkbox_group',
+          options: ['TLC', 'IR', 'NMR', 'Mass', 'HPLC', 'Elemental Analysis', 'XRD', 'DSC', 'SEM'],
+        },
+      ],
+    },
+    {
+      title: 'Novelty & Expected Outcomes',
+      fields: [
         {
           name: 'noveltyStatement',
           label: 'Statement of Novelty',
@@ -222,17 +252,12 @@ export const DEPARTMENT_SCHEMAS: Record<string, SectionDef[]> = {
           type: 'textarea',
           placeholder: 'Specify the scientific gap this research addresses.',
         },
-        {
-          name: 'workLocation',
-          label: 'Primary Work Location',
-          type: 'dropdown',
-          options: ['Internal', 'External Industry', 'External Research Institute'],
-        },
         { name: 'deliverables', label: 'Expected Deliverables', type: 'checkbox_group', options: COMMON_DELIVERABLES },
       ],
     },
   ],
   'PHARMACEUTICS': [
+    // NOTE: This schema is also used by INDUSTRIAL PHARMACY and TECHNO PHARMACY (see aliases below)
     {
       title: 'Dissertation',
       fields: [{ name: 'title', label: 'Proposed Title', type: 'text', required: true }],
@@ -378,176 +403,397 @@ export const DEPARTMENT_SCHEMAS: Record<string, SectionDef[]> = {
       ],
     },
   ],
+  // Industrial Pharmacy and Techno Pharmacy share the same form schema as Pharmaceutics
+  'INDUSTRIAL PHARMACY': [], // populated below via alias
+  'TECHNO PHARMACY': [],     // populated below via alias
   'QUALITY ASSURANCE': [
     {
-      title: 'Fundamental Information',
+      title: 'Product Info',
       fields: [
         { name: 'title', label: 'Dissertation Title', type: 'text', required: true },
-        { name: 'drugName', label: 'Active Pharmaceutical Ingredient (API)', type: 'text' },
-        { name: 'productName', label: 'Marketed Product Name (if applicable)', type: 'text' },
+        {
+          name: 'drugName',
+          label: 'Drug Name(s)',
+          type: 'drug_multiselect',
+          required: true,
+          placeholder: 'Search and select drugs from database...',
+        },
+        {
+          name: 'drugCategoryType',
+          label: 'Drug Classification',
+          type: 'dropdown',
+          required: true,
+          options: ['Single Drug', 'Combination', 'Herbal Marker', 'Impurity'],
+        },
+        { name: 'productName', label: 'Product Name', type: 'text' },
         {
           name: 'dosageForm',
-          label: 'Target Dosage Form',
+          label: 'Dosage Form',
           type: 'dropdown',
-          options: ['Tablet', 'Capsule', 'Liquid', 'Injectable', 'Topical', 'NDDS', 'Emulgel', 'Scaffold formulation', 'Nano structured Lipid carriers', 'NLC-loaded biodegradable polymeric scaffold (nanocomposite/medicated sponge dressing)'],
+          options: ['Tablet', 'Capsule', 'Syrup', 'Injection', 'Cream', 'API', 'Herbal Product', 'Other'],
         },
       ],
     },
     {
-      title: 'Project Domain & Methodological Approach',
+      title: 'Project Details',
       fields: [
         {
           name: 'qaDomain',
-          label: 'Primary QA Domain',
+          label: 'Project Domain',
           type: 'dropdown',
-          options: ['Analytical Method Development', 'Validation', 'Quality Control', 'Documentation', 'Audit'],
+          required: true,
+          options: [
+            'Analytical QA',
+            'Formulation QA',
+            'Manufacturing QA',
+            'Stability QA',
+            'Regulatory QA',
+            'Synthesis QA',
+            'Risk Analysis',
+          ],
         },
         {
           name: 'studyType',
-          label: 'Nature of Study',
+          label: 'Study Type',
           type: 'dropdown',
-          options: ['Routine Analysis', 'Stability Indicating', 'Impurity Profiling', 'Bioanalytical'],
+          required: true,
+          options: [
+            'Method Development + Validation',
+            'Comparative Study',
+            'Stability Study',
+            'Optimization',
+            'Troubleshooting',
+            'Audit Support',
+          ],
         },
+      ],
+    },
+    {
+      title: 'Method / Technique',
+      fields: [
         {
           name: 'analyticalTool',
-          label: 'Primary Analytical Tool',
+          label: 'Main Tool Used',
           type: 'dropdown',
-          options: ['HPLC', 'UV-Vis', 'HPTLC', 'LC-MS', 'GC'],
+          required: true,
+          options: [
+            'HPLC',
+            'HPTLC',
+            'HTLC',
+            'UV',
+            'GC',
+            'LC-MS',
+            'Dissolution',
+            'GC-MS',
+            'FTIR',
+            'Titration',
+            'ICP-MS',
+            'Other',
+          ],
+        },
+        {
+          name: 'otherAnalyticalTool',
+          label: 'Specify Other Instrument / Tool',
+          type: 'text',
+          required: true,
+          condition: (d) => d.analyticalTool === 'Other',
+          placeholder: 'e.g., Enter instrument type...',
         },
         {
           name: 'validationType',
-          label: 'Validation Guidelines Followed',
-          type: 'dropdown',
-          options: ['ICH', 'USP', 'FDA', 'EMA'],
+          label: 'Validation Type',
+          type: 'checkbox_group',
+          options: [
+            'Analytical Method',
+            'Process',
+            'Cleaning',
+            'Equipment',
+            'Computer System',
+            'Formulation Validation',
+          ],
         },
       ],
     },
     {
-      title: 'Execution Strategy & Facilities',
+      title: 'Execution Mode',
       fields: [
         {
           name: 'workLocation',
-          label: 'Primary Work Location',
+          label: 'Work Location',
           type: 'dropdown',
-          options: ['Internal', 'External Industry'],
-        },
-        {
-          name: 'facilities',
-          label: 'Required Facility Standards',
-          type: 'checkbox_group',
-          options: ['GLP Lab', 'GMP Facility', 'Clean Room'],
-        },
-        {
-          name: 'industryName',
-          label: 'Collaborating Industry Name',
-          type: 'text',
-          condition: (d) => d.workLocation === 'External Industry',
-        },
-        {
-          name: 'permissionLetter',
-          label: 'Industry Permission Letter (Upload)',
-          type: 'file',
-          condition: (d) => d.workLocation === 'External Industry',
+          required: true,
+          options: ['College', 'Industry', 'Hybrid'],
         },
       ],
     },
     {
-      title: 'Novelty & Expected Outcomes',
+      title: 'Part A – College Work',
       fields: [
-        { name: 'novelty', label: 'Statement of Novelty', type: 'textarea' },
-        { name: 'literatureGap', label: 'Identified Literature Gap', type: 'textarea' },
-        { name: 'deliverables', label: 'Expected Deliverables', type: 'checkbox_group', options: COMMON_DELIVERABLES },
+        {
+          name: 'collegeActivities',
+          label: 'Activities',
+          type: 'checkbox_group',
+          options: [
+            'Literature Review',
+            'Method Development',
+            'Validation',
+            'Data Analysis',
+            'Trial Work',
+          ],
+          condition: (d) => d.workLocation === 'College' || d.workLocation === 'Hybrid',
+        },
+      ],
+    },
+    {
+      title: 'Part B – Industry Work',
+      fields: [
+        {
+          name: 'industryActivities',
+          label: 'Activities',
+          type: 'checkbox_group',
+          options: [
+            'Pilot Batch',
+            'Process Validation',
+            'Stability Chamber',
+            'Commercial Product Study',
+            'Advanced Instrumentation',
+          ],
+          condition: (d) => d.workLocation === 'Industry' || d.workLocation === 'Hybrid',
+        },
+      ],
+    },
+    {
+      title: 'Industry Details',
+      fields: [
+        {
+          name: 'industryName',
+          label: 'Industry Name',
+          type: 'text',
+          condition: (d) => d.workLocation === 'Industry' || d.workLocation === 'Hybrid',
+        },
+        {
+          name: 'permissionLetter',
+          label: 'Permission Letter',
+          type: 'file',
+          condition: (d) => d.workLocation === 'Industry' || d.workLocation === 'Hybrid',
+        },
+      ],
+    },
+    {
+      title: 'Facilities Required',
+      fields: [
+        {
+          name: 'facilities',
+          label: 'Instruments / Labs',
+          type: 'checkbox_group',
+          options: [
+            'HPLC',
+            'Dissolution',
+            'FTIR',
+            'GC',
+            'Stability Chamber',
+            'Manufacturing Unit',
+            'Microbiology Lab',
+            'Other',
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Novelty & Justification',
+      fields: [
+        { name: 'novelty', label: 'Novelty Statement', type: 'textarea', required: true },
+        { name: 'literatureGap', label: 'Literature Gap / Rationale', type: 'textarea' },
+      ],
+    },
+    {
+      title: 'Expected Deliverables',
+      fields: [
+        { name: 'deliverables', label: 'Expected Deliverables', type: 'checkbox_group', options: QA_DELIVERABLES },
       ],
     },
   ],
   'REGULATORY AFFAIRS': [
     {
-      title: 'Fundamental Information',
+      title: 'Product Info',
       fields: [
         { name: 'title', label: 'Dissertation Title', type: 'text', required: true },
-        { name: 'productName', label: 'Product Name', type: 'text' },
+        { name: 'productName', label: 'Product / Drug Name', type: 'text', required: true },
         {
           name: 'category',
-          label: 'Product Category',
+          label: 'Category',
           type: 'dropdown',
-          options: ['Pharmaceuticals', 'Medical Devices', 'Nutraceuticals', 'Biologics', 'Cosmetics'],
+          required: true,
+          options: [
+            'API',
+            'Tablet',
+            'Capsule',
+            'Injection',
+            'Biologic',
+            'Herbal',
+            'Medical Device',
+            'Cosmetic',
+            'Other',
+          ],
+        },
+        {
+          name: 'marketType',
+          label: 'Market Type',
+          type: 'dropdown',
+          options: ['Domestic', 'Export', 'Global', 'Other'],
         },
       ],
     },
     {
-      title: 'Market Scope & Regulatory Domain',
+      title: 'Regulatory Scope',
       fields: [
         {
-          name: 'marketType',
-          label: 'Target Market Classification',
-          type: 'dropdown',
-          options: ['Regulated', 'Semi-regulated', 'Emerging', 'ROW'],
-        },
-        {
           name: 'regulatoryDomain',
-          label: 'Core Regulatory Domain',
+          label: 'Project Domain',
           type: 'dropdown',
+          required: true,
           options: [
             'Dossier Preparation',
-            'Post-Approval Changes',
-            'Clinical Trial Application',
-            'Compliance',
+            'ANDA',
+            'CTD',
+            'eCTD',
+            'DMF',
+            'Regulatory Strategy',
+            'Labeling',
+            'Pharmacovigilance',
+            'GMP Compliance',
+            'Audit',
+            'Medical Device Regulation',
+            'Other',
           ],
         },
         {
           name: 'studyType',
-          label: 'Nature of Study',
+          label: 'Study Type',
           type: 'dropdown',
-          options: ['Comparative Study', 'Filing Strategy', 'Query Response'],
-        },
-        {
-          name: 'targetCountry',
-          label: 'Primary Target Country',
-          type: 'dropdown',
-          options: ['USA', 'EU', 'UK', 'Australia', 'Japan', 'Canada', 'India'],
-        },
-        {
-          name: 'secondaryCountries',
-          label: 'Secondary Target Countries',
-          type: 'checkbox_group',
-          options: ['USA', 'EU', 'UK', 'Australia', 'Japan', 'Canada', 'India', 'Brazil', 'South Africa'],
+          required: true,
+          options: [
+            'Gap Analysis',
+            'Comparative Study',
+            'Submission Review',
+            'Compliance Assessment',
+            'Strategy Development',
+            'Case Study',
+            'Lifecycle Management',
+            'Other',
+          ],
         },
       ],
     },
     {
-      title: 'Execution Parameters & Guidelines',
+      title: 'Target Market',
+      fields: [
+        {
+          name: 'targetCountry',
+          label: 'Primary Country / Region',
+          type: 'dropdown',
+          required: true,
+          options: [
+            'India',
+            'USA',
+            'EU',
+            'UK',
+            'Canada',
+            'Australia',
+            'Japan',
+            'WHO',
+            'ASEAN',
+            'GCC',
+            'Global',
+            'Other',
+          ],
+        },
+        {
+          name: 'secondaryCountries',
+          label: 'Secondary Country / Region',
+          type: 'checkbox_group',
+          options: [
+            'India',
+            'USA',
+            'EU',
+            'UK',
+            'Canada',
+            'Australia',
+            'Japan',
+            'WHO',
+            'ASEAN',
+            'GCC',
+            'Global',
+            'Other',
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Reference Guidelines',
       fields: [
         {
           name: 'guidelines',
-          label: 'Applicable Regulatory Guidelines',
+          label: 'Main Standards Used',
           type: 'checkbox_group',
-          options: ['ICH', 'FDA', 'EMA', 'TGA', 'CDSCO', 'WHO'],
+          options: [
+            'CDSCO',
+            'ICH',
+            'USFDA',
+            'EMA',
+            'MHRA',
+            'WHO',
+            'Schedule M',
+            'PIC/S',
+            'ISO',
+            'Other',
+          ],
         },
+      ],
+    },
+    {
+      title: 'Technical Components',
+      fields: [
         {
           name: 'workModules',
-          label: 'CTD/eCTD Modules to be Compiled',
+          label: 'Work Modules',
           type: 'checkbox_group',
-          options: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Module 5'],
+          options: [
+            'CMC Review',
+            'Stability Data',
+            'Validation Review',
+            'BE-BA Documentation',
+            'Risk Assessment',
+            'Change Control',
+            'Labeling Review',
+            'Artwork Compliance',
+            'Variation Filing',
+            'Other',
+          ],
         },
+      ],
+    },
+    {
+      title: 'Data Source',
+      fields: [
         {
           name: 'dataSource',
-          label: 'Primary Data Source',
+          label: 'Research Mode',
           type: 'dropdown',
-          options: ['Literature', 'Database', 'Company Data'],
+          options: [
+            'Literature Based',
+            'Company Data',
+            'Simulated Dossier',
+            'Public Database',
+            'Hybrid',
+            'Other',
+          ],
         },
-        { name: 'tools', label: 'Regulatory Intelligence Tools', type: 'text' },
-        { name: 'ndaRequired', label: 'NDA/ANDA Submission Simulation Required', type: 'radio', options: ['Yes', 'No'] },
       ],
     },
     {
       title: 'Novelty & Expected Outcomes',
       fields: [
-        {
-          name: 'workLocation',
-          label: 'Primary Work Location',
-          type: 'dropdown',
-          options: ['Internal', 'External Industry'],
-        },
         { name: 'novelty', label: 'Statement of Novelty', type: 'textarea' },
         { name: 'literatureGap', label: 'Identified Literature Gap', type: 'textarea' },
         { name: 'deliverables', label: 'Expected Deliverables', type: 'checkbox_group', options: COMMON_DELIVERABLES },
@@ -747,89 +993,173 @@ export const DEPARTMENT_SCHEMAS: Record<string, SectionDef[]> = {
       title: 'Fundamental Information',
       fields: [
         { name: 'title', label: 'Dissertation Title', type: 'text', required: true },
-        { name: 'drugName', label: 'Active Pharmaceutical Ingredient (API)', type: 'text' },
+      ],
+    },
+    {
+      title: 'Drug / Test Material Info',
+      fields: [
+        {
+          name: 'drugName',
+          label: 'Drug / Extract / Compound Name',
+          type: 'text',
+          required: true,
+        },
         {
           name: 'category',
-          label: 'API Source Category',
+          label: 'Category',
           type: 'dropdown',
-          options: ['Synthetic', 'Plant Extract', 'Biologic', 'Repurposed Drug'],
+          required: true,
+          options: ['Synthetic', 'Herbal', 'Biologic', 'Nanoformulation', 'Combination'],
         },
       ],
     },
     {
-      title: 'Study Scope & Therapeutic Target',
+      title: 'Study Details',
       fields: [
         {
           name: 'therapeuticArea',
-          label: 'Target Therapeutic Area',
-          type: 'dropdown',
-          options: ['CNS', 'CVS', 'Endocrine', 'Gastrointestinal', 'Oncology', 'Inflammation', 'Metabolic'],
+          label: 'Therapeutic Area',
+          type: 'checkbox_group',
+          options: [
+            'Antidiabetic',
+            'Anti-inflammatory',
+            'Anticancer',
+            'CNS',
+            'CVS',
+            'Respiratory',
+            'Hepatoprotective',
+            'Antimicrobial',
+            'Nephroprotective',
+            'Other',
+          ],
         },
         {
           name: 'studyType',
-          label: 'Nature of Study',
+          label: 'Study Type',
           type: 'dropdown',
-          options: ['Efficacy', 'Toxicity', 'Mechanistic', 'Pharmacokinetic'],
-        },
-        {
-          name: 'workType',
-          label: 'Primary Work Type',
-          type: 'dropdown',
-          options: ['In vivo', 'In vitro', 'In silico', 'Ex vivo'],
+          required: true,
+          options: [
+            'Screening',
+            'Mechanism Study',
+            'Toxicity Study',
+            'Comparative Study',
+            'PK-PD Study',
+            'Formulation Evaluation',
+            'Efficacy Study',
+          ],
         },
       ],
     },
     {
-      title: 'Experimental Design & Parameters',
+      title: 'Research Model',
+      fields: [
+        {
+          name: 'workType',
+          label: 'Work Type',
+          type: 'dropdown',
+          required: true,
+          options: ['In vitro', 'In vivo', 'Ex vivo', 'In silico'],
+        },
+      ],
+    },
+    {
+      title: 'Experimental Model',
       fields: [
         {
           name: 'experimentalModel',
-          label: 'Specific Experimental Model',
+          label: 'Disease / Screening Model',
           type: 'text',
           placeholder: 'e.g., STZ-induced diabetes',
         },
         {
           name: 'species',
-          label: 'Target Animal/Cell Species',
+          label: 'Species / Cell Line',
           type: 'dropdown',
-          options: ['Rat', 'Mouse', 'Rabbit', 'Zebrafish', 'Cell Lines', 'Human (Clinical)'],
-        },
-        { name: 'dose', label: 'Proposed Dose/Concentration Range', type: 'text' },
-        {
-          name: 'route',
-          label: 'Proposed Route of Administration',
-          type: 'dropdown',
-          options: ['Oral', 'IP', 'IV', 'SC', 'Topical'],
-        },
-        {
-          name: 'techniques',
-          label: 'Primary Evaluation Techniques',
-          type: 'dropdown',
-          options: ['Behavioral', 'Biochemical', 'Histopathology', 'Molecular Biology'],
-        },
-        {
-          name: 'parameters',
-          label: 'Key Parameters to be Evaluated',
-          type: 'checkbox_group',
-          options: ['Biomarkers', 'Enzyme Levels', 'Gene Expression', 'Tissue Architecture', 'Behavioral Scores'],
+          required: true,
+          options: ['Rat', 'Mouse', 'Rabbit', 'Guinea Pig', 'Zebrafish', 'Cell Line', 'Other'],
         },
       ],
     },
     {
-      title: 'Ethics & Expected Outcomes',
+      title: 'Dose Details',
+      fields: [
+        {
+          name: 'dose',
+          label: 'Dose Level(s)',
+          type: 'text',
+          placeholder: 'e.g., 50, 100, 200 mg/kg',
+        },
+        {
+          name: 'route',
+          label: 'Route of Administration',
+          type: 'dropdown',
+          required: true,
+          options: ['Oral', 'IP', 'IV', 'SC', 'Topical', 'Inhalation', 'Other'],
+        },
+      ],
+    },
+    {
+      title: 'Methodology',
+      fields: [
+        {
+          name: 'techniques',
+          label: 'Main Technique',
+          type: 'dropdown',
+          required: true,
+          options: [
+            'Behavioral Test',
+            'Biochemical Assay',
+            'Histopathology',
+            'ELISA',
+            'PCR',
+            'Imaging',
+            'Hematology',
+            'Organ Bath',
+            'Other',
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Evaluation',
+      fields: [
+        {
+          name: 'parameters',
+          label: 'Required Parameters',
+          type: 'checkbox_group',
+          options: [
+            'Body Weight',
+            'Blood Glucose',
+            'BP',
+            'HR',
+            'Behavioral Score',
+            'Biomarkers',
+            'Organ Weight',
+            'Histology',
+            'Enzyme Levels',
+            'Survival',
+            'Toxicity Signs',
+            'Hematology',
+            'Other',
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Ethics Approval',
       fields: [
         {
           name: 'iaecApproval',
-          label: 'IAEC / IEC Approval Required',
+          label: 'IAEC Approval Required',
           type: 'radio',
-          options: ['Yes', 'No', 'Applied'],
+          required: true,
+          options: ['Yes', 'No'],
         },
-        {
-          name: 'workLocation',
-          label: 'Primary Work Location',
-          type: 'dropdown',
-          options: ['Internal', 'External CRO', 'Hospital'],
-        },
+      ],
+    },
+    {
+      title: 'Novelty & Expected Outcomes',
+      fields: [
         { name: 'novelty', label: 'Statement of Novelty', type: 'textarea' },
         { name: 'literatureGap', label: 'Identified Literature Gap', type: 'textarea' },
         { name: 'deliverables', label: 'Expected Deliverables', type: 'checkbox_group', options: COMMON_DELIVERABLES },
@@ -939,7 +1269,7 @@ const GENERIC_SCHEMA: SectionDef[] = [
     title: 'Fundamental Information',
     fields: [
       { name: 'title', label: 'Dissertation Title', type: 'text', required: true, placeholder: 'e.g., Enter dissertation title...' },
-      { name: 'drugName', label: 'Drug Name', type: 'text', required: true, placeholder: 'e.g., Enter dissertation title...' },
+      { name: 'drugName', label: 'Drug Name', type: 'text', required: true, placeholder: 'e.g., Enter drug name...' },
       {
         name: 'dosageForm',
         label: 'Dosage Form',
@@ -947,7 +1277,7 @@ const GENERIC_SCHEMA: SectionDef[] = [
         options: ['Tablet', 'Capsule', 'Liquid', 'Topical', 'Injectable', 'NDDS', 'Emulgel', 'Scaffold formulation', 'Nano structured Lipid carriers', 'NLC-loaded biodegradable polymeric scaffold (nanocomposite/medicated sponge dressing)', 'Other'],
         required: true,
       },
-      { name: 'primarySubject', label: 'Primary Subject / Target Active Ingredient', type: 'text', required: true, placeholder: 'e.g., Enter dissertation title...' },
+      { name: 'primarySubject', label: 'Primary Subject / Target Active Ingredient', type: 'text', required: true, placeholder: 'e.g., Enter active ingredient...' },
       {
         name: 'projectDomain',
         label: 'Core Project Domain',
@@ -960,8 +1290,8 @@ const GENERIC_SCHEMA: SectionDef[] = [
   {
     title: 'Methodology Specifications',
     fields: [
-      { name: 'methodPreparation', label: 'Methodology Details & Protocol', type: 'textarea', required: true, placeholder: 'e.g., Enter dissertation title...' },
-      { name: 'tools', label: 'Required Tools & Instruments', type: 'text', required: true, placeholder: 'e.g., Enter dissertation title...' },
+      { name: 'methodPreparation', label: 'Methodology Details & Protocol', type: 'textarea', required: true, placeholder: 'e.g., Describe your methodology...' },
+      { name: 'tools', label: 'Required Tools & Instruments', type: 'text', required: true, placeholder: 'e.g., FTIR, DSC, XRD...' },
       {
         name: 'workLocation',
         label: 'Primary Work Location',
@@ -980,6 +1310,53 @@ const GENERIC_SCHEMA: SectionDef[] = [
   },
 ];
 
+// Alias: Industrial Pharmacy and Techno Pharmacy use the same schema as Pharmaceutics
+DEPARTMENT_SCHEMAS['INDUSTRIAL PHARMACY'] = DEPARTMENT_SCHEMAS['PHARMACEUTICS'];
+DEPARTMENT_SCHEMAS['TECHNO PHARMACY'] = DEPARTMENT_SCHEMAS['PHARMACEUTICS'];
+
+// Alias: Quality Assurance and Pharmaceutical Analysis share the exact same schema
+DEPARTMENT_SCHEMAS['PHARMACEUTICAL ANALYSIS'] = DEPARTMENT_SCHEMAS['QUALITY ASSURANCE'];
+DEPARTMENT_SCHEMAS['QA'] = DEPARTMENT_SCHEMAS['QUALITY ASSURANCE'];
+DEPARTMENT_SCHEMAS['PA'] = DEPARTMENT_SCHEMAS['QUALITY ASSURANCE'];
+
+/**
+ * Map of department-name substrings to schema keys.
+ * Checked in order — first match wins. Put more specific patterns first.
+ */
+const DEPARTMENT_ALIAS_MAP: [string, string][] = [
+  ['PHARMACEUTICAL CHEMISTRY', 'PHARMACEUTICAL CHEMISTRY'],
+  ['CHEMISTRY', 'PHARMACEUTICAL CHEMISTRY'],
+  ['PHARMACEUTICAL ANALYSIS', 'QUALITY ASSURANCE'],
+  ['ANALYSIS', 'QUALITY ASSURANCE'],
+  ['QUALITY ASSURANCE', 'QUALITY ASSURANCE'],
+  ['QA', 'QUALITY ASSURANCE'],
+  ['PA', 'QUALITY ASSURANCE'],
+  ['REGULATORY AFFAIRS', 'REGULATORY AFFAIRS'],
+  ['PHARMACOLOGY', 'PHARMACOLOGY'],
+  ['INDUSTRIAL PHARMACY', 'INDUSTRIAL PHARMACY'],
+  ['TECHNO PHARMACY', 'TECHNO PHARMACY'],
+  ['TECHNO', 'TECHNO PHARMACY'],              // shorthand
+  ['INDUSTRIAL', 'INDUSTRIAL PHARMACY'],       // shorthand
+  ['PHARMACEUTICS', 'PHARMACEUTICS'],
+  ['PHARMACOGNOSY', 'PHARMACOGNOSY'],
+  ['PHARMACY PRACTICE', 'PHARMACY PRACTICE'],
+];
+
+function resolveDepartmentSchema(department: string): SectionDef[] {
+  const deptUpper = (department || '').toUpperCase().trim();
+  if (!deptUpper) return GENERIC_SCHEMA;
+
+  // Exact match first
+  if (DEPARTMENT_SCHEMAS[deptUpper]) return DEPARTMENT_SCHEMAS[deptUpper];
+
+  // Alias / substring match
+  for (const [pattern, key] of DEPARTMENT_ALIAS_MAP) {
+    if (deptUpper.includes(pattern)) return DEPARTMENT_SCHEMAS[key];
+  }
+
+  return GENERIC_SCHEMA;
+}
+
 export default function SubmitTitleForm({
   department,
   data,
@@ -993,16 +1370,70 @@ export default function SubmitTitleForm({
   dosageSuggestion,
   disabled = false,
 }: SubmitTitleFormProps) {
-  const deptUpper = (department || '').toUpperCase();
-  let schemaKey = Object.keys(DEPARTMENT_SCHEMAS).find(
-    (k) => deptUpper.includes(k) || k.includes(deptUpper.split(' ')[0])
-  );
-
-  if (deptUpper.includes('PHARMACOGNOSY')) schemaKey = 'PHARMACOGNOSY';
-
-  const schema = schemaKey ? DEPARTMENT_SCHEMAS[schemaKey] : GENERIC_SCHEMA;
+  const schema = resolveDepartmentSchema(department);
 
   const [suggestions, setSuggestions] = useState<Record<string, string>>({});
+
+  // Drug multi-select state
+  const [drugsList, setDrugsList] = useState<{ id: string; name: string; category?: string; therapeutic?: string }[]>([]);
+  const [drugSearchQuery, setDrugSearchQuery] = useState('');
+  const [isDrugDropdownOpen, setIsDrugDropdownOpen] = useState(false);
+  const [isSearchingDrugs, setIsSearchingDrugs] = useState(false);
+  const drugDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let active = true;
+    const query = drugSearchQuery.trim();
+
+    const fetchDrugs = async () => {
+      try {
+        setIsSearchingDrugs(true);
+        const url = query
+          ? `/api/drugs?search=${encodeURIComponent(query)}&limit=100`
+          : `/api/drugs?limit=2500`;
+        const res = await fetch(url);
+        if (res.ok && active) {
+          const json = await res.json();
+          if (Array.isArray(json.drugs)) {
+            setDrugsList((prev) => {
+              const map = new Map<string, { id: string; name: string; category?: string; therapeutic?: string }>();
+              // New results first
+              json.drugs.forEach((d: any) => map.set(d.name.toLowerCase(), d));
+              // Retain any already selected/existing drugs in memory
+              prev.forEach((d) => {
+                if (!map.has(d.name.toLowerCase())) {
+                  map.set(d.name.toLowerCase(), d);
+                }
+              });
+              return Array.from(map.values());
+            });
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load drugs in SubmitTitleForm:', err);
+      } finally {
+        if (active) setIsSearchingDrugs(false);
+      }
+    };
+
+    const delay = query ? 200 : 0;
+    const timer = setTimeout(fetchDrugs, delay);
+
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [drugSearchQuery]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (drugDropdownRef.current && !drugDropdownRef.current.contains(e.target as Node)) {
+        setIsDrugDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLiveAutocorrect = useCallback(
     async (name: string, text: string) => {
@@ -1345,6 +1776,157 @@ export default function SubmitTitleForm({
             </div>
           </div>
         );
+      case 'drug_multiselect': {
+        const selectedDrugs: string[] = Array.isArray(value)
+          ? value
+          : typeof value === 'string' && value.trim()
+          ? value.split(',').map((s) => s.trim()).filter(Boolean)
+          : [];
+
+        const filteredDrugs = drugsList.filter((d) => {
+          const matchesSearch = !drugSearchQuery.trim() || d.name.toLowerCase().includes(drugSearchQuery.toLowerCase());
+          const notAlreadySelected = !selectedDrugs.some((sel) => sel.toLowerCase() === d.name.toLowerCase());
+          return matchesSearch && notAlreadySelected;
+        });
+
+        const handleAddDrug = (drugName: string) => {
+          if (!selectedDrugs.some((sel) => sel.toLowerCase() === drugName.toLowerCase())) {
+            const next = [...selectedDrugs, drugName];
+            onChange(field.name, next);
+          }
+          setDrugSearchQuery('');
+          setIsDrugDropdownOpen(false);
+        };
+
+        const handleRemoveDrug = (drugName: string) => {
+          const next = selectedDrugs.filter((d) => d.toLowerCase() !== drugName.toLowerCase());
+          onChange(field.name, next);
+        };
+
+        return (
+          <div key={field.name} className="col-span-1 md:col-span-2 group" ref={drugDropdownRef}>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+              {field.label} {field.required && <span className="text-red-500">*</span>}
+              <span className="text-slate-400 font-normal normal-case ml-1">
+                (Search & select drugs from database — duplicates prevented)
+              </span>
+            </label>
+
+            {/* Selected Drug Badges */}
+            {selectedDrugs.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-2.5">
+                {selectedDrugs.map((d, idx) => (
+                  <span
+                    key={d}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#4361EE]/10 text-[#4361EE] border border-[#4361EE]/30 transition-all shadow-sm"
+                  >
+                    <Icon icon="solar:pill-bold-duotone" className="w-3.5 h-3.5" />
+                    <span>{d}</span>
+                    {idx === 0 && (
+                      <span className="text-[8px] bg-[#4361EE] text-white px-1.5 py-0.5 rounded-full font-black uppercase">
+                        Primary
+                      </span>
+                    )}
+                    {!disabled && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveDrug(d)}
+                        className="ml-0.5 text-[#4361EE]/70 hover:text-red-500 transition-colors p-0.5 rounded-full"
+                        title={`Remove ${d}`}
+                      >
+                        <Icon icon="solar:close-circle-bold" className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Search Input */}
+            <div className="relative">
+              <Icon
+                icon="solar:pill-bold-duotone"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4361EE]"
+              />
+              <input
+                type="text"
+                value={drugSearchQuery}
+                onChange={(e) => {
+                  setDrugSearchQuery(e.target.value);
+                  setIsDrugDropdownOpen(true);
+                }}
+                onFocus={() => setIsDrugDropdownOpen(true)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (filteredDrugs.length > 0) {
+                      handleAddDrug(filteredDrugs[0].name);
+                    }
+                  }
+                }}
+                disabled={disabled}
+                placeholder={
+                  selectedDrugs.length > 0
+                    ? 'Search to add another drug (e.g., Praziquantel)...'
+                    : field.placeholder || 'Search and select drug name (e.g., Praziquantel)...'
+                }
+                className="w-full pl-10 pr-24 py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none transition-all"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                {isSearchingDrugs && (
+                  <Icon icon="solar:refresh-circle-bold" className="w-4 h-4 text-[#4361EE] animate-spin" />
+                )}
+                {selectedDrugs.length > 0 && (
+                  <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                    {selectedDrugs.length} selected
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Dropdown Options List */}
+            {isDrugDropdownOpen && !disabled && (
+              <div className="relative">
+                <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto divide-y divide-slate-100">
+                  {filteredDrugs.length > 0 ? (
+                    filteredDrugs.map((drug, idx) => (
+                      <button
+                        key={`${drug.id || drug.name}-${idx}`}
+                        type="button"
+                        onClick={() => handleAddDrug(drug.name)}
+                        className="w-full text-left px-4 py-2.5 hover:bg-[#4361EE]/5 transition-colors flex items-center justify-between group/item"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900 group-hover/item:text-[#4361EE]">
+                            {drug.name}
+                          </p>
+                          {(drug.category || drug.therapeutic) && (
+                            <p className="text-[10px] text-slate-400">
+                              {[drug.category, drug.therapeutic].filter(Boolean).join(' • ')}
+                            </p>
+                          )}
+                        </div>
+                        <Icon icon="solar:add-circle-linear" className="w-4 h-4 text-slate-400 group-hover/item:text-[#4361EE]" />
+                      </button>
+                    ))
+                  ) : isSearchingDrugs ? (
+                    <div className="px-4 py-3 text-xs text-slate-400 text-center flex items-center justify-center gap-2">
+                      <Icon icon="solar:refresh-circle-bold" className="w-4 h-4 text-[#4361EE] animate-spin" />
+                      <span>Searching database for &quot;{drugSearchQuery}&quot;...</span>
+                    </div>
+                  ) : (
+                    <div className="px-4 py-3 text-xs text-slate-400 text-center">
+                      {drugSearchQuery.trim()
+                        ? `No matching drugs found for "${drugSearchQuery}"`
+                        : 'All available drugs already selected'}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
       default:
         return null;
     }

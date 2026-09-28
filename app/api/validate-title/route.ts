@@ -13,11 +13,13 @@ interface TitleEntry {
 
 interface ValidationRequest {
   title: string;
-  drugName: string;
-  dosageForm: string;
-  keywords: string;
-  excipients: string;
-  novelty: string;
+  drugName?: string | string[];
+  dosageForm?: string | string[];
+  keywords?: string;
+  excipients?: string;
+  novelty?: string;
+  department?: string;
+  excludeSubmissionId?: string;
 }
 
 interface LayerResult {
@@ -83,17 +85,25 @@ function calculateSimilarity(str1: string, str2: string): number {
   return (intersection / union) * 100;
 }
 
-function checkDrugInTitle(drugName: string, title: string): { score: number; percentage: number } {
-  if (!drugName.trim() || !title.trim()) return { score: 0, percentage: 0 };
+function checkDrugInTitle(drugInput: string | string[] | undefined, title: string): { score: number; percentage: number; matchedDrug?: string } {
+  if (!drugInput || !title.trim()) return { score: 0, percentage: 0 };
   
   const normalizedTitle = title.toLowerCase().trim();
-  const items = drugName.split(',').map(d => d.trim().toLowerCase()).filter(Boolean);
+  const items: string[] = Array.isArray(drugInput)
+    ? drugInput.map(d => d.trim().toLowerCase()).filter(Boolean)
+    : typeof drugInput === 'string'
+    ? drugInput.split(',').map(d => d.trim().toLowerCase()).filter(Boolean)
+    : [];
   
+  if (items.length === 0) return { score: 0, percentage: 0 };
+
   let bestPercentage = 0;
+  let bestMatchedDrug = items[0];
   
   for (const item of items) {
     if (normalizedTitle.includes(item)) {
       bestPercentage = Math.max(bestPercentage, 100);
+      bestMatchedDrug = item;
       continue;
     }
     const drugWords = item.split(/\s+/).filter(w => w.length > 2);
@@ -106,22 +116,31 @@ function checkDrugInTitle(drugName: string, title: string): { score: number; per
       }
     });
     const percentage = drugWords.length > 0 ? (matchCount / drugWords.length) * 100 : 0;
-    bestPercentage = Math.max(bestPercentage, percentage);
+    if (percentage > bestPercentage) {
+      bestPercentage = percentage;
+      bestMatchedDrug = item;
+    }
   }
   
-  if (bestPercentage >= 90) return { score: 30, percentage: bestPercentage };
-  if (bestPercentage >= 70) return { score: 22, percentage: bestPercentage };
-  if (bestPercentage >= 50) return { score: 15, percentage: bestPercentage };
-  if (bestPercentage >= 30) return { score: 8, percentage: bestPercentage };
-  return { score: 0, percentage: bestPercentage };
+  if (bestPercentage >= 90) return { score: 30, percentage: bestPercentage, matchedDrug: bestMatchedDrug };
+  if (bestPercentage >= 70) return { score: 22, percentage: bestPercentage, matchedDrug: bestMatchedDrug };
+  if (bestPercentage >= 50) return { score: 15, percentage: bestPercentage, matchedDrug: bestMatchedDrug };
+  if (bestPercentage >= 30) return { score: 8, percentage: bestPercentage, matchedDrug: bestMatchedDrug };
+  return { score: 0, percentage: bestPercentage, matchedDrug: bestMatchedDrug };
 }
 
-function checkDosageFormInTitle(dosageForm: string, title: string): { score: number; percentage: number } {
-  if (!dosageForm.trim() || !title.trim()) return { score: 0, percentage: 0 };
+function checkDosageFormInTitle(dosageInput: string | string[] | undefined, title: string): { score: number; percentage: number } {
+  if (!dosageInput || !title.trim()) return { score: 0, percentage: 0 };
   
   const normalizedTitle = title.toLowerCase().trim();
-  const items = dosageForm.split(',').map(d => d.trim().toLowerCase()).filter(Boolean);
+  const items: string[] = Array.isArray(dosageInput)
+    ? dosageInput.map(d => d.trim().toLowerCase()).filter(Boolean)
+    : typeof dosageInput === 'string'
+    ? dosageInput.split(',').map(d => d.trim().toLowerCase()).filter(Boolean)
+    : [];
   
+  if (items.length === 0) return { score: 0, percentage: 0 };
+
   let bestPercentage = 0;
   
   for (const item of items) {
@@ -158,7 +177,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
     }
 
-    const { title, drugName, dosageForm, keywords, excipients, novelty, excludeSubmissionId } = body;
+    const {
+      title,
+      drugName,
+      dosageForm,
+      keywords = '',
+      excipients = '',
+      novelty = '',
+      department,
+      excludeSubmissionId,
+    } = body;
 
     if (!title?.trim()) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
@@ -318,36 +346,87 @@ export async function POST(request: Request) {
     let layer3: LayerResult;
     let scores: ScoreBreakdown;
 
+    const isQAPADept = department && [
+      'QUALITY ASSURANCE',
+      'PHARMACEUTICAL ANALYSIS',
+      'QA',
+      'PA',
+    ].some((d) => department.toUpperCase().includes(d));
+
+    const rawDrugNames = Array.isArray(drugName)
+      ? drugName.join(', ')
+      : drugName || '';
+
     if (!layer1.passed || !layer2.passed) {
       scores = {
-        drugName: { score: 0, max: 30, detail: 'Skipped' },
-        dosageForm: { score: 0, max: 35, detail: 'Skipped' },
-        keywords: { score: 0, max: 15, detail: 'Skipped' },
-        excipients: { score: 0, max: 15, detail: 'Skipped' },
+        drugName: { score: 0, max: isQAPADept ? 100 : 30, detail: 'Skipped' },
+        dosageForm: { score: 0, max: isQAPADept ? 0 : 35, detail: 'Skipped' },
+        keywords: { score: 0, max: isQAPADept ? 0 : 15, detail: 'Skipped' },
+        excipients: { score: 0, max: isQAPADept ? 0 : 15, detail: 'Skipped' },
         total: 0,
-        maxTotal: 95,
+        maxTotal: isQAPADept ? 100 : 95,
       };
       layer3 = {
         passed: false,
         status: 'skipped',
         message: 'Skipped — Layer 1 and Layer 2 must pass first.',
       };
+    } else if (isQAPADept) {
+      // ===== SPECIAL LEVEL 3 FOR QA & PA DEPARTMENTS =====
+      // Checks if the selected drug name(s) are present in the dissertation title
+      // Threshold: >= 60% similarity / match required to pass and allow filling/submitting form
+      const drugResult = checkDrugInTitle(drugName, title);
+      const similarityPercent = Math.round(drugResult.percentage);
+
+      scores = {
+        drugName: {
+          score: similarityPercent,
+          max: 100,
+          detail: similarityPercent >= 60
+            ? `Drug "${drugResult.matchedDrug || rawDrugNames}" found in title (${similarityPercent}% similarity)`
+            : similarityPercent > 0
+              ? `Drug "${rawDrugNames}" partially found (${similarityPercent}% similarity)`
+              : `Drug "${rawDrugNames}" not found in title (0% match)`,
+        },
+        dosageForm: { score: 0, max: 0, detail: 'Not required for QA/PA' },
+        keywords: { score: 0, max: 0, detail: 'Not required for QA/PA' },
+        excipients: { score: 0, max: 0, detail: 'Not required for QA/PA' },
+        total: similarityPercent,
+        maxTotal: 100,
+      };
+
+      if (similarityPercent >= 60) {
+        layer3 = {
+          passed: true,
+          status: 'passed',
+          message: `Drug Similarity: ${similarityPercent}% — Meets minimum threshold (60%).`,
+          details: `Drug name "${drugResult.matchedDrug || rawDrugNames}" verified in dissertation title with ${similarityPercent}% similarity. Form submission unlocked.`,
+        };
+      } else {
+        layer3 = {
+          passed: false,
+          status: 'failed',
+          message: `Drug Similarity: ${similarityPercent}% — Below minimum threshold (60%).`,
+          details: `Your selected drug name (${rawDrugNames || 'None'}) must appear in the dissertation title with at least 60% similarity to allow submission.\n\nTip: Include your drug name clearly in your dissertation title.`,
+        };
+      }
     } else {
-      // Drug name scoring (30/35)
+      // Standard / Legacy scoring for Pharmaceutics / Industrial / Techno
       const drugResult = checkDrugInTitle(drugName, title);
       const drugDetail = drugResult.percentage >= 90
-        ? `Drug "${drugName}" found in title (${Math.round(drugResult.percentage)}% match)`
+        ? `Drug "${rawDrugNames}" found in title (${Math.round(drugResult.percentage)}% match)`
         : drugResult.percentage > 0
-          ? `Drug "${drugName}" partially found (${Math.round(drugResult.percentage)}% match)`
-          : `Drug "${drugName}" not found in title`;
+          ? `Drug "${rawDrugNames}" partially found (${Math.round(drugResult.percentage)}% match)`
+          : `Drug "${rawDrugNames}" not found in title`;
 
       // Dosage form scoring (35/35)
+      const rawDosageForms = Array.isArray(dosageForm) ? dosageForm.join(', ') : dosageForm || '';
       const dosageResult = checkDosageFormInTitle(dosageForm, title);
       const dosageDetail = dosageResult.percentage >= 90
-        ? `Dosage form "${dosageForm}" found in title (${Math.round(dosageResult.percentage)}% match)`
+        ? `Dosage form "${rawDosageForms}" found in title (${Math.round(dosageResult.percentage)}% match)`
         : dosageResult.percentage > 0
-          ? `Dosage form "${dosageForm}" partially found (${Math.round(dosageResult.percentage)}% match)`
-          : `Dosage form "${dosageForm}" not found in title`;
+          ? `Dosage form "${rawDosageForms}" partially found (${Math.round(dosageResult.percentage)}% match)`
+          : `Dosage form "${rawDosageForms}" not found in title`;
 
       // Keywords & Excipients scoring via Groq
       let keywordsScore = 0;

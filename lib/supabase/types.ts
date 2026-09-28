@@ -63,6 +63,8 @@ export type SubmissionRow = {
   hod_reviewed_at: string | null;
   rejection_reason: string | null;
   edit_unlocked: boolean;
+  schema_version: number | null;
+  department_id: string | null;
   created_at: string;
   updated_at: string;
 };

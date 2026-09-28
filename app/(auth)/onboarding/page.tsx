@@ -31,6 +31,22 @@ export default function OnboardingPage() {
     }
   }, [user, authLoading]);
 
+  // If user already has university_id configured, redirect to dashboard
+  useEffect(() => {
+    async function checkExistingProfile() {
+      if (!user) return;
+      const { data } = await supabase
+        .from('profiles')
+        .select('university_id')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (data?.university_id) {
+        window.location.href = '/dashboard';
+      }
+    }
+    checkExistingProfile();
+  }, [user, supabase]);
+
   // Pre-fill name and email prefix on load
   useEffect(() => {
     if (user) {
@@ -72,7 +88,7 @@ export default function OnboardingPage() {
       return;
     }
 
-    // Reset selected department when institute changes if current selected department doesn't belong to it
+    // Reset selected department when institute changes
     setSelectedDepartment('');
 
     async function loadGuides() {
@@ -80,14 +96,22 @@ export default function OnboardingPage() {
         const res = await fetch(`/api/guides?institute_id=${selectedInstitute}`);
         if (!res.ok) throw new Error('Failed to load guides');
         const data = await res.json();
-        setGuides(data.guides || []);
+        let loadedGuides = data.guides || [];
+        // If no guides explicitly found for this institute, fall back to all guides
+        if (loadedGuides.length === 0) {
+          const fallbackRes = await fetch('/api/guides');
+          if (fallbackRes.ok) {
+            const fallbackData = await fallbackRes.json();
+            loadedGuides = fallbackData.guides || [];
+          }
+        }
+        setGuides(loadedGuides);
       } catch (err) {
         console.error('Error loading guides via API:', err);
         const { data: guideData } = await supabase
           .from('profiles')
           .select('id, full_name, email')
           .eq('role', 'guide')
-          .eq('institute_id', selectedInstitute)
           .order('full_name');
         setGuides((guideData as unknown as { id: string; full_name: string | null; email: string }[]) || []);
       }
@@ -111,23 +135,29 @@ export default function OnboardingPage() {
     setSubmitting(true);
 
     try {
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          full_name: fullName.trim(),
-          university_id: universityId.trim(),
-          institute_id: selectedInstitute,
-          department_id: selectedDepartment,
-          guide_id: selectedGuide,
-        })
-        .eq('id', user.id);
+      const res = await fetch('/api/onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          userEmail: user.email,
+          fullName: fullName.trim(),
+          universityId: universityId.trim(),
+          instituteId: selectedInstitute,
+          departmentId: selectedDepartment,
+          guideId: selectedGuide,
+        }),
+      });
 
-      if (updateError) throw new Error(updateError.message);
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to update profile.');
+      }
 
       clearRoleCache();
       setSuccess(true);
       setTimeout(() => {
-        window.location.href = '/dashboard';
+        window.location.replace(data.redirectUrl || '/dashboard');
       }, 500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to create profile.';

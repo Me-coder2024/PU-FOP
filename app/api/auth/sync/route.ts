@@ -222,13 +222,20 @@ export async function POST(request: Request) {
 
     if (createError) {
       if (createError.message?.includes('already been registered') || createError.status === 422) {
-        // Auth user exists but profile was missing — find them
-        const { data: listData } = await supabaseAdmin.auth.admin.listUsers({
-          perPage: 50,
-          page: 1,
-        });
+        // Auth user exists but profile was missing — find them across all pages
+        let page = 1;
+        let foundUser: { id: string } | undefined;
+        while (!foundUser) {
+          const { data: listData } = await supabaseAdmin.auth.admin.listUsers({
+            perPage: 50,
+            page,
+          });
+          if (!listData?.users || listData.users.length === 0) break;
+          foundUser = listData.users.find((u) => u.email?.toLowerCase() === email);
+          if (listData.users.length < 50) break;
+          page++;
+        }
 
-        const foundUser = listData?.users?.find((u) => u.email?.toLowerCase() === email);
         if (!foundUser) {
           console.error('User registered in auth but not found in list:', email);
           return NextResponse.json(
