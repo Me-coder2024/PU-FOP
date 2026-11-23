@@ -1,5 +1,7 @@
 'use client';
 
+import SchemaDataViewer from '@/components/forms/SchemaDataViewer';
+import { titleAction } from '@/lib/utils/title-actions';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRole } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
@@ -66,20 +68,7 @@ export default function PgDirectorPage() {
     if (!editTitle.trim()) return;
     setSaving(true);
     try {
-      const old = submissions.find((s) => s.id === submissionId);
-      const { error } = await supabase
-        .from('submissions')
-        .update({ title: editTitle.trim() })
-        .eq('id', submissionId);
-      if (error) throw error;
-      await supabase.from('audit_logs').insert({
-        user_id: profile!.id,
-        action: 'edit_title',
-        table_name: 'submissions',
-        record_id: submissionId,
-        old_data: { title: old?.title },
-        new_data: { title: editTitle.trim() },
-      });
+      await titleAction({ action: 'edit_title', submissionId, title: editTitle.trim() });
       setEditingId(null);
       success('Title saved successfully!', 'Success');
       await fetchSubmissions();
@@ -93,23 +82,7 @@ export default function PgDirectorPage() {
 
   const handleToggleEditUnlock = async (submissionId: string, currentValue: boolean) => {
     try {
-      const { error } = await supabase
-        .from('submissions')
-        .update({ edit_unlocked: !currentValue })
-        .eq('id', submissionId);
-      if (error) throw error;
-      const sub = submissions.find((s) => s.id === submissionId);
-      if (sub) {
-        await supabase.from('notifications').insert({
-          user_id: sub.student_id,
-          title: !currentValue ? 'Edit Access Granted' : 'Edit Access Revoked',
-          message: !currentValue
-            ? `The PG Director has unlocked your title "${sub.title}" for editing.`
-            : `Edit access for your title "${sub.title}" has been revoked.`,
-          type: !currentValue ? 'success' : 'warning',
-          link: '/dashboard/submit',
-        });
-      }
+      await titleAction({ action: 'set_unlock', submissionId, unlocked: !currentValue });
       success(!currentValue ? 'Edit access granted.' : 'Edit access revoked.', 'Access Changed');
       await fetchSubmissions();
     } catch (err) {
@@ -127,22 +100,7 @@ export default function PgDirectorPage() {
     try {
       const sub = submissions.find(s => s.id === submissionId);
       if (!sub) return;
-      const { error } = await supabase
-        .from('submissions')
-        .update({
-          status: 'revision_requested' as SubmissionRow['status'],
-          edit_unlocked: true,
-        })
-        .eq('id', submissionId);
-      if (error) throw error;
-      await supabase.from('notifications').insert({
-        user_id: sub.student_id,
-        title: 'Revisions Requested by PG Director',
-        message: `The PG Director has requested changes to your title "${sub.title}". Remarks: ${remarks[submissionId]}`,
-        type: 'warning',
-        link: '/dashboard/submit',
-      });
-      setModalSub(null);
+      await titleAction({ action: 'final_revision', submissionId, remarks: remarks[submissionId]?.trim() });
       success('Title sent back for revisions.', 'Success');
       await fetchSubmissions();
     } catch (err) {
@@ -205,7 +163,7 @@ export default function PgDirectorPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-black text-slate-900 tracking-tight" style={authorFont}>PG Director — Title Review</h1>
-        <p className="text-sm text-slate-500 mt-1" style={authorFont}>Review HOD-forwarded titles. Finalize, edit, or send back for revisions.</p>
+        <p className="text-sm text-slate-500 mt-1" style={authorFont}>Review HOD-forwarded titles. Finalize or send back for revisions.</p>
       </div>
 
       {/* Stat Cards */}
@@ -312,7 +270,7 @@ export default function PgDirectorPage() {
                   </div>
 
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    {!isEditing && (
+                    {!isEditing && profile?.role === 'super_admin' && (
                       <button
                         onClick={() => { setEditingId(sub.id); setEditTitle(sub.title); }}
                         className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#4361EE] hover:bg-[#4361EE]/5 transition-all"
@@ -389,6 +347,7 @@ export default function PgDirectorPage() {
               )}
               {(() => {
                 const details = (modalSub.criteria_details as Record<string, unknown>) || {};
+                if ((modalSub.schema_version === 2 || details.schema_version === 2) && typeof details.department === 'string') return <SchemaDataViewer department={details.department} data={details} />;
                 const fields = [
                   { key: 'drugName', label: 'Drug Name' }, { key: 'dosageForm', label: 'Dosage Form' },
                   { key: 'primarySubject', label: 'Primary Subject' }, { key: 'coreDomain', label: 'Core Domain' },

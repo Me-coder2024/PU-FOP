@@ -1,3 +1,5 @@
+import { resolveDepartment, isPilotDepartment } from '@/lib/config/departments';
+import { isLegacyFormDepartment } from '@/lib/config/scoring-criteria';
 import { NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
@@ -192,6 +194,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     }
 
+    if (department && !isLegacyFormDepartment(department) && resolveDepartment(department) !== 'QUALITY ASSURANCE') {
+      return NextResponse.json({ canSubmit: false, scoringAvailable: false, error: isPilotDepartment(department) ? 'Official department rubric pending; staging uses field validation only.' : 'No approved scoring rubric is configured for this department.' }, { status: 422 });
+    }
+
     // ============ LAYER 1: Title Uniqueness Check ============
     let layer1: LayerResult;
     let existingTitles: TitleEntry[] = [];
@@ -346,12 +352,7 @@ export async function POST(request: Request) {
     let layer3: LayerResult;
     let scores: ScoreBreakdown;
 
-    const isQAPADept = department && [
-      'QUALITY ASSURANCE',
-      'PHARMACEUTICAL ANALYSIS',
-      'QA',
-      'PA',
-    ].some((d) => department.toUpperCase().includes(d));
+    const isQAPADept = resolveDepartment(department) === 'QUALITY ASSURANCE';
 
     const rawDrugNames = Array.isArray(drugName)
       ? drugName.join(', ')

@@ -42,7 +42,7 @@ export default function RepositoryPage() {
             title: d.title,
             status: d.status,
             created_at: d.created_at,
-            similarity_score: Math.floor(Math.random() * 25) + 5,
+            similarity_score: null,
             criteria_details: d.criteria_details,
           }));
           setTitles(mapped);
@@ -190,6 +190,7 @@ export default function RepositoryPage() {
                       {details.drugName}
                     </span>
                   )}
+                  {t.similarity_score == null && <span className="text-xs text-slate-500">Similarity not available</span>}
                   {t.similarity_score !== null && t.similarity_score !== undefined && (
                     <span className="px-2 py-0.5 bg-slate-50 text-slate-400 rounded-md text-[9px] font-bold border border-slate-100" style={poppinsFont}>
                       Sim: {t.similarity_score}%

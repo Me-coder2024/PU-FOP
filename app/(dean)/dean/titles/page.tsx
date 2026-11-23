@@ -1,5 +1,6 @@
 'use client';
 
+import SchemaDataViewer from '@/components/forms/SchemaDataViewer';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRole } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
@@ -129,7 +130,7 @@ export default function DeanTitlesPage() {
       const res = await fetch('/api/dean/titles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'toggle_edit_unlock', submissionId, userId: profile!.id }),
+        body: JSON.stringify({ action: 'toggle_edit_unlock', unlocked: !currentValue, submissionId, userId: profile!.id }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to update edit access.');
@@ -453,6 +454,7 @@ export default function DeanTitlesPage() {
                 <p className="text-base font-bold text-slate-900 mt-1" style={authorFont}>{modalSub.title}</p>
               </div>
 
+              {typeof modalSub.criteria_details?.department === 'string' && <SchemaDataViewer department={modalSub.criteria_details.department} data={modalSub.criteria_details} />}
               {modalSub.status === 'hod_accepted' && (
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
                   <button

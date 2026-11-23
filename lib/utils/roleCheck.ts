@@ -46,6 +46,9 @@ export function canAccessRoute(role: AppRole, pathname: string): boolean {
   if (pathname.startsWith('/super-admin')) {
     return false; // Only super_admin handled above
   }
+  if (pathname.startsWith('/research')) {
+    return role === 'dean' || role === 'pg_director';
+  }
 
   return true; // Public routes
 }

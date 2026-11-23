@@ -1,0 +1,23 @@
+
+ create role anon; create role authenticated; create role service_role bypassrls;
+ create schema auth; create schema storage;
+ create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+ grant usage on schema public,auth to authenticated,service_role;
+ create type app_role as enum('student','guide','hod','pg_director','dean','super_admin');
+ create type submission_status as enum('submitted','revision_requested','guide_accepted','guide_rejected','hod_accepted','hod_rejected','finalized');
+ create table institutes(id uuid primary key default gen_random_uuid(),name text);
+ create table departments(id uuid primary key default gen_random_uuid(),institute_id uuid references institutes(id),name text);
+ create table profiles(id uuid primary key default gen_random_uuid(),email text,role app_role,institute_id uuid references institutes(id),department_id uuid references departments(id),guide_id uuid references profiles(id),full_name text,university_id text);
+ create table submissions(id uuid primary key default gen_random_uuid(),student_id uuid references profiles(id),guide_id uuid references profiles(id),title text,description text,criteria_details jsonb,status submission_status default 'submitted',edit_unlocked boolean default false,department_id uuid references departments(id),schema_version integer,guide_remarks text,guide_reviewed_at timestamptz,hod_id uuid,hod_remarks text,hod_reviewed_at timestamptz,rejection_reason text,created_at timestamptz default now(),updated_at timestamptz default now());
+ create unique index idx_one_active_submission_per_student on submissions(student_id) where status not in ('guide_rejected','hod_rejected');
+ create table notifications(id uuid primary key default gen_random_uuid(),user_id uuid,title text,message text,type text,link text);
+ create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text,name text);
+ alter table storage.objects enable row level security;
+ create policy existing_broad_storage on storage.objects for all to authenticated using(true) with check(true);
+ grant usage on schema storage to authenticated; grant select,insert,update,delete on storage.objects to authenticated;
+ create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
+ create function is_submission_open(p_institute_id uuid default null) returns boolean language sql as $$ select true $$;
+ alter table submissions enable row level security;
+ create policy legacy_read on submissions for select to authenticated using(true);
+ create policy legacy_write on submissions for all to authenticated using(true) with check(true);
+ grant select,insert,update,delete on all tables in schema public to authenticated,service_role;

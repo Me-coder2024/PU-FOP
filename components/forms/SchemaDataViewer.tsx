@@ -1,44 +1,12 @@
 'use client';
 
 import React from 'react';
-import { DEPARTMENT_SCHEMAS } from './SubmitTitleForm';
+import { DEPARTMENT_SCHEMAS } from '@/lib/config/department-schemas';
+import { resolveDepartment } from '@/lib/config/departments';
 import { Icon } from '@iconify/react';
 
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
-
-/**
- * Map of department-name substrings → DEPARTMENT_SCHEMAS key.
- * Mirrors the alias logic in SubmitTitleForm.tsx.
- */
-const DEPARTMENT_ALIAS_MAP: [string, string][] = [
-  ['PHARMACEUTICAL CHEMISTRY', 'PHARMACEUTICAL CHEMISTRY'],
-  ['CHEMISTRY', 'PHARMACEUTICAL CHEMISTRY'],
-  ['PHARMACEUTICAL ANALYSIS', 'QUALITY ASSURANCE'],
-  ['ANALYSIS', 'QUALITY ASSURANCE'],
-  ['QUALITY ASSURANCE', 'QUALITY ASSURANCE'],
-  ['QA', 'QUALITY ASSURANCE'],
-  ['PA', 'QUALITY ASSURANCE'],
-  ['REGULATORY AFFAIRS', 'REGULATORY AFFAIRS'],
-  ['PHARMACOLOGY', 'PHARMACOLOGY'],
-  ['INDUSTRIAL PHARMACY', 'INDUSTRIAL PHARMACY'],
-  ['TECHNO PHARMACY', 'TECHNO PHARMACY'],
-  ['TECHNO', 'TECHNO PHARMACY'],
-  ['INDUSTRIAL', 'INDUSTRIAL PHARMACY'],
-  ['PHARMACEUTICS', 'PHARMACEUTICS'],
-  ['PHARMACOGNOSY', 'PHARMACOGNOSY'],
-  ['PHARMACY PRACTICE', 'PHARMACY PRACTICE'],
-];
-
-function resolveSchemaKey(department: string): string | null {
-  const upper = (department || '').toUpperCase().trim();
-  if (!upper) return null;
-  if (DEPARTMENT_SCHEMAS[upper]) return upper;
-  for (const [pattern, key] of DEPARTMENT_ALIAS_MAP) {
-    if (upper.includes(pattern)) return key;
-  }
-  return null;
-}
 
 interface SchemaDataViewerProps {
   /** The department name (e.g., "Pharmaceutical Chemistry") */
@@ -56,7 +24,7 @@ interface SchemaDataViewerProps {
  * department-specific form data without duplicating layout logic.
  */
 export default function SchemaDataViewer({ department, data }: SchemaDataViewerProps) {
-  const schemaKey = resolveSchemaKey(department);
+  const schemaKey = resolveDepartment(typeof data.department === 'string' ? data.department : department);
   if (!schemaKey) return null;
 
   const schema = DEPARTMENT_SCHEMAS[schemaKey];

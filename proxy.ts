@@ -169,6 +169,12 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  if (pathname.startsWith('/research')) {
+    if (profile.role !== 'dean' && profile.role !== 'pg_director') {
+      return redirectWithCookies(getRoleRedirect(profile.role));
+    }
+  }
+
   if (pathname.startsWith('/super-admin')) {
     if (profile.role !== 'super_admin') {
       return redirectWithCookies(getRoleRedirect(profile.role));

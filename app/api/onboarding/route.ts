@@ -14,7 +14,7 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { fullName, universityId, instituteId, departmentId, guideId, userId, userEmail } = body;
+    const { fullName, universityId, instituteId, departmentId, guideId } = body;
 
     // --- Validate required fields ---
     if (!fullName?.trim()) {
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
     const supabaseAdmin = createServiceClient();
 
-    // --- Authenticate the caller: first via Supabase session cookie, then via body.userId ---
+    // Authenticate only through the Supabase session.
     let targetUserId: string | null = null;
     let targetUserEmail: string | null = null;
 
@@ -71,27 +71,20 @@ export async function POST(request: Request) {
       console.warn('[Onboarding] Cookie auth error:', cookieErr);
     }
 
-    // Fallback to body.userId if cookie session was not accessible
-    if (!targetUserId && userId) {
-      const { data: adminUser } = await supabaseAdmin.auth.admin.getUserById(userId);
-      if (adminUser?.user?.id) {
-        targetUserId = adminUser.user.id;
-        targetUserEmail = adminUser.user.email || null;
-      }
-    }
-
     if (!targetUserId) {
       return NextResponse.json({ error: 'Not authenticated. Please sign in again.' }, { status: 401 });
-    }
-
-    if (!targetUserEmail && userEmail) {
-      targetUserEmail = userEmail;
     }
 
     if (!targetUserEmail) {
       const { data: adminUser } = await supabaseAdmin.auth.admin.getUserById(targetUserId);
       targetUserEmail = adminUser?.user?.email || '';
     }
+
+    const { data: existing } = await supabaseAdmin.from('profiles').select('role,university_id').eq('id',targetUserId).single();
+    if (!existing || existing.role !== 'student' || existing.university_id) return NextResponse.json({ error: 'Onboarding is already complete or is not available for this role.' }, { status: 403 });
+    const { data: department } = await supabaseAdmin.from('departments').select('id').eq('id',departmentId).eq('institute_id',instituteId).single();
+    const { data: guide } = await supabaseAdmin.from('profiles').select('id').eq('id',guideId).eq('role','guide').eq('institute_id',instituteId).eq('department_id',departmentId).single();
+    if (!department || !guide) return NextResponse.json({ error: 'Select a department and guide within your institute.' }, { status: 400 });
 
     // Build the upsert payload
     const updatePayload = {

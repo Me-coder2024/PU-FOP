@@ -1,3 +1,4 @@
+import { resolveDepartment, isPilotDepartment, pilotDepartmentsEnabled } from './departments';
 /**
  * Scoring Criteria Configuration
  *
@@ -195,22 +196,15 @@ export const DYNAMIC_FORM_DEPARTMENTS = [
  * Check if a department belongs to Category A (Legacy flat form).
  */
 export function isLegacyFormDepartment(departmentName: string | null | undefined): boolean {
-  if (!departmentName) return false;
-  const upper = departmentName.toUpperCase().trim();
-  return LEGACY_FORM_DEPARTMENTS.some(
-    (legacy) => upper === legacy || upper.includes(legacy) || legacy.includes(upper)
-  );
+  return ['PHARMACEUTICS', 'INDUSTRIAL PHARMACY', 'TECHNO PHARMACY'].includes(resolveDepartment(departmentName) || '');
 }
 
 /**
  * Check if a department belongs to Category B (Dynamic schema form).
  */
 export function isDynamicFormDepartment(departmentName: string | null | undefined): boolean {
-  if (!departmentName) return false;
-  const upper = departmentName.toUpperCase().trim();
-  return DYNAMIC_FORM_DEPARTMENTS.some(
-    (dept) => upper === dept || upper.includes(dept) || dept.includes(upper)
-  );
+  if (isPilotDepartment(departmentName)) return pilotDepartmentsEnabled();
+  return ['REGULATORY AFFAIRS', 'PHARMACOLOGY', 'PHARMACEUTICAL CHEMISTRY', 'QUALITY ASSURANCE'].includes(resolveDepartment(departmentName) || '');
 }
 
 /**
@@ -223,23 +217,10 @@ export function isComingSoonDepartment(departmentName: string | null | undefined
 
 /**
  * Get Level 3 criteria for a given department.
- * Falls back to Pharmaceutics criteria (the old scoring) if department is unknown.
+ * Unknown and pilot departments have no approved alignment scoring.
  */
 export function getLevel3Criteria(departmentName: string): ScoringCriterion[] {
-  const upper = (departmentName || '').toUpperCase().trim();
-
-  // Exact match
-  if (SCORING_CRITERIA.level3_by_department[upper]) {
-    return SCORING_CRITERIA.level3_by_department[upper];
-  }
-
-  // Alias matching
-  for (const key of Object.keys(SCORING_CRITERIA.level3_by_department)) {
-    if (upper.includes(key) || key.includes(upper)) {
-      return SCORING_CRITERIA.level3_by_department[key];
-    }
-  }
-
-  // Default to Pharmaceutics scoring
-  return SCORING_CRITERIA.level3_by_department['PHARMACEUTICS'];
+  const key = resolveDepartment(departmentName);
+  if (!key || isPilotDepartment(key)) return [];
+  return SCORING_CRITERIA.level3_by_department[key] || [];
 }

@@ -55,11 +55,13 @@ const OTHER_NAV: Record<Exclude<AppRole, 'student'>, NavItem[]> = {
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
   ],
   pg_director: [
-    { label: 'Title Browser', href: '/dean/titles', lucideIcon: Eye },
+    { label: 'Research Progress', href: '/research', lucideIcon: Eye },
+    { label: 'Title Browser', href: '/pg-director/titles', lucideIcon: Eye },
     { label: 'Drug Requests', href: '/pg-director/drug-requests', lucideIcon: Pill },
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
   ],
   dean: [
+    { label: 'Research Progress', href: '/research', lucideIcon: Eye },
     { label: 'Dashboard', href: '/dean', iconifyIcon: 'solar:widget-bold-duotone' },
     { label: 'Title Browser', href: '/dean/titles', lucideIcon: Eye },
     { label: 'Drug Requests', href: '/dean/drug-requests', lucideIcon: Pill },

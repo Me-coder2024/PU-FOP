@@ -1,5 +1,7 @@
 'use client';
 
+import SchemaDataViewer from '@/components/forms/SchemaDataViewer';
+import { titleAction } from '@/lib/utils/title-actions';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRole } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
@@ -19,7 +21,7 @@ interface SubmissionWithDetails extends SubmissionRow {
 
 export default function HodPage() {
   const { profile } = useRole();
-  const { success, error: showError, warning } = useToast();
+  const { success, error: showError } = useToast();
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
@@ -67,87 +69,7 @@ export default function HodPage() {
       const submission = submissions.find((s) => s.id === submissionId);
       if (!submission) return;
 
-      if (action === 'forward') {
-        const { error: updateError } = await supabase
-          .from('submissions')
-          .update({
-            status: 'hod_accepted' as SubmissionRow['status'],
-            hod_id: profile!.id,
-            hod_reviewed_at: new Date().toISOString(),
-            hod_remarks: hodRemarks[submissionId]?.trim() || null,
-          })
-          .eq('id', submissionId);
-        if (updateError) throw updateError;
-
-        await supabase.from('notifications').insert({
-          user_id: submission.student_id,
-          title: 'Title Forwarded by HOD',
-          message: `Your dissertation title "${submission.title}" has been forwarded to the PG Director for review.`,
-          type: 'success',
-          link: '/dashboard',
-        });
-
-        if (submission.guide_id) {
-          await supabase.from('notifications').insert({
-            user_id: submission.guide_id,
-            title: 'Title Forwarded by HOD',
-            message: `The title "${submission.title}" has been forwarded to the PG Director.`,
-            type: 'info',
-            link: '/guide',
-          });
-        }
-
-        const { data: pgDean } = await supabase
-          .from('profiles')
-          .select('id')
-          .in('role', ['pg_director', 'dean']);
-        if (pgDean && pgDean.length > 0) {
-          const notifs = pgDean.map((p: { id: string }) => ({
-            user_id: p.id,
-            title: 'New Title for Review',
-            message: `A new dissertation title "${submission.title}" has been forwarded by the HOD.`,
-            type: 'info' as const,
-            link: '/pg-director',
-          }));
-          await supabase.from('notifications').insert(notifs);
-        }
-      } else {
-        if (!hodRemarks[submissionId]?.trim()) {
-          warning('Please provide remarks explaining what needs to be changed.', 'Warning');
-          setActionLoading(null);
-          return;
-        }
-        const { error: updateError } = await supabase
-          .from('submissions')
-          .update({
-            status: 'revision_requested' as SubmissionRow['status'],
-            edit_unlocked: true,
-            hod_id: profile!.id,
-            hod_reviewed_at: new Date().toISOString(),
-            hod_remarks: hodRemarks[submissionId].trim(),
-          })
-          .eq('id', submissionId);
-        if (updateError) throw updateError;
-
-        await supabase.from('notifications').insert({
-          user_id: submission.student_id,
-          title: 'Revisions Requested by HOD',
-          message: `The HOD has requested changes to your title "${submission.title}". Remarks: ${hodRemarks[submissionId]}`,
-          type: 'warning',
-          link: '/dashboard/submit',
-        });
-      }
-
-      // Trigger workflow Resend email notifications
-      fetch('/api/notify-workflow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: action === 'forward' ? 'hod_accept' : 'hod_revision',
-          submissionId,
-          remarks: hodRemarks[submissionId]?.trim() || '',
-        }),
-      }).catch(console.error);
+      await titleAction({ action: action === 'forward' ? 'hod_accept' : 'hod_revision', submissionId, remarks: hodRemarks[submissionId]?.trim() || '' });
 
       success(action === 'forward' ? 'Title forwarded to PG Director!' : 'Revisions requested successfully.', 'Success');
       setModalSub(null);
@@ -330,6 +252,7 @@ export default function HodPage() {
               {/* Criteria details */}
               {(() => {
                 const details = (modalSub.criteria_details as Record<string, unknown>) || {};
+                if ((modalSub.schema_version === 2 || details.schema_version === 2) && typeof details.department === 'string') return <SchemaDataViewer department={details.department} data={details} />;
                 const fields = [
                   { key: 'drugName', label: 'Drug Name' },
                   { key: 'dosageForm', label: 'Dosage Form' },

@@ -1,3 +1,6 @@
+import type { Snapshot, TaskDefinition, Question, Deliverable, ResponseVersion } from '@/lib/rpms/model';
+import type { StudentResearchSnapshot } from '@/lib/progress/student-types';
+import type { MilestoneDefinition, Milestone, ResearchFile, ResearchEvent, ResearchSnapshot, ResearchUpdate, ResearchRequestEvent } from '@/lib/progress/types';
 // =============================================================================
 // Supabase Database Types — Generated from supabase_schema_v2.sql
 // =============================================================================
@@ -58,6 +61,7 @@ export type SubmissionRow = {
   guide_id: string | null;
   guide_remarks: string | null;
   guide_reviewed_at: string | null;
+  finalized_at: string | null;
   hod_id: string | null;
   hod_remarks: string | null;
   hod_reviewed_at: string | null;
@@ -176,6 +180,14 @@ export type GuideLoadRow = {
 export interface Database {
   public: {
     Tables: {
+      research_updates: { Row: ResearchUpdate; Insert: never; Update: never; Relationships: [] };
+      research_request_events: { Row: ResearchRequestEvent; Insert: never; Update: never; Relationships: [] };
+      workflow_mail_outbox: { Row: { id: string; event_id: string; actor_id: string; submission_id: string; recipient_id: string; subject: string; message: string; state: 'pending' | 'sending' | 'sent' | 'failed'; created_at: string; attempted_at: string | null; sent_at: string | null }; Insert: never; Update: { state?: 'pending' | 'sending' | 'sent' | 'failed'; attempted_at?: string; sent_at?: string | null }; Relationships: [] };
+      title_review_events: { Row: { id: string; submission_id: string; actor_id: string; action: string; remarks: string | null; created_at: string }; Insert: never; Update: never; Relationships: [] };
+      research_milestone_definitions: { Row: MilestoneDefinition; Insert: Partial<MilestoneDefinition> & { name: string }; Update: Partial<MilestoneDefinition>; Relationships: [] };
+      research_milestones: { Row: Milestone; Insert: Partial<Milestone>; Update: Partial<Milestone>; Relationships: [] };
+      research_files: { Row: ResearchFile; Insert: Partial<ResearchFile>; Update: Partial<ResearchFile>; Relationships: [] };
+      research_events: { Row: ResearchEvent; Insert: Partial<ResearchEvent>; Update: Partial<ResearchEvent>; Relationships: [] };
       profiles: {
         Row: ProfileRow;
         Insert: Partial<ProfileRow> & { id: string; email: string };
@@ -341,6 +353,23 @@ export interface Database {
       };
     };
     Functions: {
+      rpms_replay: { Args:{actor:string;action:string;p:Record<string,unknown>}; Returns:{id:string;path?:string}|null };
+      rpms_reference: { Args:{actor:string;action:string;p:Record<string,unknown>}; Returns:{id:string;filename:string;size:number;path:string;sealed_path:string|null;state:string;owner_id:string} };
+      rpms_snapshot: { Args: { actor:string }; Returns:Snapshot };
+      rpms_action: { Args: { actor:string; action:string; p:Record<string,unknown> }; Returns:{id:string;path?:string} };
+      rpms_jobs: { Args:Record<string,never>; Returns:number };
+      rpms_private: { Args:{actor:string;task:string}; Returns:{ task:{id:string;kind:string;config:TaskDefinition;project_id:string}; attempt:{id:string;questions:Question[]}|null; responses:ResponseVersion[]; files:(Deliverable & {path:string;sealed_path:string|null;uploaded_by:string})[] }|null };
+      has_faculty_research_access: { Args: { p_actor: string }; Returns: boolean };
+      student_research_snapshot: { Args: Record<string, never>; Returns: StudentResearchSnapshot };
+      publish_student_research: { Args: { p_actor: string; p_key: string; p_students: string[]; p_name: string; p_stage: string; p_instructions: string; p_questions: string[]; p_deadline: string }; Returns: string };
+      student_research_action: { Args: { p_actor: string; p_assignment: string; p_action: string; p_answers?: Record<string,string>; p_response?: string; p_remarks?: string; p_deadline?: string }; Returns: string };
+      publish_research_request: { Args: { p_actor: string; p_submission: string; p_key: string; p_name: string; p_instructions: string; p_questions: string[]; p_deadline: string; p_kind: 'text' | 'pptx'; p_staging: boolean }; Returns: string };
+      extend_research_deadline: { Args: { p_actor: string; p_definition: string; p_deadline: string; p_remarks: string }; Returns: undefined };
+      research_update_action: { Args: { p_actor: string; p_submission: string; p_definition: string; p_action: string; p_answers?: Record<string,string>; p_update?: string; p_remarks?: string; p_staging: boolean }; Returns: string };
+      title_action: { Args: { p_actor: string; p_action: string; p_submission?: string; p_title?: string; p_description?: string; p_details?: Record<string, unknown>; p_remarks?: string; p_unlocked?: boolean }; Returns: string };
+      research_snapshot: { Args: Record<string, never>; Returns: ResearchSnapshot[] };
+      research_scope: { Args: { p_actor: string; p_submission: string; p_roles?: string[] }; Returns: boolean };
+      research_action: { Args: { p_actor: string; p_submission: string; p_definition: string; p_action: string; p_file?: string; p_filename?: string; p_size?: number; p_remarks?: string; p_sealed_path?: string; p_staging?: boolean }; Returns: ResearchFile };
       assign_guide: {
         Args: { p_submission_id: string };
         Returns: string;

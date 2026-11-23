@@ -369,7 +369,7 @@ export default function GuidePage() {
                   <p className="text-xs font-black text-slate-500 uppercase tracking-widest" style={poppinsFont}>Application Details</p>
 
                   {/* v2 Dynamic Form: Use SchemaDataViewer */}
-                  {cd.schema_version === 2 && cd.department ? (
+                  {(modalSub.schema_version === 2 || cd.schema_version === 2) && cd.department ? (
                     <SchemaDataViewer department={cd.department as string} data={cd} />
                   ) : (
                     /* Legacy form display (original hardcoded layout) */

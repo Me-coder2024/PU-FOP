@@ -1,8 +1,7 @@
 import { Resend } from 'resend';
 import nodemailer from 'nodemailer';
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_Tz4nAh5M_M5a6ofRC369u4KZP1ATy4A68';
-const resend = new Resend(RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const FROM_NAME = process.env.SMTP_FROM_NAME || 'PU-FOP System';
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
@@ -90,23 +89,27 @@ export async function sendNotificationEmail(
   to: string,
   subject: string,
   bodyHtml: string,
-  fromAddress?: string
+  fromAddress?: string,
+  idempotencyKey?: string
 ) {
   const html = getStyledEmailHtml(subject, bodyHtml);
   const sender = fromAddress || `${FROM_NAME} <${FROM_EMAIL}>`;
 
   // 1. Try Resend API
   try {
+    if (!resend) throw new Error("RESEND_API_KEY is not configured");
     const data = await resend.emails.send({
       from: sender,
       replyTo: DEFAULT_PG_DIRECTOR_EMAIL,
       to,
       subject: `[PU-FOP] ${subject}`,
       html,
-    });
+    }, idempotencyKey ? { idempotencyKey } : undefined);
+    if (data.error) throw new Error(data.error.message);
     console.log(`[Resend Email] Successfully sent to ${to}:`, data);
     return { sent: true, data };
   } catch (resendErr) {
+    if (idempotencyKey && resend) return { sent: false, reason: 'Resend delivery failed or is uncertain; reconcile the outbox before retrying.' };
     console.warn(`[Resend Email Warning] Resend failed for ${to}, checking SMTP fallback:`, resendErr);
   }
 

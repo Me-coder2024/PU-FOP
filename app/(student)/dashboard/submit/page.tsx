@@ -1,5 +1,7 @@
 'use client';
 
+import { resolveDepartment, isPilotDepartment } from '@/lib/config/departments';
+import { titleAction } from '@/lib/utils/title-actions';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRole } from '@/hooks/useRole';
@@ -111,12 +113,7 @@ export default function SubmitTitlePage() {
   const isLegacy = isLegacyFormDepartment(departmentName);
   const isDynamic = isDynamicFormDepartment(departmentName);
   const isComingSoon = isComingSoonDepartment(departmentName);
-  const isQAPA = !!departmentName && [
-    'QUALITY ASSURANCE',
-    'PHARMACEUTICAL ANALYSIS',
-    'QA',
-    'PA',
-  ].some((d) => departmentName.toUpperCase().includes(d));
+  const isQAPA = resolveDepartment(departmentName) === 'QUALITY ASSURANCE';
 
   // Drug dropdown state
   const [drugs, setDrugs] = useState<Drug[]>([]);
@@ -224,10 +221,10 @@ export default function SubmitTitlePage() {
           setExistingSubmission(subData as SubmissionRow);
           setTitle(subData.title);
           const details = (subData.criteria_details as Record<string, unknown>) || {};
-          setNovelty((details.novelty as string) || '');
+          setNovelty((details.novelty as string) || subData.description || '');
 
           // If this is a v2 (dynamic form) submission, load into dynamicFormData
-          if (details.schema_version === 2) {
+          if (subData.schema_version === 2 || details.schema_version === 2) {
             setDynamicFormData(details);
           }
 
@@ -470,53 +467,8 @@ export default function SubmitTitlePage() {
     }
 
     try {
-      if (isEditMode && existingSubmission) {
-        const { error: updateError } = await supabase
-          .from('submissions')
-          .update({
-            title: finalTitle,
-            description: finalNovelty,
-            criteria_details: criteriaDetails,
-            status: 'submitted',
-            edit_unlocked: false,
-          })
-          .eq('id', existingSubmission.id);
-
-        if (updateError) throw new Error(updateError.message);
-        fetch('/api/notify-workflow', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'student_submit', submissionId: existingSubmission.id }),
-        }).catch(console.error);
-      } else {
-        const { data: insertedData, error: insertError } = await supabase
-          .from('submissions')
-          .insert({
-            student_id: profile.id,
-            guide_id: profile.guide_id || null,
-            title: finalTitle,
-            description: finalNovelty,
-            criteria_details: criteriaDetails,
-            status: 'submitted',
-          })
-          .select('id')
-          .single();
-
-        if (insertError) {
-          if (insertError.message.includes('idx_one_active_submission_per_student')) {
-            throw new Error('You already have an active submission. You can only submit one title at a time.');
-          }
-          throw new Error(insertError.message);
-        }
-
-        if (insertedData?.id) {
-          fetch('/api/notify-workflow', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: 'student_submit', submissionId: insertedData.id }),
-          }).catch(console.error);
-        }
-      }
+      await titleAction({ action: 'student_submit', submissionId: isEditMode ? existingSubmission?.id : undefined,
+        title: finalTitle, description: finalNovelty, criteria_details: criteriaDetails });
 
       setSuccess(true);
       setTimeout(() => {
@@ -626,10 +578,11 @@ export default function SubmitTitlePage() {
               </div>
             </div>
             <p className="text-sm text-slate-500" style={authorFont}>
-              Fill in all fields below. The AI validation system will check your title across 3 layers before submission is allowed.
+              {isLegacy || isQAPA ? 'Complete the required fields and run the three validation layers before submitting.' : 'Complete the required fields. Your guide will review the submitted research details.'}
             </p>
           </div>
 
+          {isPilotDepartment(departmentName) && isDynamic && <p className="rounded-xl bg-amber-50 p-4 text-sm text-amber-900">Staging pilot: official department scoring is pending. No academic alignment score is assigned.</p>}
           {!windowOpen && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
               <Icon icon="solar:danger-triangle-bold-duotone" className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
