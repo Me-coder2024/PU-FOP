@@ -353,6 +353,8 @@ export interface Database {
       };
     };
     Functions: {
+      is_assigned_guide: {Args:{p_guide:string;p_institute:string;p_department:string};Returns:boolean};
+      reassign_student_guide: {Args:{p_actor:string;p_student:string;p_guide:string};Returns:undefined};
       rpms_replay: { Args:{actor:string;action:string;p:Record<string,unknown>}; Returns:{id:string;path?:string}|null };
       rpms_reference: { Args:{actor:string;action:string;p:Record<string,unknown>}; Returns:{id:string;filename:string;size:number;path:string;sealed_path:string|null;state:string;owner_id:string} };
       rpms_snapshot: { Args: { actor:string }; Returns:Snapshot };
@@ -361,6 +363,7 @@ export interface Database {
       rpms_private: { Args:{actor:string;task:string}; Returns:{ task:{id:string;kind:string;config:TaskDefinition;project_id:string}; attempt:{id:string;questions:Question[]}|null; responses:ResponseVersion[]; files:(Deliverable & {path:string;sealed_path:string|null;uploaded_by:string})[] }|null };
       has_faculty_research_access: { Args: { p_actor: string }; Returns: boolean };
       student_research_snapshot: { Args: Record<string, never>; Returns: StudentResearchSnapshot };
+      publish_assignment: { Args: {p_actor:string;p_key:string;p_audience:string;p_selected:string[];p_name:string;p_instructions:string;p_questions:string[];p_deadline:string}; Returns:string };
       publish_student_research: { Args: { p_actor: string; p_key: string; p_students: string[]; p_name: string; p_stage: string; p_instructions: string; p_questions: string[]; p_deadline: string }; Returns: string };
       student_research_action: { Args: { p_actor: string; p_assignment: string; p_action: string; p_answers?: Record<string,string>; p_response?: string; p_remarks?: string; p_deadline?: string }; Returns: string };
       publish_research_request: { Args: { p_actor: string; p_submission: string; p_key: string; p_name: string; p_instructions: string; p_questions: string[]; p_deadline: string; p_kind: 'text' | 'pptx'; p_staging: boolean }; Returns: string };

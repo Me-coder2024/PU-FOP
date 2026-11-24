@@ -9,13 +9,13 @@ import { requestLabels, requestState, type RequestState } from '@/lib/progress/r
 import SchemaDataViewer from '@/components/forms/SchemaDataViewer';
 
 async function action(body: Record<string, unknown>) {
-  const res = await fetch('/api/research', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const res = await fetch('/api/research', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(45000) });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Action failed.');
   return data;
 }
 const button = 'rounded-lg bg-blue-600 px-3 py-2 text-sm text-white disabled:opacity-40';
-export default function ResearchProgress({ submissionId, titlesOnly = false }: { submissionId?: string; titlesOnly?: boolean }) {
+export default function ResearchProgress({ submissionId, titlesOnly = false, presentationsOnly=false }: { submissionId?: string; titlesOnly?: boolean; presentationsOnly?:boolean }) {
   const [records, setRecords] = useState<ResearchSnapshot[]>([]);
   const [canManage,setCanManage] = useState(false);
   const [query,setQuery] = useState('');
@@ -29,7 +29,7 @@ export default function ResearchProgress({ submissionId, titlesOnly = false }: {
   const locked = useRef(false);
   const [remarks, setRemarks] = useState<Record<string, string>>({});
   const load = useCallback(async (): Promise<{records:ResearchSnapshot[];canManage:boolean}> => {
-    const response = await fetch('/api/research', { cache: 'no-store' });
+    const response = await fetch('/api/research', { cache: 'no-store', signal: AbortSignal.timeout(20000) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     return data;
@@ -53,14 +53,14 @@ export default function ResearchProgress({ submissionId, titlesOnly = false }: {
     finally { locked.current = false; setBusy(false); }
   }
   if (loading) return <p role="status">Loading research progress…</p>;
-  const scoped = records.filter(r => !submissionId || r.submission.id === submissionId);
+  const scoped = records.filter(r => (!submissionId || r.submission.id === submissionId) && (!presentationsOnly || r.submission.status==='finalized')).map(r=>presentationsOnly?{...r,definitions:r.definitions.filter(d=>d.response_kind==='pptx')}:r);
   const visible = scoped.filter(r => `${r.submission.title} ${r.studentName || ''} ${r.universityId || ''}`.toLowerCase().includes(query.toLowerCase()) && (filter==='all' || r.definitions.some(d=>requestState(r,d,now)===filter || (filter==='pending' && requestState(r,d,now)==='revision_requested'))));
   const counts = scoped.flatMap(r=>r.definitions.map(d=>requestState(r,d,now)));
 
   return <section className="space-y-5">
-    <h2 className="text-xl font-bold">{titlesOnly ? 'Title Browser' : 'Title-linked presentations and requests'}</h2>
-    {!titlesOnly && <p className="text-sm text-slate-600">Use this section for requests linked to a submitted title, including PowerPoint presentations. General research questions can be sent before the title is finalized in the student tracker above.</p>}
-    {canManage && !titlesOnly && <RequestComposer records={records} onSaved={refresh} />}
+    <h2 className="text-xl font-bold">{titlesOnly ? 'Title Browser' : presentationsOnly ? 'Submit your presentation' : 'Title-linked presentations and requests'}</h2>
+    {!titlesOnly && !presentationsOnly && <p className="text-sm text-slate-600">Use this section for requests linked to a submitted title, including PowerPoint presentations. General research questions can be sent before the title is finalized in the student tracker above.</p>}
+    {canManage && !titlesOnly && !presentationsOnly && <RequestComposer records={records} onSaved={refresh} />}
     {!titlesOnly && <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{(['pending','overdue','submitted','accepted'] as const).map(status=><button key={status} onClick={()=>setFilter(filter===status?'all':status)} className={`rounded-xl border bg-white p-4 text-left ${filter===status?'ring-2 ring-blue-600':''}`}><span className="block text-2xl font-bold">{counts.filter(s=>s===status || (status==='pending' && s==='revision_requested')).length}</span><span className="text-xs text-slate-600">{requestLabels[status]}</span></button>)}</div>}
     {!submissionId && <label className="block text-sm">Find a student or title<input value={query} onChange={e=>setQuery(e.target.value)} className="mt-1 block w-full rounded-lg border p-3" placeholder="Search student name, university ID, or research title" /></label>}
     {filter!=='all' && <button className="text-sm text-blue-700 underline" onClick={()=>setFilter('all')}>Show all requests</button>}
@@ -73,14 +73,14 @@ export default function ResearchProgress({ submissionId, titlesOnly = false }: {
       {!record.isOwner && <p className="text-sm font-medium text-slate-600">{record.studentName || 'Student'} {record.universityId && `· ${record.universityId}`}</p>}
       {!record.isOwner && <details><summary className="cursor-pointer text-blue-700">View submitted title fields</summary><p className="my-3">{record.submission.description}</p><SchemaDataViewer department={String(record.submission.criteria_details.department || '')} data={record.submission.criteria_details} /></details>}
       {!titlesOnly && !record.definitions.length && <p className="text-slate-500">No update requests yet. The PG Director can publish a request at any stage of title review.</p>}
-      {!titlesOnly && record.definitions.filter(d=>filter==='all' || requestState(record,d,now)===filter || (filter==='pending' && requestState(record,d,now)==='revision_requested')).map(definition => {
+      {(!titlesOnly || record.submission.status==='finalized') && record.definitions.filter(d=>(!titlesOnly || d.response_kind==='pptx') && (filter==='all' || requestState(record,d,now)===filter || (filter==='pending' && requestState(record,d,now)==='revision_requested'))).map(definition => {
         if (definition.response_kind==='text') return <WrittenUpdate key={`${definition.id}:${record.milestones.find(m=>m.definition_id===definition.id)?.state}`} record={record} definition={definition} busy={busy} run={run} action={action} canManage={canManage} now={now} />;
         const milestone = record.milestones.find(m => m.definition_id === definition.id);
         const events = record.events.filter(e => e.milestone_id === milestone?.id);
         const files = record.files.filter(f => f.milestone_id === milestone?.id);
         const latest = files.find(f => f.state === 'submitted');
         const state = milestone?.state || 'pending';
-        const lockedReason = ['guide_rejected','hod_rejected'].includes(record.submission.status) ? 'Title was rejected.'
+        const lockedReason = record.submission.status!=='finalized' ? 'PPT submission opens after title finalization.' : ['guide_rejected','hod_rejected'].includes(record.submission.status) ? 'Title was rejected.'
           : definition.unlock_after && !record.milestones.some(m => m.definition_id === definition.unlock_after && m.state === 'accepted') ? 'Waiting for the previous milestone.'
           : definition.deadline && Date.parse(definition.deadline) < now && !definition.allow_late ? 'Deadline has passed.'
           : !['pending','revision_requested'].includes(state) ? 'Uploads are locked until a reviewer requests revision.'

@@ -43,10 +43,12 @@ const STUDENT_NAV: NavItem[] = [
 
 const OTHER_NAV: Record<Exclude<AppRole, 'student'>, NavItem[]> = {
   guide: [
+    {label:'My Assignments',href:'/assignments',lucideIcon:ClipboardCheck},
     { label: 'Review Queue', href: '/guide', lucideIcon: ClipboardCheck },
     { label: 'Feedback', href: '/feedback', lucideIcon: MessageSquare },
   ],
   hod: [
+    {label:'My Assignments',href:'/assignments',lucideIcon:ClipboardCheck},
     { label: 'Review Queue', href: '/hod', lucideIcon: ClipboardCheck },
     { label: 'Manage Guides', href: '/hod/assign', iconifyIcon: 'solar:user-plus-bold-duotone' },
     { label: 'All Titles', href: '/hod/all', lucideIcon: Eye },

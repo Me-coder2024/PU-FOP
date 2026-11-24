@@ -1,8 +1,11 @@
+import { requireRole } from '@/lib/utils/require-role';
 import { NextResponse } from 'next/server';
 import { createLegacyServiceClient } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
   try {
+    const access=await requireRole(req,['super_admin']);
+    if(access.response)return access.response;
     const supabase = createLegacyServiceClient();
     const { studentId, title, department, formData } = await req.json();
 

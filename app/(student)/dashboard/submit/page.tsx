@@ -1,4 +1,6 @@
 'use client';
+import dynamic from 'next/dynamic';
+const FinalizedPpt = dynamic(()=>import('@/components/progress/ResearchProgress'),{loading:()=> <p role="status">Loading presentation submission…</p>});
 
 import { resolveDepartment, isPilotDepartment } from '@/lib/config/departments';
 import { titleAction } from '@/lib/utils/title-actions';
@@ -510,6 +512,8 @@ export default function SubmitTitlePage() {
       </div>
     );
   }
+
+  if(existingSubmission?.status==='finalized'&&!isEditMode)return <div className="space-y-5"><header className="rounded-xl border bg-white p-5"><h1 className="text-xl font-bold">Your finalized title</h1><p className="mt-2">{existingSubmission.title}</p><p className="mt-2 text-sm text-emerald-700">Title finalized. You can now submit your PPT below.</p></header><FinalizedPpt submissionId={existingSubmission.id} presentationsOnly/></div>;
 
   if (existingSubmission && !isEditMode && !['guide_rejected', 'hod_rejected'].includes(existingSubmission.status)) {
     return (

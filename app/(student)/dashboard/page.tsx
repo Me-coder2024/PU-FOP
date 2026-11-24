@@ -128,7 +128,7 @@ export default function StudentDashboard() {
           <p className="mt-2 text-sm text-slate-600">{windowOpen ? `Title submission open · ${daysLeft} days left${deadlineDate ? ` · Until ${deadlineDate}` : ''}` : 'Title submission window is closed.'}</p>
           <p className="mt-2 text-sm text-slate-600">Guide: {guideName || 'Not assigned'}{guideEmail ? ` · ${guideEmail}` : ''}</p>
           <Link className="mt-3 block font-semibold text-blue-700" href="/dashboard/submit">View title submission →</Link>
-          <Link className="mt-2 block font-semibold text-blue-700" href="/dashboard/track?tab=presentations">View PPT submissions →</Link>
+          <Link className="mt-2 block font-semibold text-blue-700" href="/dashboard/submit">PPT is available after title finalization →</Link>
         </div>
       </div>
 

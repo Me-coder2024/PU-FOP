@@ -165,6 +165,8 @@ export async function POST(request: Request) {
       const { data: grant } = await supabaseAdmin
         .from('role_grants')
         .select('role, institute_id, department_id')
+        .order('role')
+        .limit(1)
         .ilike('email', email)
         .maybeSingle();
 
@@ -188,6 +190,8 @@ export async function POST(request: Request) {
       const { data: grant } = await supabaseAdmin
         .from('role_grants')
         .select('role, institute_id, department_id')
+        .order('role')
+        .limit(1)
         .eq('email', email)
         .maybeSingle();
 
@@ -213,6 +217,8 @@ export async function POST(request: Request) {
         : supabaseAdmin
             .from('role_grants')
             .select('role, institute_id, department_id')
+        .order('role')
+        .limit(1)
             .eq('email', email)
             .maybeSingle(),
     ]);

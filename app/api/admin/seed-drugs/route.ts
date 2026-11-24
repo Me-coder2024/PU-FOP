@@ -1,3 +1,4 @@
+import { requireRole } from '@/lib/utils/require-role';
 import { createServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
@@ -10,8 +11,10 @@ interface DrugEntry {
   therapeutic: string;
 }
 
-export async function POST() {
+export async function POST(request:Request) {
   try {
+    const access=await requireRole(request,['super_admin']);
+    if(access.response)return access.response;
     const supabase = createServiceClient();
 
     // Verify caller is super_admin (check via service client since this is admin-only)

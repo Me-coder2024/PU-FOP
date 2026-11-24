@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { createContext, createElement, useContext, type ReactNode, useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './useAuth';
 import { createClient } from '@/lib/supabase/client';
 import type { AppRole, ProfileRow } from '@/lib/supabase/types';
+import { saveActiveRole } from '@/lib/utils/switch-role';
 import { getRoleDashboardPath } from '@/lib/utils/roleCheck';
 
 const CACHE_KEY = 'pu-fop-role-cache';
@@ -35,7 +36,7 @@ export function clearRoleCache() {
   }
 }
 
-export function useRole() {
+function useRoleState() {
   const { user, loading: authLoading, error: authError } = useAuth();
 
   const [state, setState] = useState<RoleState>({role:null,availableRoles:[],profile:null,loading:true});
@@ -63,7 +64,7 @@ export function useRole() {
         // 1. Fetch user profile and all granted roles in parallel
         const [profileRes, grantsRes] = await Promise.all([
           supabase.from('profiles').select('*').eq('id', user!.id).abortSignal(controller.signal).single(),
-          supabase.from('role_grants').select('role, institute_id, department_id').ilike('email', userEmail).abortSignal(controller.signal),
+          supabase.from('role_grants').select('role, institute_id, department_id').ilike('email', userEmail.replace(/[\\%_]/g, '\\$&')).abortSignal(controller.signal),
         ]);
 
         if (cancelled) return;
@@ -104,21 +105,11 @@ export function useRole() {
           : availableRoles[0];
 
         // If profile.role in DB was 'student' but user has staff grants, sync DB profile.role to activeRole
-        if (profileRole === 'student' && activeRole !== 'student') {
-          const matchedGrant = (grantsRes.data || []).find((g) => g.role === activeRole);
-          const updatePayload: Partial<ProfileRow> = { role: activeRole };
-          if (matchedGrant?.institute_id && !profile.institute_id) {
-            updatePayload.institute_id = matchedGrant.institute_id;
-          }
-          if (matchedGrant?.department_id && !profile.department_id) {
-            updatePayload.department_id = matchedGrant.department_id;
-          }
-
-          const saved = await supabase.from('profiles').update(updatePayload).eq('id', profile.id).select('id').abortSignal(controller.signal).single();
-          if (saved.error) throw saved.error;
-          profile.role = activeRole;
-          if (updatePayload.institute_id) profile.institute_id = updatePayload.institute_id;
-          if (updatePayload.department_id) profile.department_id = updatePayload.department_id;
+        if (profileRole !== activeRole) {
+          const saved = await saveActiveRole(activeRole, controller.signal);
+          profile.role = saved.role;
+          profile.institute_id = saved.institute_id;
+          profile.department_id = saved.department_id;
         }
 
         if (cancelled) return;
@@ -159,16 +150,13 @@ export function useRole() {
     setSwitching(true);
     setError(null);
     try {
-      const { data, error } = await createClient().from('profiles')
-        .update({role:newRole}).eq('id',state.profile.id)
-        .select('id, role').abortSignal(AbortSignal.timeout(15000)).single();
-      if (error || data?.role !== newRole) throw error || new Error('Role was not saved.');
+      await saveActiveRole(newRole);
       clearRoleCache();
       setStoredActiveRole(newRole);
       // A full navigation discards data belonging to the previous role.
       window.location.assign(getRoleDashboardPath(newRole));
-    } catch {
-      setError('Could not switch roles. Your current dashboard is unchanged. Please retry.');
+    } catch (err) {
+      setError(err instanceof Error && err.name !== 'TimeoutError' ? err.message : 'Could not confirm the role switch. Reload to check your active role, then retry.');
       setSwitching(false);
       switchingRef.current=false;
     }
@@ -183,4 +171,15 @@ export function useRole() {
     error: error || authError,
     switching,
   };
+}
+
+const RoleContext = createContext<ReturnType<typeof useRoleState>|null>(null);
+export function RoleProvider({children}:{children:ReactNode}) {
+  const value=useRoleState();
+  return createElement(RoleContext.Provider,{value},children);
+}
+export function useRole() {
+  const value=useContext(RoleContext);
+  if(!value)throw new Error('useRole requires RoleProvider');
+  return value;
 }

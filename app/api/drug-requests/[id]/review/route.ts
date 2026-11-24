@@ -1,3 +1,4 @@
+import { requireRole } from '@/lib/utils/require-role';
 import { createServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
@@ -11,11 +12,14 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access=await requireRole(request,['dean','pg_director','super_admin']);
+    if(access.response)return access.response;
     const { id } = await params;
     const supabase = createServiceClient();
     const body = await request.json();
 
-    const { userId, action, note } = body;
+    const { action, note } = body;
+    const userId=access.user.id;
 
     if (!userId || !action) {
       return NextResponse.json({ error: 'userId and action are required' }, { status: 400 });

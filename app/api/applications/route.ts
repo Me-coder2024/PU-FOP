@@ -1,8 +1,11 @@
+import { requireRole } from '@/lib/utils/require-role';
 import { NextResponse } from 'next/server';
 import { createLegacyServiceClient } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
   try {
+    const access=await requireRole(req,['super_admin']);
+    if(access.response)return access.response;
     const supabase = createLegacyServiceClient();
     const { searchParams } = new URL(req.url);
     const role = searchParams.get('role');
@@ -37,6 +40,8 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
+    const access=await requireRole(req,['super_admin']);
+    if(access.response)return access.response;
     const supabase = createLegacyServiceClient();
     const { topicId, actorRole, newStatus, remarks } = await req.json();
 

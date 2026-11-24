@@ -8,6 +8,7 @@ const migrations = [
  'migration_research_director_access.sql',
  'migration_rpms.sql',
  '../supabase/migrations/20261124043858_faculty_wide_research_access.sql',
+ '../supabase/migrations/20261124051146_assignment_audiences_and_finalized_ppt.sql',
 ];
 const output = [
  '-- PU-FOP research tracking: fresh installation bundle. Run ONCE.\n',

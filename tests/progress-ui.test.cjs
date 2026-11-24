@@ -54,7 +54,7 @@ const {studentResearchStatus}=load('lib/progress/student-types');
 const studentRecord={assignment:{id:'assignment',student_id:'new-student',request_id:'request',state:'pending'},request:{id:'request',name:'Planning update',stage:'planning',instructions:'Discuss your interests',questions:['What research interests you?'],deadline:'2026-11-22T10:00:00Z'},studentName:'New student without a title',isOwner:true,responses:[],history:[]};
 test('student composer includes registered students without requiring titles',()=>{
  const html=renderToStaticMarkup(React.createElement(StudentResearchComposer,{students:[{id:'new-student',name:'New student without a title',universityId:'NEW-1'}],onSaved:async()=>{}}));
- assert.match(html,/New student without a title/);assert.match(html,/All 1 currently registered students/);assert.match(html,/No research title or title approval is required/);assert.match(html,/document link/);assert.doesNotMatch(html,/Research stage/);
+ assert.match(html,/1 recipients selected/);assert.match(html,/All students/);assert.match(html,/No research title or title approval is required/);assert.match(html,/document link/);assert.doesNotMatch(html,/Research stage/);
 });
 test('student-first tracker supports early answers and guide review',()=>{
  const props={record:studentRecord,role:'student',refresh:async()=>{},now};
@@ -83,7 +83,7 @@ test('director roster searches the student register independently of assigned re
 });
 test('director can open a question form with the selected student preselected',()=>{
  const html=renderToStaticMarkup(React.createElement(StudentResearchComposer,{students:[{id:'new-student',name:'Selected student',universityId:'NEW-1'}],initialTarget:'new-student',onSaved:async()=>{}}));
- assert.match(html,/<details open=""/);assert.match(html,/<option value="new-student" selected=""/);
+ assert.match(html,/<details open=""/);assert.match(html,/<option value="selected" selected=""/);assert.match(html,/type="checkbox" checked=""/);
 });
 const {Answers}=load('components/rpms/TaskWorkspace');
 const {TaskViews}=load('components/rpms/ResearchWorkspace');

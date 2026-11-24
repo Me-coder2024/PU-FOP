@@ -1,3 +1,4 @@
+import { requireRole } from '@/lib/utils/require-role';
 import { createServiceClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
@@ -7,10 +8,12 @@ import type { DrugRequestStatus } from '@/lib/supabase/types';
 // GET - Fetch drug requests (filtered by role)
 export async function GET(request: NextRequest) {
   try {
+    const access=await requireRole(request);
+    if(access.response)return access.response;
     const supabase = createServiceClient();
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const role = searchParams.get('role');
+    const userId=access.user.id;
+    const role=access.profile.role;
     const status = searchParams.get('status');
 
     if (!userId) {
@@ -26,7 +29,7 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     // Students only see their own requests
-    if (role === 'student') {
+    if (!['dean','pg_director','super_admin'].includes(role)) {
       query = query.eq('requested_by', userId);
     }
 
@@ -52,10 +55,14 @@ export async function GET(request: NextRequest) {
 // POST - Create a new drug request (students only)
 export async function POST(request: NextRequest) {
   try {
+    const access=await requireRole(request);
+    if(access.response)return access.response;
     const supabase = createServiceClient();
     const body = await request.json();
 
-    const { userId, drugName, dosageForm, category, therapeutic, reason, requestType } = body;
+    const { drugName, dosageForm, category, therapeutic, reason, requestType } = body;
+    const userId=access.user.id;
+    if(access.profile.role!=='student')return NextResponse.json({error:'Student role required.'},{status:403});
     const isDosageFormRequest = requestType === 'dosage_form';
 
     if (!userId || !drugName?.trim()) {

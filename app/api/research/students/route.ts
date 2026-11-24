@@ -24,8 +24,8 @@ export async function POST(request: Request) {
   const body=await request.json();
   const admin=createServiceClient();
   if(body.action==='publish') {
-   if(!uuid.test(body.requestKey || '') || !Array.isArray(body.studentIds) || !body.studentIds.length || body.studentIds.length>1000 || !body.studentIds.every((id:unknown)=>typeof id==='string' && uuid.test(id)) || typeof body.name!=='string' || body.name.length>160 || typeof body.instructions!=='string' || body.instructions.length>4000 || typeof body.stage!=='string' || !Array.isArray(body.questions) || body.questions.length>10 || !body.questions.every((q:unknown)=>typeof q==='string' && q.length<=500) || !Number.isFinite(Date.parse(body.deadline))) return reply({error:'Check the recipients, questions and deadline.'},400);
-   const {data,error}=await admin.rpc('publish_student_research',{p_actor:user.id,p_key:body.requestKey,p_students:body.studentIds,p_name:body.name,p_stage:body.stage,p_instructions:body.instructions,p_questions:body.questions,p_deadline:new Date(body.deadline).toISOString()});
+   if(!uuid.test(body.requestKey || '') || !Array.isArray(body.studentIds) || body.studentIds.length>1000 || !body.studentIds.every((id:unknown)=>typeof id==='string' && uuid.test(id)) || typeof body.name!=='string' || body.name.length>160 || typeof body.instructions!=='string' || body.instructions.length>4000 || !['students','guides','hods','everyone','selected'].includes(body.audience) || !Array.isArray(body.questions) || body.questions.length>10 || !body.questions.every((q:unknown)=>typeof q==='string' && q.length<=500) || !Number.isFinite(Date.parse(body.deadline))) return reply({error:'Check the recipients, questions and deadline.'},400);
+   const {data,error}=await admin.rpc('publish_assignment',{p_actor:user.id,p_key:body.requestKey,p_selected:body.studentIds,p_audience:body.audience,p_name:body.name,p_instructions:body.instructions,p_questions:body.questions,p_deadline:new Date(body.deadline).toISOString()});
    if(error) return reply({error:error.message},409);
    return reply({id:data});
   }

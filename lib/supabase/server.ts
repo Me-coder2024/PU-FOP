@@ -1,4 +1,5 @@
 import 'server-only';
+import { fetchWithTimeout } from '@/lib/utils/fetch-with-timeout';
 import { createServerClient as createSupabaseServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
@@ -15,6 +16,7 @@ export async function createServerClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      global: {fetch:fetchWithTimeout},
       cookies: {
         getAll() {
           return cookieStore.getAll();
@@ -43,6 +45,7 @@ export function createServiceClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
+      global: {fetch:fetchWithTimeout},
       auth: {
         autoRefreshToken: false,
         persistSession: false,
@@ -62,6 +65,7 @@ export function createLegacyServiceClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
+      global: {fetch:fetchWithTimeout},
       auth: {
         autoRefreshToken: false,
         persistSession: false,

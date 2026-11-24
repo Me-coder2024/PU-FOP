@@ -1,122 +1,36 @@
+import { requireRole } from '@/lib/utils/require-role';
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 
+/** Reading the directory must never provision accounts or change active roles. */
 export async function GET(req: Request) {
   try {
-    const { searchParams } = new URL(req.url);
-    const instituteId = searchParams.get('institute_id');
-
-    if (!instituteId) {
-      const supabaseAdmin = createServiceClient();
-      const { data: allGuides } = await supabaseAdmin
-        .from('profiles')
-        .select('id, full_name, email')
-        .eq('role', 'guide')
-        .order('full_name');
-      return NextResponse.json({ guides: allGuides || [] });
+    const access = await requireRole(req);
+    if (access.response) return access.response;
+    const instituteId = new URL(req.url).searchParams.get('institute_id');
+    const departmentId = new URL(req.url).searchParams.get('department_id');
+    const admin = createServiceClient();
+    let grantsQuery = admin.from('role_grants').select('email').eq('role', 'guide');
+    let profilesQuery = admin.from('profiles').select('id, full_name, email').eq('role', 'guide');
+    if (instituteId) {
+      grantsQuery = grantsQuery.eq('institute_id', instituteId);
+      profilesQuery = profilesQuery.eq('institute_id', instituteId);
     }
-
-    const supabaseAdmin = createServiceClient();
-
-    // 1. Fetch role_grants for guides in this institute
-    const { data: grants } = await supabaseAdmin
-      .from('role_grants')
-      .select('email, institute_id, department_id')
-      .eq('role', 'guide')
-      .eq('institute_id', instituteId);
-
-    const grantEmails = (grants || []).map((g) => g.email.toLowerCase());
-
-    // 2. Fetch existing profiles for guides in this institute (matching granted guide emails OR having role = 'guide')
-    let query = supabaseAdmin
-      .from('profiles')
-      .select('id, full_name, email, role')
-      .eq('institute_id', instituteId);
-
-    if (grantEmails.length > 0) {
-      // Query profiles by role = 'guide' OR email in grantEmails
-      query = query.or(`role.eq.guide,email.in.(${grantEmails.join(',')})`);
-    } else {
-      query = query.eq('role', 'guide');
+    if (departmentId) {
+      grantsQuery = grantsQuery.eq('department_id',departmentId);
+      profilesQuery = profilesQuery.eq('department_id',departmentId);
     }
-
-    const { data: existingProfiles } = await query.order('full_name');
-
-    const profileEmails = new Set(
-      (existingProfiles || []).map((p) => p.email.toLowerCase())
-    );
-
-    // 3. For any role_grant without a profile, provision auth.user + profile
-    const missingGrants = (grants || []).filter(
-      (g) => !profileEmails.has(g.email.toLowerCase())
-    );
-
-    if (missingGrants.length > 0) {
-      for (const grant of missingGrants) {
-        try {
-          const email = grant.email.toLowerCase();
-          const dummyPassword = `Guide#${Math.random().toString(36).substring(2, 10)}!${Date.now()}`;
-
-          // Create auth user
-          const { data: newUser, error: createError } =
-            await supabaseAdmin.auth.admin.createUser({
-              email,
-              password: dummyPassword,
-              email_confirm: true,
-            });
-
-          let userId: string | null = null;
-          if (newUser?.user) {
-            userId = newUser.user.id;
-          } else if (createError) {
-            // User might exist in auth.users already but missing from profiles table
-            const { data: listData } = await supabaseAdmin.auth.admin.listUsers({
-              perPage: 100,
-              page: 1,
-            });
-            const found = listData?.users?.find((u) => u.email?.toLowerCase() === email);
-            if (found) userId = found.id;
-          }
-
-          if (userId) {
-            // Format nice display name from email (e.g. rakesh.patel18006@parul... -> Rakesh Patel)
-            const emailPrefix = email.split('@')[0];
-            const cleanPrefix = emailPrefix.replace(/\d+/g, '').replace(/[._]/g, ' ').trim();
-            const formattedName = cleanPrefix
-              ? cleanPrefix.replace(/\b\w/g, (c) => c.toUpperCase())
-              : emailPrefix;
-
-            await supabaseAdmin.from('profiles').upsert(
-              {
-                id: userId,
-                email,
-                full_name: formattedName,
-                role: 'guide',
-                institute_id: grant.institute_id,
-                department_id: grant.department_id,
-              },
-              { onConflict: 'id' }
-            );
-          }
-        } catch (err) {
-          console.error('Error auto-provisioning guide profile:', err);
-        }
-      }
-
-      // Re-fetch all profiles for this institute after auto-provisioning
-      const { data: updatedProfiles } = await supabaseAdmin
-        .from('profiles')
-        .select('id, full_name, email')
-        .eq('institute_id', instituteId)
-        .or(`role.eq.guide,email.in.(${grantEmails.length > 0 ? grantEmails.join(',') : 'none'})`)
-        .order('full_name');
-
-      return NextResponse.json({ guides: updatedProfiles || [] });
-    }
-
-    return NextResponse.json({ guides: existingProfiles || [] });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Failed to fetch guides';
-    return NextResponse.json({ error: message }, { status: 500 });
+    const [grants, profiles] = await Promise.all([grantsQuery, profilesQuery.order('full_name')]);
+    if (grants.error || profiles.error) throw new Error('Unable to load guides. Please retry.');
+    const emails = (grants.data || []).map(grant => grant.email.toLowerCase());
+    const granted = emails.length
+      ? await admin.from('profiles').select('id, full_name, email').in('email', emails)
+      : {data: [], error: null};
+    if (granted.error) throw new Error('Unable to load guides. Please retry.');
+    const guides = [...new Map([...(profiles.data || []), ...(granted.data || [])].map(p => [p.id, p])).values()];
+    guides.sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''));
+    return NextResponse.json({guides}, {headers: {'Cache-Control': 'private, no-store'}});
+  } catch (err) {
+    return NextResponse.json({error: err instanceof Error ? err.message : 'Unable to load guides.'}, {status: 503});
   }
 }

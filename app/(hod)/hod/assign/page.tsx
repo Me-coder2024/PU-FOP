@@ -57,16 +57,11 @@ export default function HodManageGuidesPage() {
   const fetchData = useCallback(async () => {
     if (!profile) return;
     try {
-      // 1. Fetch all Guides in institute
-      let guideQuery = supabase
-        .from('profiles')
-        .select('id, full_name, email, role')
-        .eq('role', 'guide');
-      if (profile.institute_id) {
-        guideQuery = guideQuery.eq('institute_id', profile.institute_id);
-      }
-      const { data: guideData, error: guideErr } = await guideQuery.order('full_name');
-      if (guideErr) throw guideErr;
+      const params = new URLSearchParams({institute_id:profile.institute_id || '',department_id:profile.department_id || ''});
+      const guideResponse = await fetch(`/api/guides?${params}`,{signal:AbortSignal.timeout(20000)});
+      const directory = await guideResponse.json();
+      if (!guideResponse.ok) throw new Error(directory.error || 'Unable to load guides.');
+      const guideData: GuideProfile[] = directory.guides;
 
       // 2. Fetch all Students in institute (without FK join — more robust)
       let studentQuery = supabase
@@ -76,6 +71,7 @@ export default function HodManageGuidesPage() {
       if (profile.institute_id) {
         studentQuery = studentQuery.eq('institute_id', profile.institute_id);
       }
+      if (profile.department_id) studentQuery = studentQuery.eq('department_id',profile.department_id);
       const { data: studentData, error: studentErr } = await studentQuery.order('full_name');
       if (studentErr) throw studentErr;
 
@@ -134,6 +130,7 @@ export default function HodManageGuidesPage() {
         query = query.eq('institute_id', profile.institute_id);
       }
 
+      if (profile?.department_id) query = query.eq('department_id',profile.department_id);
       const { data, error } = await query;
       if (error) throw error;
       setSearchResults(data || []);
@@ -152,41 +149,19 @@ export default function HodManageGuidesPage() {
   const handleAddGuideRole = async (targetUser: UserSearchResult) => {
     setActionLoading(`add-${targetUser.id}`);
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: 'guide', institute_id: profile?.institute_id || null })
-        .eq('id', targetUser.id);
-
-      if (error) throw error;
-
-      // Also upsert into role_grants if needed
-      await supabase.from('role_grants').upsert(
-        {
-          email: targetUser.email.toLowerCase(),
-          role: 'guide',
-          institute_id: profile?.institute_id || null,
-          can_edit: true,
-          granted_by: profile?.id,
-        },
-        { onConflict: 'email' }
-      );
-
-      // Notify user
-      await supabase.from('notifications').insert({
-        user_id: targetUser.id,
-        title: 'Role Updated: Guide',
-        message: 'You have been appointed as a Dissertation Guide by the HOD.',
-        type: 'success',
-        link: '/guide',
+      const res = await fetch('/api/dean/role-grants', {
+        method:'POST', headers:{'Content-Type':'application/json'}, signal:AbortSignal.timeout(30000),
+        body:JSON.stringify({action:'create', email:targetUser.email, role:'guide'}),
       });
-
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to grant guide role.');
       success(`${targetUser.full_name || targetUser.email} is now a Guide!`, 'Role Granted');
       setAddSearchEmail('');
       setSearchResults([]);
       await fetchData();
     } catch (err) {
       console.error('Grant guide role error', err);
-      showError('Failed to add guide role.', 'Error');
+      showError(err instanceof Error ? err.message : 'Failed to add guide role.', 'Error');
     } finally {
       setActionLoading(null);
     }
@@ -201,21 +176,17 @@ export default function HodManageGuidesPage() {
 
     setActionLoading(`remove-${guide.id}`);
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: 'student' })
-        .eq('id', guide.id);
-
-      if (error) throw error;
-
-      // Remove from role_grants
-      await supabase.from('role_grants').delete().eq('email', guide.email.toLowerCase());
-
+      const res = await fetch('/api/dean/role-grants', {
+        method:'POST', headers:{'Content-Type':'application/json'}, signal:AbortSignal.timeout(30000),
+        body:JSON.stringify({action:'revoke', userId:guide.id}),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to revoke guide role.');
       success(`Removed guide role for ${guide.full_name || guide.email}.`, 'Role Removed');
       await fetchData();
     } catch (err) {
       console.error('Remove guide role error', err);
-      showError('Failed to remove guide role.', 'Error');
+      showError(err instanceof Error ? err.message : 'Failed to remove guide role.', 'Error');
     } finally {
       setActionLoading(null);
     }
@@ -234,41 +205,14 @@ export default function HodManageGuidesPage() {
       const student = students.find((s) => s.id === studentId);
       if (!student) return;
 
-      // Update student profile
-      const { error: profileErr } = await supabase
-        .from('profiles')
-        .update({ guide_id: guideId })
-        .eq('id', studentId);
-
-      if (profileErr) throw profileErr;
-
-      // Also update any active submission by this student
-      await supabase
-        .from('submissions')
-        .update({ guide_id: guideId })
-        .eq('student_id', studentId)
-        .not('status', 'in', '("guide_rejected","hod_rejected")');
-
-      const targetGuide = guides.find((g) => g.id === guideId);
+      const res = await fetch('/api/dean/role-grants', {
+        method:'POST', headers:{'Content-Type':'application/json'}, signal:AbortSignal.timeout(30000),
+        body:JSON.stringify({action:'reassign_guide', studentId, guideId}),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to reassign guide.');
+      const targetGuide = guides.find(g=>g.id===guideId);
       const guideName = targetGuide?.full_name || targetGuide?.email || 'New Guide';
-
-      // Notifications
-      await supabase.from('notifications').insert({
-        user_id: studentId,
-        title: 'Guide Updated',
-        message: `Your guide has been changed to ${guideName} by the HOD.`,
-        type: 'info',
-        link: '/dashboard',
-      });
-
-      await supabase.from('notifications').insert({
-        user_id: guideId,
-        title: 'New Student Assigned',
-        message: `Student ${student.full_name || student.email} has been assigned to you by the HOD.`,
-        type: 'info',
-        link: '/guide',
-      });
-
       success(`Updated guide for ${student.full_name || student.email} to ${guideName}.`, 'Success');
       await fetchData();
     } catch (err) {

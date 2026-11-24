@@ -83,7 +83,7 @@ export async function POST(request: Request) {
     const { data: existing } = await supabaseAdmin.from('profiles').select('role,university_id').eq('id',targetUserId).single();
     if (!existing || existing.role !== 'student' || existing.university_id) return NextResponse.json({ error: 'Onboarding is already complete or is not available for this role.' }, { status: 403 });
     const { data: department } = await supabaseAdmin.from('departments').select('id').eq('id',departmentId).eq('institute_id',instituteId).single();
-    const { data: guide } = await supabaseAdmin.from('profiles').select('id').eq('id',guideId).eq('role','guide').eq('institute_id',instituteId).eq('department_id',departmentId).single();
+    const { data: guide } = await supabaseAdmin.rpc('is_assigned_guide',{p_guide:guideId,p_institute:instituteId,p_department:departmentId});
     if (!department || !guide) return NextResponse.json({ error: 'Select a department and guide within your institute.' }, { status: 400 });
 
     // Build the upsert payload

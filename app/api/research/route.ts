@@ -35,6 +35,10 @@ export async function POST(request: Request) {
     if (scopeError || !allowed) return reply({ error: 'Record not available.' }, 403);
     const { data: definition } = await admin.from('research_milestone_definitions').select('*').eq('id', definitionId).single();
     if (!definition || !definition.enabled || (definition.test_only && process.env.APP_ENV !== 'staging')) return reply({ error: 'Milestone unavailable.' }, 403);
+    if(definition.response_kind==='pptx'&&['reserve','confirm','submit'].includes(action)){
+      const {data:title,error:titleError}=await admin.from('submissions').select('status').eq('id',submissionId).single();
+      if(titleError||title?.status!=='finalized')return reply({error:'PPT submission opens only after your title is finalized.'},409);
+    }
     const args = { p_actor: user.id, p_submission: submissionId, p_definition: definitionId, p_action: action as string, p_staging: process.env.APP_ENV === 'staging' };
     if (definition.target_submission_id && definition.target_submission_id !== submissionId) return reply({ error: 'Request not assigned to this title.' }, 403);
     if (definition.response_kind === 'text') {

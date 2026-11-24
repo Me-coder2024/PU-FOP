@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { createContext, createElement, useContext, type ReactNode, useState, useEffect, useCallback, useRef } from 'react';
 import { auth } from '@/lib/firebase/config';
 import {
   signInWithPopup,
@@ -89,7 +89,7 @@ function performSync(firebaseUser: FirebaseUser): Promise<UnifiedUser> {
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
-export function useAuth() {
+function useAuthState() {
   const [state, setState] = useState<AuthState>({
     user: null,
     loading: true,
@@ -242,3 +242,14 @@ export function useAuth() {
   };
 }
 
+
+const AuthContext = createContext<ReturnType<typeof useAuthState>|null>(null);
+export function AuthProvider({children}:{children:ReactNode}) {
+  const value=useAuthState();
+  return createElement(AuthContext.Provider,{value},children);
+}
+export function useAuth() {
+  const value=useContext(AuthContext);
+  if(!value)throw new Error('useAuth requires AuthProvider');
+  return value;
+}

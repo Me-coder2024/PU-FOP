@@ -1,3 +1,4 @@
+import AuthProviders from '@/components/AuthProviders';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased bg-white text-slate-900">
-        <ToastProvider>{children}</ToastProvider>
+        <AuthProviders><ToastProvider>{children}</ToastProvider></AuthProviders>
       </body>
     </html>
   );

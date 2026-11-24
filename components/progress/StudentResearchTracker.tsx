@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { studentResearchStatus, type StudentResearchRecord, type StudentResearchSnapshot } from '@/lib/progress/student-types';
+import { studentResearchStatus, type AssignmentRecipient, type StudentResearchRecord, type StudentResearchSnapshot } from '@/lib/progress/student-types';
 const input='mt-1 block w-full rounded-lg border border-slate-300 bg-white p-2 text-sm';
 const labels:Record<string,string>={all:'All assignments',pending:'To do',overdue:'Overdue',submitted:'Awaiting review',revision_requested:'Changes requested',accepted:'Completed'};
 const button='rounded-lg bg-blue-700 px-3 py-2 text-sm text-white disabled:opacity-50';
@@ -17,29 +17,37 @@ async function post(body:Record<string,unknown>):Promise<{id:string}> {
  const response=await fetch('/api/research/students',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
  const data=await response.json();if(!response.ok)throw new Error(data.error || 'Unable to save.');return data;
 }
-export function StudentResearchComposer({students,onSaved,initialTarget='',facultyAccess=false}:{students:StudentResearchSnapshot['students'];onSaved:()=>Promise<void>;initialTarget?:string;facultyAccess?:boolean}) {
- const [target,setTarget]=useState(initialTarget);const stage='other';
+export function StudentResearchComposer({students,onSaved,initialTarget='',facultyAccess=false,recipients}:{students:StudentResearchSnapshot['students'];onSaved:()=>Promise<void>;initialTarget?:string;facultyAccess?:boolean;recipients?:AssignmentRecipient[]}) {
+ const [audience,setAudience]=useState(initialTarget&&initialTarget!=='all'?'selected':'students');
+ const [selected,setSelected]=useState<string[]>(initialTarget&&initialTarget!=='all'?[initialTarget]:[]);
+ const [search,setSearch]=useState('');
+ const people=recipients || students.map(s=>({...s,roles:['student']}));
+ const studentOptions=people.filter(p=>p.roles.includes('student'));
+ const targetRole=({students:'student',guides:'guide',hods:'hod'} as Record<string,string>)[audience];
+ const count=audience==='selected'?selected.length:people.filter(p=>audience==='everyone'||p.roles.includes(targetRole)).length;
  const [name,setName]=useState('');const [instructions,setInstructions]=useState('');
  const [questions,setQuestions]=useState('Submit your work here, or paste a link to your document.');const [deadline,setDeadline]=useState('');
  const [busy,setBusy]=useState(false);const [message,setMessage]=useState('');const [error,setError]=useState('');
  const pending=useRef<{fingerprint:string;key:string}|null>(null);const lock=useRef(false);
  return <details open className="rounded-xl border border-blue-200 bg-blue-50 p-4"><summary className="cursor-pointer font-semibold">Create assignment</summary>
- <p className="my-3 text-sm">Choose one student or all currently registered students {facultyAccess?'across all institutes':'in your institute'}. No research title or title approval is required. {!facultyAccess&&'Students need an institute on their profile to appear here.'}</p>
- {!students.length?<p>No eligible students yet.</p>:<form className="grid gap-4 sm:grid-cols-2" onSubmit={async e=>{
+ <p className="my-3 text-sm">Choose a group or select multiple students {facultyAccess?'across all institutes':'in your institute'}. No research title or title approval is required. {!facultyAccess&&'Students need an institute on their profile to appear here.'}</p>
+ {!people.length?<p>No registered recipients yet.</p>:<form className="grid gap-4 sm:grid-cols-2" onSubmit={async e=>{
   e.preventDefault();if(lock.current)return;lock.current=true;setBusy(true);setError('');setMessage('');
-  try {const body={action:'publish',studentIds:target==='all'?students.map(s=>s.id):[target],stage,name,instructions,questions:questions.split('\n').map(q=>q.trim()).filter(Boolean),deadline:new Date(deadline).toISOString()};
+  try {const body={action:'publish',studentIds:selected,audience,stage:'other',name,instructions,questions:questions.split('\n').map(q=>q.trim()).filter(Boolean),deadline:new Date(deadline).toISOString()};
    const fingerprint=JSON.stringify(body);if(pending.current?.fingerprint!==fingerprint)pending.current={fingerprint,key:crypto.randomUUID()};
-   await post({...body,requestKey:pending.current.key});pending.current=null;setName('');setDeadline('');setMessage(`Sent to ${body.studentIds.length} student(s).`);await onSaved();
+   await post({...body,requestKey:pending.current.key});pending.current=null;setName('');setDeadline('');setMessage(`Assignment sent to ${count} recipient(s).`);await onSaved();
   }catch(e){setError(e instanceof Error?e.message:'Unable to publish.');}finally{lock.current=false;setBusy(false);}
  }}>
- <label>Recipients<select required className={input} value={target} onChange={e=>setTarget(e.target.value)}><option value="">Choose recipients</option><option value="all">All {students.length} currently registered students</option>{students.map(s=><option key={s.id} value={s.id}>{s.name || 'Student'} {s.universityId || s.id}</option>)}</select></label>
+ <label>Recipients<select required className={input} value={audience} onChange={e=>setAudience(e.target.value)}><option value="students">All students</option><option value="guides">All guides</option><option value="hods">All HODs</option><option value="everyone">Everyone (all registered roles)</option><option value="selected">Selected students</option></select></label>
+ {audience==='selected'&&<fieldset className="sm:col-span-2 rounded-lg border p-3"><legend>Select students ({selected.length})</legend><label>Find students<input className={input} value={search} onChange={e=>setSearch(e.target.value)} placeholder="Name or university ID"/></label><div className="my-2 flex gap-3"><button type="button" className="text-blue-700 underline" onClick={()=>setSelected(studentOptions.map(s=>s.id))}>Select all students</button><button type="button" className="text-blue-700 underline" onClick={()=>setSelected([])}>Clear selection</button></div><div className="max-h-60 overflow-y-auto">{studentOptions.filter(s=>`${s.name} ${s.universityId}`.toLowerCase().includes(search.toLowerCase())).map(s=><label key={s.id} className="flex items-center gap-2 py-2"><input type="checkbox" checked={selected.includes(s.id)} onChange={e=>setSelected(previous=>e.target.checked?[...previous,s.id]:previous.filter(id=>id!==s.id))}/>{s.name || 'Student'} · {s.universityId || 'ID not set'}</label>)}</div></fieldset>}
+ <p className="text-sm sm:col-span-2">{count} recipients selected. Each person receives one private assignment, even with multiple roles.</p>
 
  <label>Assignment title<input required maxLength={160} className={input} value={name} onChange={e=>setName(e.target.value)} placeholder="For example: Literature review" /></label>
  <label>Deadline ({Intl.DateTimeFormat().resolvedOptions().timeZone})<input required type="datetime-local" className={input} value={deadline} onChange={e=>setDeadline(e.target.value)} /></label>
  <label className="sm:col-span-2">Instructions<textarea maxLength={4000} className={input} value={instructions} onChange={e=>setInstructions(e.target.value)} /></label>
  <label className="sm:col-span-2">What should students submit? — one item per line, up to 10<textarea required rows={6} className={input} value={questions} onChange={e=>setQuestions(e.target.value)} /><span className="text-xs text-slate-600">Students can write their response or paste a document link. Make sure linked documents are shared with the reviewer.</span></label>
- <p className="text-sm sm:col-span-2">Each student gets a separate private response and review history. Students registering later are not included in this request.</p>
- <button disabled={busy} className={button}>{busy?'Sending…':`Send assignment${target==='all'?` to ${students.length} students`:''}`}</button>
+ <p className="text-sm sm:col-span-2">Each recipient gets a private response and review history. People registering later are not included.</p>
+ <button disabled={busy||!count} className={button}>{busy?'Sending…':`Send assignment to ${count} recipients`}</button>
  </form>}{error&&<p role="alert" className="mt-2 text-red-700">{error}</p>}{message&&<p role="status" className="mt-2 text-green-800">{message}</p>}</details>;
 }
 export function StudentResearchCard({record,role,refresh,now}:{record:StudentResearchRecord;role:string|null;refresh:()=>Promise<void>;now:number}) {
@@ -84,7 +92,7 @@ export function StudentResearchRoster({students,records,now,query,onSelect,onReq
   <td className="px-4 py-4">{latest?new Date(latest).toLocaleString():'No submitted update'}</td><td className="px-4 py-4">{next?new Date(next).toLocaleString():'No pending deadline'}</td>
   <td className="space-y-2 px-4 py-4">{onRequest&&<button className={button} onClick={()=>onRequest(student.id)}>Assign work</button>}<button className="block text-blue-700 underline" onClick={()=>onSelect(student.id)}>View progress</button></td></tr>;
  })}</tbody></table>
- {!students.length&&<p className="p-5 text-slate-600">No student profiles are assigned to your institute. Check the institute on your PG Director profile and on student profiles. Students do not need a research title to appear.</p>}
+ {!students.length&&<p className="p-5 text-slate-600">No registered students found. Students do not need a research title to appear.</p>}
  {!!students.length&&!visible.length&&<p className="p-5 text-slate-600">No students match this search.</p>}
  </div>;
 }
@@ -94,9 +102,10 @@ export default function StudentResearchTracker(){
  const load=useCallback(async()=>{const r=await fetch('/api/research/students',{cache:'no-store',signal:AbortSignal.timeout(20000)});const body=await r.json();if(!r.ok)throw new Error(body.error || 'Unable to load.');return body as StudentResearchSnapshot;},[]);
  const refresh=async()=>{const body=await load();setData(body);setError('');};
  useEffect(()=>{let active=true;load().then(body=>{if(active)setData(body);}).catch(e=>{if(active)setError(e.message);});const timer=setInterval(()=>setNow(Date.now()),30000);return()=>{active=false;clearInterval(timer);};},[load]);
- const records=data?.records || [];const counts=records.map(r=>studentResearchStatus(r,now));
+ const manageRole=['pg_director','dean','super_admin'].includes(data?.role || '');
+ const records=(data?.records || []).filter(r=>manageRole||r.isOwner);const counts=records.map(r=>studentResearchStatus(r,now));
  const manage=['pg_director','super_admin'].includes(data?.role || '');
- const faculty=data?.role!=='student';
+ const faculty=['pg_director','dean','super_admin'].includes(data?.role || '');
  const showRoster=manage||data?.role==='dean';
  const selectedStudent=data?.students.find(s=>s.id===selected);
  const selectedRecords=selected?records.filter(r=>r.assignment.student_id===selected):records;
@@ -105,14 +114,14 @@ export default function StudentResearchTracker(){
  function requestStudent(id:string){setCompose(id);}
  return <section className="space-y-5">
  <div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-sm font-medium text-blue-700">{showRoster?`${data?.role==='dean'?'Dean':'PG Director'} · ${data?.facultyAccess?'All institutes':'Research management'}`:'Research progress'}</p><h2 className="mt-1 text-2xl font-bold">{faculty?'Student assignments':'My assignments'}</h2><p className="mt-2 text-sm text-slate-600">{faculty?'Review assignments and see student progress.':'Open an assignment, submit your work, and check feedback.'}</p></div>
- {data&&<div className="flex gap-3"><button className="rounded-lg border bg-white px-3 py-2 text-sm" onClick={()=>void refresh().catch(e=>setError(e.message))}>Refresh</button>{manage&&<button disabled={!data.students.length} className={button} onClick={()=>requestStudent('all')}>Create assignment</button>}</div>}</div>
+ {data&&<div className="flex gap-3"><button className="rounded-lg border bg-white px-3 py-2 text-sm" onClick={()=>void refresh().catch(e=>setError(e.message))}>Refresh</button>{manage&&<button disabled={!(data.recipients?.length||data.students.length)} className={button} onClick={()=>requestStudent('all')}>Create assignment</button>}</div>}</div>
  {error&&<p role="alert" className="rounded-lg bg-red-50 p-3 text-red-800">{error} <button className="underline" onClick={()=>void refresh().catch(e=>setError(e.message))}>Reload</button></p>}
  {!data&&!error&&<p role="status">Loading students and research requests…</p>}
  {data&&<>
  {!faculty&&<div className="rounded-xl border bg-white p-5"><h3 className="font-semibold">Assignment progress</h3><p className="mt-2">{counts.filter(s=>s==='accepted').length} of {records.length} completed</p><progress aria-label="Completed assignments" className="mt-2 w-full" max={records.length||1} value={counts.filter(s=>s==='accepted').length}/><p className="mt-1 text-sm text-slate-500">Work counts as complete when accepted by your reviewer.</p></div>}
  {data.needsInstitute&&<div role="alert" className="rounded-xl border border-amber-300 bg-amber-50 p-4"><h3 className="font-semibold text-amber-900">Your PG Director account needs an institute assignment</h3><p className="mt-1 text-sm text-amber-900">Students cannot be listed until an administrator assigns your account to the correct pharmacy institute. This is an account setup issue, not an empty student register.</p></div>}
  {faculty&&<div className="grid grid-cols-2 gap-3 lg:grid-cols-4">{(showRoster?[['Registered students',data.students.length],['No requests yet',data.students.filter(s=>!records.some(r=>r.assignment.student_id===s.id)).length],['Awaiting review',counts.filter(s=>s==='submitted').length],['Overdue',counts.filter(s=>s==='overdue').length]]:[['Assignments',records.length],['Awaiting review',counts.filter(s=>s==='submitted').length],['Completed assignments',counts.filter(s=>s==='accepted').length],['Overdue',counts.filter(s=>s==='overdue').length]]).map(([label,count])=><div key={label} className="rounded-xl border bg-white p-4"><p className="text-2xl font-bold">{count}</p><p className="mt-1 text-sm text-slate-600">{label}</p></div>)}</div>}
- {manage&&compose!==null&&<div><div className="mb-2 flex justify-between"><h3 className="font-semibold">New assignment</h3><button className="text-sm text-slate-600 underline" onClick={()=>setCompose(null)}>Close form</button></div><StudentResearchComposer key={compose} students={data.students} initialTarget={compose} facultyAccess={data.facultyAccess} onSaved={refresh}/></div>}
+ {manage&&compose!==null&&<div><div className="mb-2 flex justify-between"><h3 className="font-semibold">New assignment</h3><button className="text-sm text-slate-600 underline" onClick={()=>setCompose(null)}>Close form</button></div><StudentResearchComposer key={compose} students={data.students} initialTarget={compose} facultyAccess={data.facultyAccess} recipients={data.recipients} onSaved={async()=>{await refresh();setCompose(null);}}/></div>}
  {showRoster&&<nav aria-label="Research views" className="flex gap-2 border-b pb-3"><button aria-pressed={view==='students'} className={`rounded-lg px-4 py-2 ${view==='students'?'bg-blue-700 text-white':'bg-white'}`} onClick={()=>{setView('students');setSelected(null);setQuery('');}}>Students ({data.students.length})</button><button aria-pressed={view==='requests'} className={`rounded-lg px-4 py-2 ${view==='requests'?'bg-blue-700 text-white':'bg-white'}`} onClick={()=>{setView('requests');setSelected(null);setQuery('');}}>Assignments and reviews ({records.length})</button></nav>}
  {showRoster&&view==='students'?<><label className="block text-sm font-medium">Search registered students<input className={input} placeholder="Student name or university ID" value={query} onChange={e=>setQuery(e.target.value)}/></label><StudentResearchRoster students={data.students} records={records} now={now} query={query} onSelect={selectStudent} onRequest={manage?requestStudent:undefined}/></>:<>
  {selectedStudent&&<div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-white p-4"><div><h3 className="font-bold">{selectedStudent.name || 'Student'}</h3><p className="text-sm text-slate-500">{selectedStudent.universityId} · Research progress and feedback</p></div>{manage&&<button className={button} onClick={()=>requestStudent(selectedStudent.id)}>Assign work to this student</button>}</div>}

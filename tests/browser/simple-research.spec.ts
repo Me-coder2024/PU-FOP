@@ -9,9 +9,9 @@ test('director sends work without milestones or title prerequisites',async({page
  await page.getByLabel('Assignment title').fill('Literature review');
  await page.getByLabel('Deadline').fill('2030-12-01T12:00');
  await page.getByLabel('Instructions',{exact:true}).fill('Read two papers');
- await page.getByRole('button',{name:'Send assignment to 1 students'}).click();
+ await page.getByRole('button',{name:'Send assignment to 1 recipients'}).click();
  await expect.poll(()=>sent.length).toBe(1);
- expect(sent[0]).toMatchObject({action:'publish',studentIds:['student'],name:'Literature review',stage:'other'});
+ expect(sent[0]).toMatchObject({action:'publish',studentIds:[],audience:'students',name:'Literature review',stage:'other'});
  await expect(page.getByText('Research stage',{exact:true})).toHaveCount(0);
  await expect(page.getByText('Workflow builder',{exact:true})).toHaveCount(0);
 });
@@ -56,4 +56,27 @@ test('Dean sees the faculty-wide student roster without assignment-creation cont
  await expect(page.getByRole('button',{name:'Assign work',exact:true})).toHaveCount(0);
  await page.getByRole('button',{name:'Other Institute Student',exact:true}).click();
  await expect(page.getByRole('button',{name:'Assign work to this student',exact:true})).toHaveCount(0);
+});
+
+test('director can select groups and multiple individual students',async({page})=>{
+ const people=[{...student,roles:['student']},{id:'s2',name:'Second student',universityId:'02',roles:['student']},{id:'guide',name:'Guide and HOD',universityId:null,roles:['guide','hod']}];
+ const sent:Record<string,unknown>[]=[];
+ await page.route('**/api/research/students',route=>{if(route.request().method()==='POST'){sent.push(route.request().postDataJSON());return route.fulfill({json:{id:'new'}});}return route.fulfill({json:{role:'pg_director',facultyAccess:true,students:people.slice(0,2),recipients:people,records:[]}});});
+ await page.goto('/?simple');
+ await page.getByRole('button',{name:'Create assignment',exact:true}).click();
+ await page.getByRole('combobox',{name:'Recipients',exact:true}).selectOption('guides');
+ await expect(page.getByRole('button',{name:'Send assignment to 1 recipients'})).toBeEnabled();
+ await page.getByRole('combobox',{name:'Recipients',exact:true}).selectOption('hods');
+ await expect(page.getByRole('button',{name:'Send assignment to 1 recipients'})).toBeEnabled();
+ await page.getByRole('combobox',{name:'Recipients',exact:true}).selectOption('everyone');
+ await expect(page.getByRole('button',{name:'Send assignment to 3 recipients'})).toBeEnabled();
+ await page.getByRole('combobox',{name:'Recipients',exact:true}).selectOption('selected');
+ await page.getByRole('checkbox',{name:'Test Student · ST-01'}).check();
+ await page.getByRole('checkbox',{name:'Second student · 02'}).check();
+ await page.getByLabel('Assignment title').fill('Group literature work');
+ await page.getByLabel('Deadline').fill('2030-12-01T12:00');
+ await page.getByRole('button',{name:'Send assignment to 2 recipients'}).click();
+ await expect.poll(()=>sent.length).toBe(1);
+ expect(sent[0]).toMatchObject({audience:'selected',studentIds:['student','s2']});
+ await expect(page.getByRole('button',{name:'Title & PPT submissions'})).toHaveCount(0);
 });
