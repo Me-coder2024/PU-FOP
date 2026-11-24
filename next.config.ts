@@ -49,6 +49,10 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      ...['dashboard','student','guide','hod','pg-director','dean','super-admin','research','assignments','onboarding','feedback','api','auth'].map(segment => ({
+        source: `/${segment}/:path*`,
+        headers: [{key: 'X-Robots-Tag', value: 'noindex, nofollow'}],
+      })),
       {
         source: "/(.*)",
         headers: securityHeaders,

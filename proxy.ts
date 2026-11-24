@@ -15,6 +15,10 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith('/api') ||
     pathname.startsWith('/data') ||
     pathname === '/auth/callback' ||
+    pathname === '/portal-guide' ||
+    pathname === '/robots.txt' ||
+    pathname === '/sitemap.xml' ||
+    pathname === '/opengraph-image' ||
     pathname === '/google7405d600af21ccee.html' ||
     pathname === '/login/google7405d600af21ccee.html' ||
     pathname === '/login' ||

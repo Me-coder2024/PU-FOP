@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
+import { SITE_URL, SITE_DESCRIPTION } from '@/lib/site';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -11,6 +12,19 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: 'PU-FOP',
+  openGraph: {
+    type: 'website', locale: 'en_IN', siteName: 'PU-FOP',
+    title: 'PU-FOP | Parul University Pharmacy Research Portal',
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PU-FOP | Parul University Pharmacy Research Portal',
+    description: SITE_DESCRIPTION,
+    images: ['/opengraph-image'],
+  },
   verification: {
     google: "CIihGPwGogeiZMAvmEVlsVbhQcKNfsfG-CgC4JoeRTk",
   },
