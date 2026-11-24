@@ -47,3 +47,13 @@ test('failed assignment fetch exposes retry and recovers',async({page})=>{
  await page.getByRole('button',{name:'Reload',exact:true}).click();
  await expect(page.getByText('0 of 0 completed',{exact:true})).toBeVisible();
 });
+test('Dean sees the faculty-wide student roster without assignment-creation controls',async({page})=>{
+ await page.route('**/api/research/students',route=>route.fulfill({json:{role:'dean',facultyAccess:true,students:[student,{id:'other',name:'Other Institute Student',universityId:'ST-02'}],records:[]}}));
+ await page.goto('/?simple');
+ await expect(page.getByText('Dean · All institutes',{exact:true})).toBeVisible();
+ await expect(page.getByRole('row').filter({hasText:'Other Institute Student'})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Students (2)',exact:true})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Assign work',exact:true})).toHaveCount(0);
+ await page.getByRole('button',{name:'Other Institute Student',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Assign work to this student',exact:true})).toHaveCount(0);
+});
