@@ -11,6 +11,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  verification: {
+    google: "CIihGPwGogeiZMAvmEVlsVbhQcKNfsfG-CgC4JoeRTk",
+  },
   title: "PU-FOP — Form & Title Online Portal",
   description:
     "The official dissertation management portal for Parul University, Faculty of Pharmacy. Submit, track, and manage research proposals.",
