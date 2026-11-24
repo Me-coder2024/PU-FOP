@@ -5,11 +5,14 @@ export async function GET() {
  const session=await createServerClient();
  const {data:{user}}=await session.auth.getUser();
  if (!user) return reply({error:'Sign in to see research requests.'},401);
- const {data,error}=await session.rpc('student_research_snapshot',{});
+ const admin=createServiceClient();
+ const [{data,error},{data:profile,error:profileError},{data:facultyAccess,error:accessError}]=await Promise.all([
+  session.rpc('student_research_snapshot',{}),
+  admin.from('profiles').select('institute_id').eq('id',user.id).single(),
+  admin.rpc('has_faculty_research_access',{p_actor:user.id}),
+ ]);
  if(error) return reply({error:'Student research tracking is unavailable. Apply the student research tracking migration.'},503);
- const {data:profile,error:profileError}=await createServiceClient().from('profiles').select('institute_id').eq('id',user.id).single();
- if(profileError) return reply({error:'Unable to check your institute assignment. Reload and try again.'},503);
- const {data:facultyAccess}=await createServiceClient().rpc('has_faculty_research_access',{p_actor:user.id});
+ if(profileError||accessError) return reply({error:'Unable to check your institute assignment. Reload and try again.'},503);
  return reply({...data,facultyAccess:facultyAccess===true,needsInstitute:data?.role==='pg_director'&&!profile?.institute_id&&facultyAccess!==true});
 }
 export async function POST(request: Request) {

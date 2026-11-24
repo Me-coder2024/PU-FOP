@@ -9,7 +9,7 @@ import { Loader2, Info, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
   const { user, loading: authLoading, error: authError, signInWithGoogle } = useAuth();
-  const { role, profile, loading: roleLoading } = useRole();
+  const { role, loading: roleLoading, error: roleError } = useRole();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loginLoading, setLoginLoading] = useState(false);
@@ -17,6 +17,9 @@ export default function LoginPage() {
   // Check for URL error params
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === 'service_unavailable') {
+      setError('The sign-in service is temporarily unavailable. Reload to try again.');
+    }
     if (params.get('error') === 'auth_failed') {
       setError('Authentication failed. Please try again with your university email.');
     }
@@ -32,27 +35,30 @@ export default function LoginPage() {
 
   // Auto-redirect if already logged in
   useEffect(() => {
-    if (!authLoading && !roleLoading && user && role) {
+    if (!error && !authError && !roleError && !authLoading && !roleLoading && user && role) {
       const redirectPath = getRoleDashboardPath(role);
       router.push(redirectPath);
     }
-  }, [user, role, authLoading, roleLoading, router]);
+  }, [user, role, authLoading, roleLoading, router, error, authError, roleError]);
 
   const handleGoogleSignIn = async () => {
     setError(null);
     setLoginLoading(true);
     try {
       await signInWithGoogle();
-      // Loading will be managed by useAuth's onAuthStateChanged
+      // Role loading is shown separately while the dashboard redirect resolves.
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Sign-in failed.';
       setError(message);
+      setLoginLoading(false);
+    } finally {
       setLoginLoading(false);
     }
   };
 
   // Don't show spinner if there's an error — show the button instead so user can retry
-  const isLoading = !error && (loginLoading || (authLoading && !authError));
+  const displayedError = error || authError || roleError;
+  const isLoading = !displayedError && (loginLoading || authLoading || (!!user && roleLoading));
 
   return (
     <div className="min-h-screen h-screen flex font-sans overflow-hidden bg-white">
@@ -117,10 +123,10 @@ export default function LoginPage() {
 
           {/* Google Sign-in / Error / Loader */}
           <div className="space-y-4">
-            {error && (
+            {displayedError && (
               <div className="p-3.5 bg-red-50 text-red-700 rounded-xl text-xs font-bold border border-red-100 flex items-start animate-pulse">
                 <Info className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5 text-red-500" />
-                <span>{error}</span>
+                <div><span>{displayedError}</span><button type="button" className="mt-2 block underline" onClick={()=>window.location.assign('/login')}>Reload and retry</button></div>
               </div>
             )}
 

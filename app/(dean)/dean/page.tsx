@@ -50,6 +50,7 @@ export default function DeanDashboard() {
   const { profile } = useRole();
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState({
     totalStudents: 0,
@@ -90,22 +91,19 @@ export default function DeanDashboard() {
   }, [modalOpen]);
 
   useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(),20000);
     async function fetchStats() {
       if (!profile) return;
       try {
-        // Fetch student count
-        const { count: studentCount } = await supabase
-          .from('profiles')
-          .select('*', { count: 'exact', head: true })
-          .eq('role', 'student');
-
-        // Fetch submissions
-        const { data: subs, error: subsErr } = await supabase
-          .from('submissions')
-          .select('id, status, created_at, title, student:profiles!submissions_student_id_fkey(full_name, email, university_id)')
-          .order('created_at', { ascending: false });
-
-        if (subsErr) throw subsErr;
+        const [{count:studentCount,error:countError},{data:subs,error:subsErr},{data:windowData,error:windowError}] = await Promise.all([
+          supabase.from('profiles').select('*',{count:'exact',head:true}).eq('role','student').abortSignal(controller.signal),
+          supabase.from('submissions').select('id, status, created_at, title, student:profiles!submissions_student_id_fkey(full_name, email, university_id)').order('created_at',{ascending:false}).abortSignal(controller.signal),
+          supabase.from('submission_window').select('*').order('end_date',{ascending:false}).limit(1).abortSignal(controller.signal),
+        ]);
+        if(!active)return;
+        if(countError||subsErr||windowError)throw countError||subsErr||windowError;
 
         let pg = 0;
         let ph = 0;
@@ -117,13 +115,6 @@ export default function DeanDashboard() {
             if (s.status === 'hod_accepted' || s.status === 'finalized') fin++;
           });
         }
-
-        // Fetch active submission window
-        const { data: windowData } = await supabase
-          .from('submission_window')
-          .select('*')
-          .order('end_date', { ascending: false })
-          .limit(1);
 
         let windowActive = false;
         let daysLeft = 0;
@@ -152,11 +143,14 @@ export default function DeanDashboard() {
         }
       } catch (err) {
         console.error('Error fetching Dean stats:', err);
+        if(active)setLoadError('Unable to load dashboard data. Please retry.');
       } finally {
-        setLoading(false);
+        clearTimeout(timer);
+        if(active)setLoading(false);
       }
     }
     fetchStats();
+    return()=>{active=false;clearTimeout(timer);controller.abort();};
   }, [profile, supabase]);
 
   // Card Pagination Calculations
@@ -188,6 +182,8 @@ export default function DeanDashboard() {
   useEffect(() => {
     setModalPage(1);
   }, [modalSearch, modalStatusFilter]);
+
+  if(loadError)return <div role="alert" className="rounded-xl border bg-white p-6"><p>{loadError}</p><button className="mt-3 text-blue-700 underline" onClick={()=>window.location.reload()}>Retry</button></div>;
 
   if (loading) {
     return (

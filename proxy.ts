@@ -1,3 +1,4 @@
+import { fetchWithTimeout } from '@/lib/utils/fetch-with-timeout';
 import { createServerClient } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
@@ -14,6 +15,7 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith('/api') ||
     pathname.startsWith('/data') ||
     pathname === '/auth/callback' ||
+    pathname === '/login' ||
     pathname === '/'
   ) {
     return NextResponse.next();
@@ -28,6 +30,7 @@ export async function proxy(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      global: { fetch: fetchWithTimeout },
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -66,24 +69,16 @@ export async function proxy(request: NextRequest) {
     return redirectResponse;
   };
 
-  // 3. Refresh session (important for token refresh)
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Allow login page for everyone
-  if (pathname === '/login') {
-    if (user) {
-      // Already logged in — redirect to appropriate dashboard
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-
-      if (profile) {
-        return redirectWithCookies(getRoleRedirect(profile.role));
-      }
+  // A backend outage must not leave navigation pending or send users to onboarding.
+  let user;
+  try {
+    const result = await supabase.auth.getUser();
+    if (result.error && !['AuthSessionMissingError','AuthApiError'].includes(result.error.name)) {
+      return redirectWithCookies('/login?error=service_unavailable');
     }
-    return response;
+    user = result.data.user;
+  } catch {
+    return redirectWithCookies('/login?error=service_unavailable');
   }
 
   // 4. Protect all other routes — require auth
@@ -92,11 +87,14 @@ export async function proxy(request: NextRequest) {
   }
 
   // 5. Get user profile for role-based routing
-  let { data: profile } = await supabase
+  const { data: fetchedProfile, error: profileError } = await supabase
     .from('profiles')
     .select('role, university_id')
     .eq('id', user.id)
     .maybeSingle();
+
+  let profile = fetchedProfile;
+  if(profileError)return redirectWithCookies('/login?error=service_unavailable');
 
   // Fallback to service role if anon query returned null to prevent false onboarding redirects
   if ((!profile || (profile.role === 'student' && !profile.university_id)) && process.env.SUPABASE_SERVICE_ROLE_KEY) {
@@ -104,19 +102,21 @@ export async function proxy(request: NextRequest) {
       const adminClient = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.SUPABASE_SERVICE_ROLE_KEY!,
-        { auth: { autoRefreshToken: false, persistSession: false } }
+        { auth: { autoRefreshToken: false, persistSession: false }, global: { fetch: fetchWithTimeout } }
       );
-      const { data: adminProfile } = await adminClient
+      const { data: adminProfile, error: adminError } = await adminClient
         .from('profiles')
         .select('role, university_id')
         .eq('id', user.id)
         .maybeSingle();
 
+      if (adminError)return redirectWithCookies('/login?error=service_unavailable');
       if (adminProfile) {
         profile = adminProfile;
       }
     } catch (adminErr) {
       console.error('[Proxy] Admin profile lookup error:', adminErr);
+      return redirectWithCookies('/login?error=service_unavailable');
     }
   }
 

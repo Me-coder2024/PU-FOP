@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/hooks/useAuth';
 import { useRole } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
 import type { SubmissionRow, NotificationRow } from '@/lib/supabase/types';
@@ -23,11 +22,11 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 };
 
 export default function StudentDashboard() {
-  const { user } = useAuth();
   const { profile } = useRole();
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
+  const [loadError,setLoadError] = useState('');
   const [submission, setSubmission] = useState<SubmissionRow | null>(null);
   const [guideName, setGuideName] = useState<string | null>(null);
   const [guideEmail, setGuideEmail] = useState<string | null>(null);
@@ -37,51 +36,33 @@ export default function StudentDashboard() {
   const [notifications, setNotifications] = useState<NotificationRow[]>([]);
 
   useEffect(() => {
+    let active = true;
     async function loadDashboard() {
       if (!profile) return;
       try {
-        const { data: subData } = await supabase
+        const [{data:subData,error:subError},{data:windowData,error:windowError},{data:notifData,error:notifError}] = await Promise.all([supabase
           .from('submissions')
           .select('*')
           .eq('student_id', profile.id)
           .order('created_at', { ascending: false })
           .limit(1)
-          .maybeSingle();
+          .abortSignal(AbortSignal.timeout(20000)).maybeSingle(),
+          supabase.rpc('get_submission_window',{p_institute_id:profile.institute_id || undefined}).abortSignal(AbortSignal.timeout(20000)),
+          supabase.from('notifications').select('*').eq('user_id',profile.id).order('created_at',{ascending:false}).limit(10).abortSignal(AbortSignal.timeout(20000)),
+        ]);
+        if (!active) return;
+        if(subError||windowError||notifError) throw subError||windowError||notifError;
+        setSubmission(subData as SubmissionRow|null);
 
-        let foundGuide = false;
-        if (subData) {
-          setSubmission(subData as SubmissionRow);
-          if (subData.guide_id) {
-            const { data: guideData } = await supabase
-              .from('profiles')
-              .select('full_name, email')
-              .eq('id', subData.guide_id)
-              .single();
-            if (guideData) {
-              setGuideName(guideData.full_name);
-              setGuideEmail(guideData.email);
-              foundGuide = true;
-            }
-          }
+        const guideId = subData?.guide_id || profile.guide_id;
+        if(guideId){
+          const {data:guide,error:guideError}=await supabase.from('profiles').select('full_name,email').eq('id',guideId).abortSignal(AbortSignal.timeout(20000)).single();
+          if(!active)return;
+          if(guideError)throw guideError;
+          setGuideName(guide?.full_name || null);
+          setGuideEmail(guide?.email || null);
         }
 
-        // If no guide found from submission, check the profile's guide_id
-        // (set during onboarding when student selects their guide)
-        if (!foundGuide && profile.guide_id) {
-          const { data: profileGuideData } = await supabase
-            .from('profiles')
-            .select('full_name, email')
-            .eq('id', profile.guide_id)
-            .single();
-          if (profileGuideData) {
-            setGuideName(profileGuideData.full_name);
-            setGuideEmail(profileGuideData.email);
-          }
-        }
-
-        const { data: windowData } = await supabase.rpc('get_submission_window', {
-          p_institute_id: profile.institute_id || undefined,
-        });
         if (windowData && windowData.length > 0) {
           setWindowOpen(true);
           setDaysLeft(windowData[0].days_remaining);
@@ -91,22 +72,20 @@ export default function StudentDashboard() {
           }
         }
 
-        const { data: notifData } = await supabase
-          .from('notifications')
-          .select('*')
-          .eq('user_id', profile.id)
-          .order('created_at', { ascending: false })
-          .limit(10);
         if (notifData) setNotifications(notifData as NotificationRow[]);
       } catch (err) {
         console.error('Error loading dashboard', err);
+        if(active)setLoadError('Unable to load your dashboard. Please retry.');
       } finally {
-        setLoading(false);
+        if(active)setLoading(false);
       }
     }
     if (profile) loadDashboard();
+    return () => { active = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
+
+  if(loadError)return <div role="alert" className="rounded-xl border bg-white p-6"><p>{loadError}</p><button className="mt-3 text-blue-700 underline" onClick={()=>window.location.reload()}>Retry</button></div>;
 
   if (loading) {
     return (
@@ -121,19 +100,6 @@ export default function StudentDashboard() {
 
   const statusConfig = submission ? STATUS_CONFIG[submission.status] : null;
   const canSubmit = windowOpen && (!submission || ['guide_rejected', 'hod_rejected'].includes(submission.status));
-  const canEdit = submission && (
-    submission.status === 'revision_requested' ||
-    submission.edit_unlocked
-  );
-
-  const completionSteps = [
-    !!submission,
-    submission?.status === 'guide_accepted' || submission?.status === 'hod_accepted' || submission?.status === 'finalized',
-    submission?.status === 'hod_accepted' || submission?.status === 'finalized',
-    submission?.status === 'finalized',
-  ];
-  const completionPercent = Math.round((completionSteps.filter(Boolean).length / completionSteps.length) * 100);
-
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Page Header */}
@@ -151,87 +117,18 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* ===== Quick Access Cards ===== */}
-      <div>
-        <h2 className="text-[11px] font-black text-slate-700 uppercase tracking-[0.15em] mb-4" style={authorFont}>Quick Access</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Days Left Card - Blue */}
-          <div className="bg-[#4361EE] rounded-2xl p-5 text-white min-h-[155px] flex flex-col justify-between shadow-lg shadow-[#4361EE]/20 relative overflow-hidden">
-            {/* Subtle decorative circle */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/5" />
-            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/70" style={authorFont}>Days Left</p>
-            <div>
-              {windowOpen ? (
-                <>
-                  <p className="text-[52px] font-bold leading-none tracking-tight" style={poppinsFont}>{daysLeft}</p>
-                  <p className="text-[11px] font-bold text-white/50 uppercase tracking-wider mt-2" style={authorFont}>
-                    Until <span className="text-white/80">{deadlineDate || 'Deadline'}</span>
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="text-2xl font-black" style={authorFont}>Closed</p>
-                  <p className="text-[11px] font-bold text-white/50 mt-1" style={authorFont}>Check back later</p>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Completion Card */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200 min-h-[155px] flex flex-col justify-between">
-            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400" style={authorFont}>Completion</p>
-            <div>
-              <p className="text-[52px] font-bold text-slate-900 leading-none tracking-tight" style={poppinsFont}>
-                {completionPercent}<span className="text-[24px]">%</span>
-              </p>
-              <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden mt-3">
-                <div
-                  className="h-full bg-[#4361EE] rounded-full transition-all duration-500"
-                  style={{ width: `${completionPercent}%` }}
-                />
-              </div>
-              <p className="text-[10px] text-[#4361EE] font-medium mt-1.5" style={authorFont}>Overall Progress</p>
-            </div>
-          </div>
-
-          {/* Avg Score Card */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200 min-h-[155px] flex flex-col justify-between">
-            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400" style={authorFont}>Avg Score</p>
-            <div>
-              <p className="text-[52px] font-bold text-slate-900 leading-none tracking-tight" style={poppinsFont}>0.0</p>
-              <p className="text-[10px] text-slate-400 font-medium mt-2" style={authorFont}>Evaluations average</p>
-            </div>
-          </div>
-
-          {/* Guide Card */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200 min-h-[155px] flex flex-col justify-between">
-            <div className="flex items-start justify-between">
-              <div className="w-8 h-8 rounded-lg bg-[#4361EE] flex items-center justify-center">
-                <Icon icon="solar:user-check-rounded-bold" className="w-4 h-4 text-white" />
-              </div>
-              {guideName && (
-                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-sm">
-                  {guideName[0]?.toUpperCase()}
-                </div>
-              )}
-            </div>
-            <div>
-              <p className="text-sm font-bold text-slate-900" style={authorFont}>{guideName || 'Not Assigned'}</p>
-              <p className="text-[10px] text-slate-400 mt-0.5" style={authorFont}>
-                {guideEmail || (guideName ? 'Your selected guide' : 'Select during onboarding')}
-              </p>
-              {guideName && guideEmail && (
-                <a
-                  href={`mailto:${guideEmail}`}
-                  className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800 transition-all"
-                  style={authorFont}
-                >
-                  <Icon icon="solar:letter-bold" className="w-3.5 h-3.5" />
-                  Send Email
-                </a>
-              )}
-            </div>
-          </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Link href="/dashboard/track" className="rounded-2xl border border-blue-200 bg-blue-50 p-6">
+          <h2 className="text-lg font-bold text-blue-900">My assignments</h2>
+          <p className="mt-2 text-sm text-slate-600">View work from your PG Director, submit responses or document links, and check progress.</p>
+          <span className="mt-3 block font-semibold text-blue-700">Open assignments →</span>
+        </Link>
+        <div className="rounded-2xl border bg-white p-6">
+          <h2 className="text-lg font-bold">Title & PPT submissions</h2>
+          <p className="mt-2 text-sm text-slate-600">{windowOpen ? `Title submission open · ${daysLeft} days left${deadlineDate ? ` · Until ${deadlineDate}` : ''}` : 'Title submission window is closed.'}</p>
+          <p className="mt-2 text-sm text-slate-600">Guide: {guideName || 'Not assigned'}{guideEmail ? ` · ${guideEmail}` : ''}</p>
+          <Link className="mt-3 block font-semibold text-blue-700" href="/dashboard/submit">View title submission →</Link>
+          <Link className="mt-2 block font-semibold text-blue-700" href="/dashboard/track?tab=presentations">View PPT submissions →</Link>
         </div>
       </div>
 

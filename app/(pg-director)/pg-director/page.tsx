@@ -2,6 +2,7 @@
 
 import SchemaDataViewer from '@/components/forms/SchemaDataViewer';
 import { titleAction } from '@/lib/utils/title-actions';
+import Link from 'next/link';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRole } from '@/hooks/useRole';
 import { createClient } from '@/lib/supabase/client';
@@ -161,6 +162,7 @@ export default function PgDirectorPage() {
 
   return (
     <div className="space-y-8">
+      <Link href="/research" className="block rounded-xl border border-blue-200 bg-blue-50 p-5"><h2 className="font-bold text-blue-900">Student assignments & progress</h2><p className="mt-1 text-sm text-slate-600">Create an assignment, review student work, or check completed assignments.</p><span className="mt-2 block font-semibold text-blue-700">Open assignments →</span></Link>
       <div>
         <h1 className="text-2xl font-black text-slate-900 tracking-tight" style={authorFont}>PG Director — Title Review</h1>
         <p className="text-sm text-slate-500 mt-1" style={authorFont}>Review HOD-forwarded titles. Finalize or send back for revisions.</p>

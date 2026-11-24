@@ -54,27 +54,27 @@ const {studentResearchStatus}=load('lib/progress/student-types');
 const studentRecord={assignment:{id:'assignment',student_id:'new-student',request_id:'request',state:'pending'},request:{id:'request',name:'Planning update',stage:'planning',instructions:'Discuss your interests',questions:['What research interests you?'],deadline:'2026-11-22T10:00:00Z'},studentName:'New student without a title',isOwner:true,responses:[],history:[]};
 test('student composer includes registered students without requiring titles',()=>{
  const html=renderToStaticMarkup(React.createElement(StudentResearchComposer,{students:[{id:'new-student',name:'New student without a title',universityId:'NEW-1'}],onSaved:async()=>{}}));
- assert.match(html,/New student without a title/);assert.match(html,/All 1 currently registered students/);assert.match(html,/No research title or title approval is required/);assert.match(html,/Research planning/);
+ assert.match(html,/New student without a title/);assert.match(html,/All 1 currently registered students/);assert.match(html,/No research title or title approval is required/);assert.match(html,/document link/);assert.doesNotMatch(html,/Research stage/);
 });
 test('student-first tracker supports early answers and guide review',()=>{
  const props={record:studentRecord,role:'student',refresh:async()=>{},now};
  const html=renderToStaticMarkup(React.createElement(StudentResearchCard,props));
- assert.match(html,/What research interests you/);assert.match(html,/Save private draft/);assert.match(html,/Submit answers/);
+ assert.match(html,/What research interests you/);assert.match(html,/Save private draft/);assert.match(html,/Submit assignment/);
  const submitted={...studentRecord,isOwner:false,assignment:{...studentRecord.assignment,state:'submitted'},responses:[{id:'response',version:1,answers:{'0':'Drug delivery'},submitted_at:'2026-11-21T09:00:00Z'}]};
  const review=renderToStaticMarkup(React.createElement(StudentResearchCard,{...props,record:submitted,role:'guide'}));
- assert.match(review,/Drug delivery/);assert.match(review,/Accept update/);assert.match(review,/Request revision/);assert.doesNotMatch(review,/Extend for all recipients/);
+ assert.match(review,/Drug delivery/);assert.match(review,/Mark complete/);assert.match(review,/Request revision/);assert.doesNotMatch(review,/Extend for all recipients/);
 });
 test('early research status locks overdue work while preserving completed states',()=>{
  const expired={...studentRecord,request:{...studentRecord.request,deadline:'2026-11-20T10:00:00Z'}};
  assert.equal(studentResearchStatus(expired,now),'overdue');
  for(const state of ['submitted','accepted'])assert.equal(studentResearchStatus({...expired,assignment:{...expired.assignment,state}},now),state);
  const html=renderToStaticMarkup(React.createElement(StudentResearchCard,{record:expired,role:'student',refresh:async()=>{},now}));
- assert.match(html,/An update is overdue/);assert.doesNotMatch(html,/>Submit answers</);
+ assert.match(html,/An update is overdue/);assert.doesNotMatch(html,/>Submit assignment</);
 });
 const {StudentResearchRoster}=load('components/progress/StudentResearchTracker');
 test('director roster displays registered students even when no requests exist',()=>{
  const html=renderToStaticMarkup(React.createElement(StudentResearchRoster,{students:[{id:'new-student',name:'New student without a title',universityId:'NEW-1'}],records:[],query:'',now,onSelect:()=>{},onRequest:()=>{}}));
- assert.match(html,/Student roster/);assert.match(html,/New student without a title/);assert.match(html,/NEW-1/);assert.match(html,/Not started · no requests/);assert.match(html,/Send questions/);assert.match(html,/View progress/);
+ assert.match(html,/Student roster/);assert.match(html,/New student without a title/);assert.match(html,/NEW-1/);assert.match(html,/Not started · no requests/);assert.match(html,/Assign work/);assert.match(html,/View progress/);
 });
 test('director roster searches the student register independently of assigned requests',()=>{
  const props={students:[{id:'new-student',name:'New student without a title',universityId:'NEW-1'}],records:[],query:'NEW-1',now,onSelect:()=>{},onRequest:()=>{}};

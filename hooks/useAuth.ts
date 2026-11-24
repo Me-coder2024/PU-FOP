@@ -10,6 +10,7 @@ import {
   type User as FirebaseUser,
 } from 'firebase/auth';
 import { createClient } from '@/lib/supabase/client';
+import { withTimeout } from '@/lib/utils/with-timeout';
 import { clearRoleCache } from './useRole';
 
 export interface UnifiedUser {
@@ -27,14 +28,14 @@ interface AuthState {
 
 // ── Core sync logic (shared between signInWithGoogle and onAuthStateChanged) ──
 
-async function performSync(
+async function syncFirebaseUser(
   firebaseUser: FirebaseUser
 ): Promise<UnifiedUser> {
   const email = firebaseUser.email;
   if (!email) throw new Error('No email associated with account.');
 
   // 1. Get Firebase ID token
-  const idToken = await firebaseUser.getIdToken();
+  const idToken = await withTimeout(firebaseUser.getIdToken(), 15000, 'Google authentication timed out. Please retry.');
 
   // 2. Call sync API (single attempt — fast fail)
   const syncRes = await fetch('/api/auth/sync', {
@@ -45,6 +46,7 @@ async function performSync(
     },
     body: JSON.stringify({ idToken, emailHint: email }),
     cache: 'no-store',
+    signal: AbortSignal.timeout(20000),
   });
 
   if (!syncRes.ok) {
@@ -60,10 +62,10 @@ async function performSync(
 
   // 3. Sign in to Supabase Auth on the client
   const supabase = createClient();
-  const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+  const { data: signInData, error: signInError } = await withTimeout(supabase.auth.signInWithPassword({
     email: syncEmail,
     password: securePassword,
-  });
+  }), 15000, 'Sign-in timed out. Please reload and retry.');
   if (signInError) throw signInError;
   const supabaseUser = signInData.user;
 
@@ -73,6 +75,16 @@ async function performSync(
     displayName: firebaseUser.displayName,
     photoURL: firebaseUser.photoURL,
   };
+}
+
+// Multiple mounted hooks must share the same login exchange.
+const pendingSync = new Map<string, Promise<UnifiedUser>>();
+function performSync(firebaseUser: FirebaseUser): Promise<UnifiedUser> {
+  const existing = pendingSync.get(firebaseUser.uid);
+  if (existing) return existing;
+  const request = syncFirebaseUser(firebaseUser).finally(() => pendingSync.delete(firebaseUser.uid));
+  pendingSync.set(firebaseUser.uid, request);
+  return request;
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -90,13 +102,37 @@ export function useAuth() {
 
   useEffect(() => {
     let cancelled = false;
+    const cleanupRef = { current: () => {} };
+    const startupTimer = setTimeout(() => {
+      if (!cancelled) {
+        cancelled = true;
+        cleanupRef.current();
+        setState({user:null,loading:false,error:'Session check timed out. Please reload and retry.'});
+      }
+    }, 30000);
+    // Keep every hook instance in sync. Do not await SDK calls in this callback.
+    const {data:{subscription}} = createClient().auth.onAuthStateChange((event, session) => {
+      if (cancelled) return;
+      if (event === 'SIGNED_OUT') {
+        clearTimeout(startupTimer);
+        clearRoleCache();
+        setState({user:null,loading:false,error:null});
+      } else if (event === 'SIGNED_IN' && session?.user) {
+        clearTimeout(startupTimer);
+        const u = session.user;
+        setState(previous => previous.user?.id === u.id && previous.user?.email === u.email
+          ? {...previous,loading:false,error:null}
+          : {user:{id:u.id,email:u.email || '',displayName:u.user_metadata?.full_name || null,photoURL:u.user_metadata?.avatar_url || null},loading:false,error:null});
+      }
+    });
 
     // Fast path: check for existing Supabase session before waiting for Firebase
     const checkExistingSession = async () => {
       try {
         const supabase = createClient();
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await withTimeout(supabase.auth.getSession(), 15000, 'Session check timed out.');
         if (session?.user && !cancelled) {
+          clearTimeout(startupTimer);
           setState({
             user: {
               id: session.user.id,
@@ -129,13 +165,16 @@ export function useAuth() {
         if (firebaseUser) {
           try {
             const user = await performSync(firebaseUser);
+            clearTimeout(startupTimer);
             if (!cancelled) setState({ user, loading: false, error: null });
           } catch (err: unknown) {
             const message = err instanceof Error ? err.message : 'Authentication failed.';
+            clearTimeout(startupTimer);
             console.error('Auth sync error (onAuthStateChanged):', message);
             if (!cancelled) setState({ user: null, loading: false, error: message });
           }
         } else {
+          clearTimeout(startupTimer);
           // Signed out
           if (!cancelled) setState({ user: null, loading: false, error: null });
         }
@@ -144,9 +183,10 @@ export function useAuth() {
       cleanupRef.current = unsubscribe;
     });
 
-    const cleanupRef = { current: () => {} };
     return () => {
       cancelled = true;
+      clearTimeout(startupTimer);
+      subscription.unsubscribe();
       cleanupRef.current();
     };
   }, []);

@@ -7,11 +7,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRole } from '@/hooks/useRole';
 import { useNotifications } from '@/hooks/useNotifications';
 import type { AppRole } from '@/lib/supabase/types';
-import { createClient } from '@/lib/supabase/client';
 import { Icon } from '@iconify/react';
 import {
   Settings,
-  Bell,
   Menu,
   X,
   Shield,
@@ -37,7 +35,7 @@ const STUDENT_NAV: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', iconifyIcon: 'solar:widget-bold-duotone' },
   { label: 'Submit Topic', href: '/dashboard/submit', iconifyIcon: 'solar:document-add-bold-duotone' },
   { label: 'Drug Requests', href: '/dashboard/drug-requests', iconifyIcon: 'solar:pill-bold-duotone' },
-  { label: 'Progress Tracker', href: '/dashboard/track', iconifyIcon: 'solar:chart-2-bold-duotone' },
+  { label: 'My Assignments', href: '/dashboard/track', iconifyIcon: 'solar:chart-2-bold-duotone' },
   { label: 'Similarity Check', href: '/dashboard/similarity', iconifyIcon: 'solar:shield-check-bold-duotone' },
   { label: 'Repository', href: '/dashboard/repository', iconifyIcon: 'solar:library-bold-duotone' },
   { label: 'Help & FAQs', href: '/dashboard/help', iconifyIcon: 'solar:question-circle-bold-duotone' },
@@ -93,36 +91,12 @@ const ROLE_CONFIG: Record<AppRole, { label: string; icon: string; bg: string; te
 const authorFont: React.CSSProperties = { fontFamily: "'Author', sans-serif" };
 const poppinsFont: React.CSSProperties = { fontFamily: "'Poppins', sans-serif" };
 
-function getTopicProgress(status: string | undefined): number {
-  if (!status) return 0;
-  switch (status) {
-    case 'submitted': case 'revision_requested': return 25;
-    case 'guide_accepted': return 50;
-    case 'hod_accepted': return 75;
-    case 'finalized': return 100;
-    case 'guide_rejected': case 'hod_rejected': return 10;
-    default: return 0;
-  }
-}
-
-function getOverallProgress(status: string | undefined): number {
-  if (!status) return 0;
-  const steps = [
-    true,
-    ['guide_accepted', 'hod_accepted', 'finalized'].includes(status),
-    ['hod_accepted', 'finalized'].includes(status),
-    status === 'finalized',
-  ];
-  return Math.round((steps.filter(Boolean).length / steps.length) * 100);
-}
-
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const { user, signOut } = useAuth();
-  const { role, availableRoles, profile, loading, switchRole } = useRole();
+  const { role, availableRoles, profile, loading, switchRole, switching, error: roleError } = useRole();
   const { unreadCount } = useNotifications();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [submissionStatus, setSubmissionStatus] = useState<string | undefined>(undefined);
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
   const roleMenuRef = useRef<HTMLDivElement>(null);
 
@@ -135,21 +109,6 @@ export default function DashboardShell({ children }: { children: React.ReactNode
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  useEffect(() => {
-    if (role !== 'student' || !profile) return;
-    const supabase = createClient();
-    supabase
-      .from('submissions')
-      .select('status')
-      .eq('student_id', profile.id)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data) setSubmissionStatus(data.status);
-      });
-  }, [role, profile]);
 
   if (loading) {
     return (
@@ -252,38 +211,6 @@ export default function DashboardShell({ children }: { children: React.ReactNode
           })}
         </nav>
 
-        {/* Submission Summary (student only) */}
-        {isStudent && (
-          <div className="px-4 pb-4 pt-3 border-t border-white/10 mt-auto">
-            <p className="text-[9px] font-bold text-white/50 uppercase tracking-widest mb-2.5" style={authorFont}>
-              Submission Summary
-            </p>
-            <div className="space-y-2.5">
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] font-semibold text-white/80 truncate pr-2" style={authorFont}>
-                    Topic Submission
-                  </span>
-                  <span className="text-[10px] font-bold text-white/60 flex-shrink-0" style={authorFont}>{getTopicProgress(submissionStatus)}%</span>
-                </div>
-                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-white rounded-full transition-all duration-500" style={{ width: `${getTopicProgress(submissionStatus)}%` }} />
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] font-semibold text-white/80 truncate pr-2" style={authorFont}>
-                    Progress
-                  </span>
-                  <span className="text-[10px] font-bold text-white/60 flex-shrink-0" style={authorFont}>{getOverallProgress(submissionStatus)}%</span>
-                </div>
-                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-white rounded-full transition-all duration-500" style={{ width: `${getOverallProgress(submissionStatus)}%` }} />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </aside>
 
       {/* ===== Main Content Area ===== */}
@@ -324,13 +251,14 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             {availableRoles.length > 1 && (
               <div ref={roleMenuRef} className="relative">
                 <button
+                  disabled={switching}
                   onClick={() => setRoleMenuOpen(!roleMenuOpen)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all active:scale-95 shadow-sm ${currentRoleConfig.bg} ${currentRoleConfig.text} border-slate-200 hover:border-[#4361EE]`}
                   style={authorFont}
                   title="Switch Active Dashboard Role"
                 >
                   <Icon icon={currentRoleConfig.icon} className="w-4 h-4 flex-shrink-0" />
-                  <span>{currentRoleConfig.label}</span>
+                  <span>{switching ? 'Switching…' : currentRoleConfig.label}</span>
                   <Icon icon="solar:alt-arrow-down-bold" className={`w-3 h-3 transition-transform ${roleMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
@@ -405,7 +333,8 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 
         {/* Page Content */}
         <main className="flex-1 p-3 sm:p-4 lg:p-8">
-          {children}
+          {roleError&&<p role="alert" className="mb-4 rounded-xl bg-red-50 p-4 text-red-800">{roleError} <button className="underline" onClick={()=>window.location.reload()}>Reload</button></p>}
+          {role ? children : !roleError && <a href="/login" className="text-blue-700 underline">Sign in to continue</a>}
         </main>
       </div>
     </div>
